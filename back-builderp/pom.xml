@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>pe.buildsoft.erp.core</groupId>
+	<artifactId>pe.buildsoft.erp.core.build</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>pe.buildsoft.erp.core.build</name>
+	<description>pe.buildsoft.erp.core.build</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<lombok.version>1.18.24</lombok.version>
+		<maven.compiler.target>16</maven.compiler.target>
+		<version.wildfly>27.0.0.Final</version.wildfly>
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+		<maven.compiler.source>16</maven.compiler.source>
+		<slf4j.api.version>1.7.30</slf4j.api.version>
+		<version.jakarta.ejb.api>4.0.1</version.jakarta.ejb.api>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.microprofile</groupId>
+			<artifactId>microprofile</artifactId>
+			<version>5.0</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+
+	<profiles>
+		<profile>
+			<id>wildfly</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.plugins</groupId>
+						<artifactId>wildfly-jar-maven-plugin</artifactId>
+						<version>2.0.2.Final</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>package</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<feature-pack-location>wildfly@maven(org.jboss.universe:community-universe)#${version.wildfly}</feature-pack-location>
+							<layers>
+								<layer>jaxrs</layer>
+								<layer>microprofile-openapi</layer>
+							</layers>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+
+				<dependency>
+					<groupId>jakarta.ejb</groupId>
+					<artifactId>jakarta.ejb-api</artifactId>
+					<version>${version.jakarta.ejb.api}</version>
+					<scope>provided</scope>
+					<optional>true</optional>
+				</dependency>
+
+				<!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
+				<dependency>
+					<groupId>jakarta.persistence</groupId>
+					<artifactId>jakarta.persistence-api</artifactId>
+					<scope>provided</scope>
+					<version>3.1.0</version>
+				</dependency>
+
+
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+					<scope>provided</scope>
+					<version>${slf4j.api.version}</version>
+				</dependency>
+
+				<dependency>
+					<groupId>org.projectlombok</groupId>
+					<artifactId>lombok</artifactId>
+					<version>${lombok.version}</version>
+					<scope>provided</scope>
+				</dependency>
+
+				<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+				<dependency>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-databind</artifactId>
+					<version>2.12.6.1</version>
+					<scope>provided</scope>
+				</dependency>
+
+
+				<dependency>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+					<version>2.12.6</version>
+					<scope>provided</scope>
+				</dependency>
+
+				<dependency>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+					<version>2.12.6</version>
+					<scope>provided</scope>
+				</dependency>
+
+				<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+				<dependency>
+					<groupId>com.fasterxml.jackson.dataformat</groupId>
+					<artifactId>jackson-dataformat-yaml</artifactId>
+					<version>2.12.6</version>
+					<scope>provided</scope>
+				</dependency>
+
+				<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
+				<dependency>
+					<groupId>com.fasterxml.jackson.datatype</groupId>
+					<artifactId>jackson-datatype-jsr310</artifactId>
+					<version>2.12.6</version>
+					<scope>provided</scope>
+				</dependency>
+
+				<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+				<dependency>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+					<version>1.8.0</version>
+					<scope>provided</scope>
+				</dependency>
+
+			</dependencies>
+			<repositories>
+				<repository>
+					<id>jboss-public-repository</id>
+					<name>JBoss Public Maven Repository Group</name>
+					<url>https://repository.jboss.org/nexus/content/groups/public/</url>
+				</repository>
+				<repository>
+					<id>Red Hat GA</id>
+					<name>Red Hat GA</name>
+					<url>https://maven.repository.redhat.com/ga/</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
+	<modules>
+		<module>pe.buildsoft.erp.core.api.aas</module>
+		<module>pe.buildsoft.erp.core.api.admision</module>
+		<module>pe.buildsoft.erp.core.api.common</module>
+		<module>pe.buildsoft.erp.core.api.consumer</module>
+		<module>pe.buildsoft.erp.core.api.producer</module>
+		<module>pe.buildsoft.erp.core.api.rrhh.escalafon</module>
+		<module>pe.buildsoft.erp.core.api.rrhh.hora</module>
+		<module>pe.buildsoft.erp.core.api.rrhh.planilla</module>
+		<module>pe.buildsoft.erp.core.api.security</module>
+
+		<module>pe.buildsoft.erp.core.application.admision</module>
+		<module>pe.buildsoft.erp.core.application.common</module>
+		<module>pe.buildsoft.erp.core.application.common.entidades</module>
+		<module>pe.buildsoft.erp.core.application.consumer</module>
+		<module>pe.buildsoft.erp.core.application.producer</module>
+		<module>pe.buildsoft.erp.core.application.rrhh.escalafon</module>
+		<module>pe.buildsoft.erp.core.application.rrhh.escalafon.entidades</module>
+		<module>pe.buildsoft.erp.core.application.rrhh.hora</module>
+		<module>pe.buildsoft.erp.core.application.rrhh.planilla</module>
+		<module>pe.buildsoft.erp.core.application.rrhh.planilla.entidades</module>
+		<module>pe.buildsoft.erp.core.application.security</module>
+
+		<module>pe.buildsoft.erp.core.domain.admision</module>
+		<module>pe.buildsoft.erp.core.domain.common</module>
+		<module>pe.buildsoft.erp.core.domain.common.entidades</module>
+		<module>pe.buildsoft.erp.core.domain.consumer</module>
+		<module>pe.buildsoft.erp.core.domain.producer</module>
+		<module>pe.buildsoft.erp.core.domain.rrhh.escalafon</module>
+		<module>pe.buildsoft.erp.core.domain.rrhh.escalafon.entidades</module>
+		<module>pe.buildsoft.erp.core.domain.rrhh.hora</module>
+		<module>pe.buildsoft.erp.core.domain.rrhh.planilla</module>
+		<module>pe.buildsoft.erp.core.domain.rrhh.planilla.entidades</module>
+		<module>pe.buildsoft.erp.core.domain.security</module>
+
+
+		<module>pe.buildsoft.erp.core.infra.data.admision</module>
+		<module>pe.buildsoft.erp.core.infra.data.common</module>
+		<module>pe.buildsoft.erp.core.infra.data.consumer</module>
+		<module>pe.buildsoft.erp.core.infra.data.producer</module>
+		<module>pe.buildsoft.erp.core.infra.data.rrhh.escalafon</module>
+		<module>pe.buildsoft.erp.core.infra.data.rrhh.hora</module>
+		<module>pe.buildsoft.erp.core.infra.data.rrhh.planilla</module>
+		<module>pe.buildsoft.erp.core.infra.data.security</module>
+
+		<module>pe.buildsoft.erp.core.infra.data.webclient</module>
+		<module>pe.buildsoft.erp.core.infra.transversal.cache</module>
+		<module>pe.buildsoft.erp.core.infra.transversal.operation</module>
+		<module>pe.buildsoft.erp.core.infra.transversal.utilitario</module>
+
+		<module>pe.buildsoft.erp.core.domain.matricula.entidades</module>
+		<module>pe.buildsoft.erp.core.domain.matricula</module>
+		<module>pe.buildsoft.erp.core.application.matricula</module>
+		<module>pe.buildsoft.erp.core.api.matricula</module>
+		<module>pe.buildsoft.erp.core.infra.data.matricula</module>
+		<module>pe.buildsoft.erp.core.infra.data.nota</module>
+		<module>pe.buildsoft.erp.core.infra.data.pago</module>
+		<module>pe.buildsoft.erp.core.application.nota</module>
+		<module>pe.buildsoft.erp.core.domain.nota</module>
+		<module>pe.buildsoft.erp.core.domain.nota.entidades</module>
+		<module>pe.buildsoft.erp.core.api.nota</module>
+		<module>pe.buildsoft.erp.core.api.pago</module>
+		<module>pe.buildsoft.erp.core.application.pago</module>
+		<module>pe.buildsoft.erp.core.domain.pago</module>
+		<module>pe.buildsoft.erp.core.domain.admision.entidades</module>
+		<module>
+  		pe.buildsoft.erp.core.application.matricula.entidades
+  	</module>
+		<module>
+  		pe.buildsoft.erp.core.application.admision.entidades
+  	</module>
+		<module>pe.buildsoft.erp.core.application.nota.entidades</module>
+		<module>pe.buildsoft.erp.core.domain.pago.entidades</module>
+		<module>pe.buildsoft.erp.core.infra.transversal.swagger</module>
+		<module>
+  		pe.buildsoft.erp.core.application.security.entidades
+  	</module>
+		<module>pe.buildsoft.erp.core.api.security.interface</module>
+		<module>pe.buildsoft.erp.core.api.common.interface</module>
+		<module>pe.buildsoft.erp.core.api.aas.interface</module>
+		<module>pe.buildsoft.erp.core.api.admision.interface</module>
+		<module>
+  		pe.buildsoft.erp.core.api.rrhh.escalafon.interface
+  	</module>
+		<module>pe.buildsoft.erp.core.api.rrhh.planilla.interface</module>
+		<module>pe.buildsoft.erp.core.api.rrhh.hora.interface</module>
+		<module>pe.buildsoft.erp.core.api.matricula.interface</module>
+		<module>pe.buildsoft.erp.core.api.nota.interface</module>
+		<module>pe.buildsoft.erp.core.api.pago.interface</module>
+		<module>
+  		pe.buildsoft.erp.core.application.rrhh.hora.entidades
+  	</module>
+		<module>pe.buildsoft.erp.core.domain.rrhh.hora.entidades</module>
+		<module>pe.buildsoft.erp.core.application.pago.entidades</module>
+		<module>
+  		pe.buildsoft.erp.core.infra.data.consumer.rrhh.hora
+  	</module>
+		<module>
+  		pe.buildsoft.erp.core.infra.data.consumer.rrhh.planilla
+  	</module>
+		<module>pe.buildsoft.erp.core.infra.data.consumer.pago</module>
+		<module>
+  		pe.buildsoft.erp.core.infra.data.consumer.matricula
+  	</module>
+		<module>pe.buildsoft.erp.core.domain.consumer.rrhh.hora</module>
+		<module>
+  		pe.buildsoft.erp.core.application.consumer.rrhh.hora
+  	</module>
+		<module>
+  		pe.buildsoft.erp.core.domain.consumer.rrhh.planilla
+  	</module>
+		<module>
+  		pe.buildsoft.erp.core.application.consumer.rrhh.planilla
+  	</module>
+		<module>pe.buildsoft.erp.core.domain.consumer.matricula</module>
+		<module>
+  		pe.buildsoft.erp.core.application.consumer.matricula
+  	</module>
+		<module>pe.buildsoft.erp.core.domain.consumer.pago</module>
+		<module>pe.buildsoft.erp.core.application.consumer.pago</module>
+		<module>pe.buildsoft.erp.core.infra.data.consumer.nota</module>
+		<module>pe.buildsoft.erp.core.domain.consumer.nota</module>
+		<module>pe.buildsoft.erp.core.application.consumer.nota</module>
+		<module>pe.buildsoft.erp.core.domain.security.entidades</module>
+		<module>pe.buildsoft.erp.core.domain.generador</module>
+		<module>pe.buildsoft.erp.core.infra.data.generador</module>
+		<module>pe.buildsoft.erp.core.application.generador</module>
+		<module>pe.buildsoft.erp.core.api.generador</module>
+		<module>
+  		pe.buildsoft.erp.core.application.generador.entidades
+  	</module>
+		<module>pe.buildsoft.erp.core.api.generador.interface</module>
+	</modules>
+	<repositories>
+		<repository>
+			<id>repo1</id>
+			<name>repo1</name>
+			<url>https://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>jboss</id>
+			<name>jboss</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+
+	</repositories>
+</project>

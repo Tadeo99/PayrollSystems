@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+	
+	<persistence-unit name="pe.buildsoft.erp.core.pu.matricula" >
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/datasources/matriculaDS</jta-data-source>
+		
+	    
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Alumno</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Aula</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.CalendarioAcademico</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.CargaAcademica</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.CriterioEvaluacion</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.DetalleCargaAcademica</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.DetMallaCurricular</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.DetMatricula</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Grupo</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Horario</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.MallaCurricular</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Matricula</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Pabellon</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Periodo</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.PreRequisito</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.matricula.Unidad</class>
+		 
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.AsistenciaAlumno</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.CursoNotaPeriodo</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.CursoNotaPeriodoProm</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.CursoNotaPeriodoTemp</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.CursoNotaUnidad</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.CursoNotaUnidadProm</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.DetRegistroNota</class>
+		 <class>pe.buildsoft.erp.core.domain.entidades.nota.RegistroNota</class>
+
+		<properties>	    
+		<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" /> -->
+		<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" /> -->
+		 <!--  <property name="hibernate.hbm2ddl.auto" value="create-drop" />  -->
+		   <!-- <property name="hibernate.hbm2ddl.auto" value="update" />  -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup" />
+			<!--<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.WeblogicTransactionManagerLookup" />-->
+			<property name="transaction.factory_class" value="org.hibernate.transaction.JTATransactionFactory" />
+		</properties>	
+	</persistence-unit>
+	
+</persistence>

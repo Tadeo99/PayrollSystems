@@ -1,0 +1,133 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>pe.buildsoft.erp.core</groupId>
+    <artifactId>pe.buildsoft.erp.core.build</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>pe.buildsoft.erp.core.domain.consumer.rrhh.planilla</artifactId>
+  <name>pe.buildsoft.erp.core.domain.consumer.rrhh.planilla</name>
+  <description>pe.buildsoft.erp.core.domain.consumer.rrhh.planilla</description>
+<packaging>ejb</packaging>
+  
+   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+
+<!-- https://mvnrepository.com/artifact/org.drools/drools-xml-support 
+<dependency>
+    <groupId>org.drools</groupId>
+    <artifactId>drools-xml-support</artifactId>
+    <version>8.22.0.Beta</version>
+</dependency>
+-->
+<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
+<dependency>
+    <groupId>com.thoughtworks.xstream</groupId>
+    <artifactId>xstream</artifactId>
+    <version>1.4.19</version>
+</dependency>
+
+
+
+<!-- https://mvnrepository.com/artifact/org.drools/drools-core -->
+<dependency>
+    <groupId>org.drools</groupId>
+    <artifactId>drools-core</artifactId>
+    <version>8.22.0.Beta</version>
+</dependency>
+
+
+<!-- https://mvnrepository.com/artifact/org.drools/drools-compiler -->
+<dependency>
+    <groupId>org.drools</groupId>
+    <artifactId>drools-compiler</artifactId>
+    <version>8.22.0.Beta</version>
+</dependency>
+
+
+   <dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.domain.consumer</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+	</dependency>
+
+ <dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.domain.producer</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+	</dependency>
+	
+	<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.domain.rrhh.planilla.entidades</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+	</dependency>
+
+	
+  <dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.transversal.utilitario</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.transversal.cache</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>provided</scope>
+	</dependency>
+	
+	 <dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.transversal.operation</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.data.webclient</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+		</dependency>
+
+  </dependencies>
+  
+ <build>
+        <resources>
+            <resource>
+                <filtering>false</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/java</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <ejbVersion>3.2</ejbVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

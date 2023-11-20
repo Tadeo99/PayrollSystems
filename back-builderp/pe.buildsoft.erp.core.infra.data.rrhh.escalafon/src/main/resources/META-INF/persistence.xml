@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+
+	<persistence-unit
+		name="pe.buildsoft.erp.core.pu.escalafon">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/datasources/escalafonDS</jta-data-source>
+
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.AsociarCentroCosto</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.Beneficiarios</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.Carrera</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.CentroCosto</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.Contrato</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.CuentaBancariaPersonal</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.DetalleContrado</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.DireccionPersonal</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.HistorialBasico</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.HistorialCargoArea</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.Institucion</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.PeriodoLaboraPersonal</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.escalafon.Personal</class>
+
+		<properties>
+			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" 
+				/> -->
+			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" 
+				/> -->
+			<!-- <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
+			<!-- <property name="hibernate.hbm2ddl.auto" value="update" /> -->
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.transaction.manager_lookup_class"
+				value="org.hibernate.transaction.JBossTransactionManagerLookup" />
+			<!--<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.WeblogicTransactionManagerLookup" 
+				/> -->
+			<property name="transaction.factory_class"
+				value="org.hibernate.transaction.JTATransactionFactory" />
+			<!--<property name="hibernate.query.factory_class" value="org.hibernate.hql.classic.ClassicQueryTranslatorFactory"/> -->
+			<property name="hibernate.jpa.compliance.query"
+				value="false" />
+		</properties>
+		
+	</persistence-unit>
+
+</persistence>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+
+	<persistence-unit
+		name="pe.buildsoft.erp.core.pu.planilla">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/datasources/planillaDS</jta-data-source>
+
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.Adelanto</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.TareoPersonal</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.Vacaciones</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.Feriado</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.VariableConf</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.VariableConfDet</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.ConceptoPdt</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.ConceptoRegimenPensionario</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.ConceptosTipoPlanilla</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.ConceptoFijosTrabajador</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.DetallePersonalConcepto</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.DetallePlanilla</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.DetallePlanillaConcepto</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.DetRentaQuintaCategoria</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.PeriodoPlanilla</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.PersonalConcepto</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.Planilla</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.RentaQuintaCategoria</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.TipoPlanilla</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.ValoresUIT</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.EPSPersonal</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.EPSConf</class>
+		<class>pe.buildsoft.erp.core.domain.entidades.planilla.InformaOtrosIngreso5ta</class>
+
+		<properties>
+			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" 
+				/> -->
+			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" 
+				/> -->
+			<!-- <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
+			<!-- <property name="hibernate.hbm2ddl.auto" value="update" /> -->
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.transaction.manager_lookup_class"
+				value="org.hibernate.transaction.JBossTransactionManagerLookup" />
+			<!--<property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.WeblogicTransactionManagerLookup" 
+				/> -->
+			<property name="transaction.factory_class"
+				value="org.hibernate.transaction.JTATransactionFactory" />
+			<!--<property name="hibernate.query.factory_class" value="org.hibernate.hql.classic.ClassicQueryTranslatorFactory"/> -->
+			<property name="hibernate.jpa.compliance.query"
+				value="false" />
+		</properties>
+	</persistence-unit>
+
+</persistence>

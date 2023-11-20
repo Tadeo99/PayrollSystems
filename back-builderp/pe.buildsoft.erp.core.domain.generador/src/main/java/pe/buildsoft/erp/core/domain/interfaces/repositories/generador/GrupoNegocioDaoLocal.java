@@ -1,0 +1,48 @@
+package pe.buildsoft.erp.core.domain.interfaces.repositories.generador;
+
+import java.util.List;
+
+import jakarta.ejb.Local;
+
+import pe.buildsoft.erp.core.domain.entidades.generador.GrupoNegocio;
+import pe.buildsoft.erp.core.domain.interfaces.repositories.GenericDAOLocal;
+import pe.buildsoft.erp.core.infra.transversal.entidades.BaseSearch;
+
+/**
+ * La Class ConfigGrupoServicioDaoLocal.
+ * <ul>
+ * <li>Copyright 2020 ndavilal - ndavilal. Todos los derechos reservados.</li>
+ * </ul>
+ *
+ * @author ndavilal
+ * @version 2.1, Mon Sep 26 11:45:04 PET 2022
+ * @since BUILDERP-CORE 2.1
+ */
+@Local
+public interface GrupoNegocioDaoLocal extends GenericDAOLocal<String, GrupoNegocio> {
+	/**
+	 * Listar.
+	 *
+	 * @param configGrupoServicio el config grupo servicioDTO
+	 * @return the list
+	 * @throws Exception the exception
+	 */
+	List<GrupoNegocio> listar(BaseSearch filtro);
+
+	/**
+	 * contar lista config grupo servicio.
+	 *
+	 * @param configGrupoServicio el config grupo servicio
+	 * @return the list
+	 * @throws Exception the exception
+	 */
+	int contar(BaseSearch filtro);
+
+	/**
+	 * Generar id configGrupoServicio.
+	 *
+	 * @return the String
+	 * @throws Exception the exception
+	 */
+	String generarId();
+}

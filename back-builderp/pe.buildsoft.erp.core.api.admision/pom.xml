@@ -1,0 +1,146 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>pe.buildsoft.erp.core</groupId>
+    <artifactId>pe.buildsoft.erp.core.build</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>pe.buildsoft.erp.core.api.admision</artifactId>
+  <name>pe.buildsoft.erp.core.api.admision</name>
+  <description>pe.buildsoft.erp.core.api.admision</description>
+  <packaging>war</packaging>
+<properties>  
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  
+</properties> 
+<dependencies>
+
+<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.api.admision.interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+	</dependency>
+	
+    <dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.application.admision</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>ejb</type>
+	</dependency>
+
+	<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.transversal.utilitario</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+	</dependency>
+	
+	<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.transversal.cache</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+	</dependency>
+	
+	 <dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.data.admision</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>ejb</type>
+	</dependency>
+	
+	<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.data.webclient</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+	</dependency>
+
+ </dependencies>
+ 
+ <build>
+		<plugins>
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.9.Final</version>
+                <configuration>
+                    <hostname>${jboss-host}</hostname>
+                    <port>9999</port>
+                    <username>${jboss-usuario}</username>
+                    <password>${jboss-clave}</password>
+                    <domain>
+                        <server-groups>
+                            <server-group>main-server-group</server-group>
+                        </server-groups>
+                    </domain>
+                </configuration>
+            </plugin>			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.2</version>
+				 <configuration>
+                    <ejbVersion>3.2</ejbVersion>
+                </configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.3.2</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>pre</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.3.2</version>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>		
+		<profile>
+			<id>prod</id>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.3.2</version>
+						<configuration>
+							
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

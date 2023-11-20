@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<jboss-deployment-structure
+	xmlns="urn:jboss:deployment-structure:1.2">
+	<deployment>
+		<dependencies>
+			<module name="com.google.guava" />
+			<module name="org.apache.commons.beanutils" />
+			<module name="org.apache.commons.codec" />
+			<module name="org.apache.commons.collections" />
+			<module name="org.apache.commons.io" />
+			<module name="org.apache.commons.lang3" />
+			<module name="org.apache.commons.logging" />
+			<module name="org.slf4j" />
+			<module name="org.apache.logging.log4j.api" />
+
+			<module name="org.infinispan" />
+			<module name="org.jboss.as.clustering.infinispan" />
+			<module name="org.infinispan.commons" />
+			<module name="org.infinispan.protostream" />
+			<module name="org.jboss.ironjacamar.jdbcadapters" />
+			<module name="com.postgresql" />
+
+			<module name="com.fasterxml.jackson.core.jackson-annotations" />
+			<module name="com.fasterxml.jackson.core.jackson-core" />
+			<module name="com.fasterxml.jackson.core.jackson-databind" />
+			<module
+				name="com.fasterxml.jackson.datatype.jackson-datatype-jdk8" />
+			<module name="org.bitbucket.jose4j" />
+
+			<module
+				name="com.fasterxml.jackson.dataformat.jackson-dataformat-yaml" />
+			<module
+				name="com.fasterxml.jackson.jaxrs.jackson-jaxrs-json-provider" />
+
+			<module name="org.apache.httpcomponents.core" />
+			<module name="org.jboss.vfs" />
+			<module name="org.jboss.modules" />
+
+		</dependencies>
+		<exclusions>
+			<module name="org.apache.xalan" />
+			<module
+				name="org.jboss.resteasy.resteasy-json-binding-provider" />
+		</exclusions>
+	</deployment>
+</jboss-deployment-structure>

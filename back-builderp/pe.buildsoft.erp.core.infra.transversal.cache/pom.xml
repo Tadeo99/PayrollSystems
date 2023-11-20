@@ -1,0 +1,48 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>pe.buildsoft.erp.core</groupId>
+		<artifactId>pe.buildsoft.erp.core.build</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>pe.buildsoft.erp.core.infra.transversal.cache</artifactId>
+	<name>pe.buildsoft.erp.core.infra.transversal.cache</name>
+	<description>pe.buildsoft.erp.core.infra.transversal.cache</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.wildfly/wildfly-clustering-infinispan-extension -->
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-clustering-infinispan-extension</artifactId>
+			<scope>provided</scope>
+			<version>27.0.0.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>pe.buildsoft.erp.core</groupId>
+			<artifactId>pe.buildsoft.erp.core.infra.transversal.utilitario</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.bitbucket.b_c</groupId>
+			<artifactId>jose4j</artifactId>
+			<version>0.6.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
+		<dependency>
+			<groupId>jakarta.servlet</groupId>
+			<artifactId>jakarta.servlet-api</artifactId>
+			<version>6.0.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+</project>

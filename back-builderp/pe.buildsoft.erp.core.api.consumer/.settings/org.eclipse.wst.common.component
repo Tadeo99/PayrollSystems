@@ -1,0 +1,876 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+                                                                                                                                                                                                                                                                                                                                                                        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <wb-module deploy-name="pe.buildsoft.erp.core.api.consumer-0.0.1-SNAPSHOT">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                                                                                                                                                                                                                                                                                                                                                                        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.consumer-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.consumer/pe.buildsoft.erp.core.application.consumer">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.consumer-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.consumer/pe.buildsoft.erp.core.domain.consumer">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.consumer.rrhh.hora-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.consumer.rrhh.hora/pe.buildsoft.erp.core.application.consumer.rrhh.hora">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.consumer.rrhh.hora-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.consumer.rrhh.hora/pe.buildsoft.erp.core.domain.consumer.rrhh.hora">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.rrhh.hora.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.rrhh.hora.entidades/pe.buildsoft.erp.core.domain.rrhh.hora.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.rrhh.escalafon.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.rrhh.escalafon.entidades/pe.buildsoft.erp.core.domain.rrhh.escalafon.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.common.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.common.entidades/pe.buildsoft.erp.core.application.common.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.consumer.rrhh.planilla-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.consumer.rrhh.planilla/pe.buildsoft.erp.core.application.consumer.rrhh.planilla">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.rrhh.planilla.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.rrhh.planilla.entidades/pe.buildsoft.erp.core.application.rrhh.planilla.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.rrhh.escalafon.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.rrhh.escalafon.entidades/pe.buildsoft.erp.core.application.rrhh.escalafon.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.security.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.security.entidades/pe.buildsoft.erp.core.application.security.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.consumer.rrhh.planilla-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.consumer.rrhh.planilla/pe.buildsoft.erp.core.domain.consumer.rrhh.planilla">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.rrhh.planilla.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.rrhh.planilla.entidades/pe.buildsoft.erp.core.domain.rrhh.planilla.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.consumer.matricula-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.consumer.matricula/pe.buildsoft.erp.core.application.consumer.matricula">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.consumer.matricula-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.consumer.matricula/pe.buildsoft.erp.core.domain.consumer.matricula">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.matricula.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.matricula.entidades/pe.buildsoft.erp.core.domain.matricula.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.consumer.pago-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.consumer.pago/pe.buildsoft.erp.core.application.consumer.pago">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.pago.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.pago.entidades/pe.buildsoft.erp.core.application.pago.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.matricula.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.matricula.entidades/pe.buildsoft.erp.core.application.matricula.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.admision.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.admision.entidades/pe.buildsoft.erp.core.application.admision.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.consumer.pago-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.consumer.pago/pe.buildsoft.erp.core.domain.consumer.pago">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.pago.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.pago.entidades/pe.buildsoft.erp.core.domain.pago.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.consumer.nota-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.consumer.nota/pe.buildsoft.erp.core.application.consumer.nota">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.nota.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.nota.entidades/pe.buildsoft.erp.core.application.nota.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.consumer.nota-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.consumer.nota/pe.buildsoft.erp.core.domain.consumer.nota">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.nota.entidades-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.nota.entidades/pe.buildsoft.erp.core.domain.nota.entidades">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.application.producer-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.application.producer/pe.buildsoft.erp.core.application.producer">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.domain.producer-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.domain.producer/pe.buildsoft.erp.core.domain.producer">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.transversal.utilitario-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.transversal.utilitario/pe.buildsoft.erp.core.infra.transversal.utilitario">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.transversal.cache-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.transversal.cache/pe.buildsoft.erp.core.infra.transversal.cache">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.transversal.operation-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.transversal.operation/pe.buildsoft.erp.core.infra.transversal.operation">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.consumer-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.consumer/pe.buildsoft.erp.core.infra.data.consumer">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.consumer.rrhh.hora-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.consumer.rrhh.hora/pe.buildsoft.erp.core.infra.data.consumer.rrhh.hora">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.consumer.rrhh.planilla-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.consumer.rrhh.planilla/pe.buildsoft.erp.core.infra.data.consumer.rrhh.planilla">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.consumer.matricula-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.consumer.matricula/pe.buildsoft.erp.core.infra.data.consumer.matricula">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.consumer.pago-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.consumer.pago/pe.buildsoft.erp.core.infra.data.consumer.pago">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.consumer.nota-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.consumer.nota/pe.buildsoft.erp.core.infra.data.consumer.nota">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.producer-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.producer/pe.buildsoft.erp.core.infra.data.producer">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="pe.buildsoft.erp.core.infra.data.webclient-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/pe.buildsoft.erp.core.infra.data.webclient/pe.buildsoft.erp.core.infra.data.webclient">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <property name="java-output-path" value="/pe.buildsoft.erp.core.api.consumer/target/classes"/>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <property name="context-root" value="pe.buildsoft.erp.core.api.consumer"/>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </wb-module>
+                                                                                                                                                                                                                                                                                                                                                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</project-modules>

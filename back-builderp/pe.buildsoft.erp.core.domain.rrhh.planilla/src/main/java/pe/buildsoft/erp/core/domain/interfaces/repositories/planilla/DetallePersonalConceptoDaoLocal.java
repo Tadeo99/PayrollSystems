@@ -1,0 +1,51 @@
+package pe.buildsoft.erp.core.domain.interfaces.repositories.planilla;
+
+import java.util.List;
+import java.util.Map;
+
+import jakarta.ejb.Local;
+
+import pe.buildsoft.erp.core.domain.entidades.planilla.DetallePersonalConcepto;
+import pe.buildsoft.erp.core.domain.interfaces.repositories.GenericDAOLocal;
+
+/**
+ * La Class DetallePersonalConceptoDaoLocal.
+ * <ul>
+ * <li>Copyright 2020 ndavilal - ndavilal. Todos los derechos reservados.</li>
+ * </ul>
+ *
+ * @author ndavilal
+ * @version 2.1, Fri Apr 23 00:16:11 COT 2021
+ * @since BUILDERP-CORE 2.1
+ */
+@Local
+public interface DetallePersonalConceptoDaoLocal extends GenericDAOLocal<String, DetallePersonalConcepto> {
+	/**
+	 * Listar tipo planilla.
+	 *
+	 * @param filtro el tipo planilla
+	 * @return the list
+	 * @throws Exception the exception
+	 */
+	List<DetallePersonalConcepto> listar(DetallePersonalConcepto filtro);
+
+	/**
+	 * contar lista tipo planilla.
+	 *
+	 * @param filtro el tipo planilla
+	 * @return the list
+	 * @throws Exception the exception
+	 */
+	int contar(DetallePersonalConcepto filtro);
+
+	/**
+	 * Generar id detallePersonalConcepto.
+	 *
+	 * @return the String
+	 * @throws Exception the exception
+	 */
+	String generarId();
+
+	Map<String, DetallePersonalConcepto> listarMap(String idPersonal, String idTipoPlanilla,
+			String idPeriodo);
+}
