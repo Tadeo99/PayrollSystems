@@ -1,0 +1,203 @@
+<div class="flex flex-col flex-auto min-w-0">
+	<!-- Main -->
+	<div class="flex flex-col flex-auto items-center">
+		<div class="flex flex-col w-full">
+			<!-- Form -->
+			<div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+				<!-- Alert -->
+				<ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+					{{alert.message}}
+				</ng-mf-bs-alert>
+				<form class="space-y-3" [formGroup]="frmGroup">
+
+					<div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+						<!-- direcionCentroAsistencialEssalud -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="direcionCentroAsistencialEssalud" [required]="true">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'direcionCentroAsistencialEssalud' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('direcionCentroAsistencialEssalud') )">
+								<span
+									*ngIf="invalid('direcionCentroAsistencialEssalud')">{{getError('direcionCentroAsistencialEssalud')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- departamento -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idDepartamento" [required]="true"
+								(selectionChange)="onDepartamentoChange($event)">
+								<mat-option *ngFor="let it of listaDepartamento " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'departamento' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idDepartamento') )">
+								<span *ngIf="invalid('idDepartamento')">{{getError('idDepartamento')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- provincia -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idProvincia" [required]="true"
+								(selectionChange)="onProvinciaChange($event)">
+								<mat-option *ngFor="let it of listaProvincia " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'provincia' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idProvincia') )">
+								<span *ngIf="invalid('idProvincia')">{{getError('idProvincia')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idUbigeo -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idUbigeo" [required]="true">
+								<mat-option *ngFor="let it of listaDistrito " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'ubigeo' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idUbigeo') )">
+								<span *ngIf="invalid('idUbigeo')">{{getError('idUbigeo')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idItemByTipoVia -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByTipoVia" [required]="true">
+								<mat-option *ngFor="let it of listaTipoVia" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByTipoVia' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByTipoVia') )">
+								<span *ngIf="invalid('idItemByTipoVia')">{{getError('idItemByTipoVia')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- nombreTipoVia -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="nombreTipoVia" [required]="true">
+							<mat-label>{{'nombreTipoVia' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('nombreTipoVia') )">
+								<span *ngIf="invalid('nombreTipoVia')">{{getError('nombreTipoVia')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idItemByZona -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByZona" [required]="true">
+								<mat-option *ngFor="let it of listaZona " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByZona' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByZona') )">
+								<span *ngIf="invalid('idItemByZona')">{{getError('idItemByZona')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- nombreZona -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="nombreZona" [required]="true">
+							<mat-label>{{'nombreZona' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('nombreZona') )">
+								<span *ngIf="invalid('nombreZona')">{{getError('nombreZona')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- numero -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="numero" [required]="true">
+							<mat-label>{{'numero' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('numero') )">
+								<span *ngIf="invalid('numero')">{{getError('numero')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- interior -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="interior" [required]="true">
+							<mat-label>{{'interior' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('interior') )">
+								<span *ngIf="invalid('interior')">{{getError('interior')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- departamento -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="departamento" [required]="false">
+							<mat-label>{{'departamento' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('departamento') )">
+								<span *ngIf="invalid('departamento')">{{getError('departamento')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- block -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="block" [required]="false">
+							<mat-label>{{'block' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('block') )">
+								<span *ngIf="invalid('block')">{{getError('block')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- mazana -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="mazana" [required]="false">
+							<mat-label>{{'mazana' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('mazana') )">
+								<span *ngIf="invalid('mazana')">{{getError('mazana')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- lote -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="lote" [required]="false">
+							<mat-label>{{'lote' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('lote') )">
+								<span *ngIf="invalid('lote')">{{getError('lote')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- etapa -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="etapa" [required]="false">
+							<mat-label>{{'etapa' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('etapa') )">
+								<span *ngIf="invalid('etapa')">{{getError('etapa')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- kilometro -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="kilometro" [required]="false">
+							<mat-label>{{'kilometro' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('kilometro') )">
+								<span *ngIf="invalid('kilometro')">{{getError('kilometro')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- referencia -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="referencia" [required]="false">
+							<mat-label>{{'referencia' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('referencia') )">
+								<span *ngIf="invalid('referencia')">{{getError('referencia')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idItemByProcedenciaDireccion -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByProcedenciaDireccion" [required]="true">
+								<mat-option *ngFor="let it of listaProcedencia " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByProcedenciaDireccion' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByProcedenciaDireccion') )">
+								<span
+									*ngIf="invalid('idItemByProcedenciaDireccion')">{{getError('idItemByProcedenciaDireccion')}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<!-- Actions -->
+					<div class="flex items-center justify-end">
+						<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+							(click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'guardar' | transloco}}
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

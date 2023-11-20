@@ -1,0 +1,117 @@
+{
+  "name": "admision",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/admision/src",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "prefix": "ng-mf",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/admision",
+        "index": "apps/admision/src/index.html",
+        "main": "apps/admision/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/admision/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/admision/src/favicon.ico", "apps/admision/src/assets"],
+        "styles": ["apps/admision/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/admision/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/admision/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nrwl/angular:webpack-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "admision:build:production"
+        },
+        "development": {
+          "browserTarget": "admision:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4204,
+		"host": "0.0.0.0",
+        "publicHost": "http://localhost:4204"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "admision:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admision/**/*.ts", "apps/admision/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/admision/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/angular:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "admision:build",
+		"host": "0.0.0.0",
+        "port": 4204
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "admision:build:development"
+        },
+        "production": {
+          "buildTarget": "admision:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,283 @@
+<div [hidden]="mostrarPanelForm"
+	class="sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+	<ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+		(changeEmitter)="changeEmitterEvent($event)"></ng-mf-bs-cabeceragrilla>
+
+	<!-- Main -->
+	<div class="flex flex-auto overflow-hidden">
+
+		<!-- ListaData list -->
+		<div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+			<ng-container>
+				<div class="grid">
+					<!-- Header -->
+					<div class="atributo-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+						matSort matSortDisableClear>
+						<div class="hidden md:block" [mat-sort-header]="'idAtributo'">
+							{{ 'id' | transloco }}
+						</div>
+						<div [mat-sort-header]="'columna'">{{ 'columna' | transloco }}</div>
+						<div class="hidden lg:block" [mat-sort-header]="'estado'">{{ 'activo' | transloco }}</div>
+						<div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+					</div>
+					<!-- Rows -->
+					<ng-container *ngIf="(listaData$ | async) as listaData">
+						<ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+							<div class="atributo-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+								<!-- SKU -->
+								<div class="hidden md:block truncate">
+									{{objData.idAtributo}}
+								</div>
+
+								<!-- Name -->
+								<div class="truncate">
+									{{objData.columna}}
+								</div>
+
+								<!-- Active -->
+								<div class="hidden lg:block">
+									<ng-container *ngIf="objData.estado">
+										<mat-icon class="text-green-400 icon-size-5"
+											[svgIcon]="'heroicons_solid:check'"></mat-icon>
+									</ng-container>
+									<ng-container *ngIf="!objData.estado">
+										<mat-icon class="text-gray-400 icon-size-5" [svgIcon]="'heroicons_solid:x'">
+										</mat-icon>
+									</ng-container>
+								</div>
+
+								<!-- accion -->
+								<div>
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+										</mat-icon>
+									</button>
+
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'eliminar' | transloco }}" (click)="confirmarEliminar(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+										</mat-icon>
+									</button>
+
+								</div>
+							</div>
+						</ng-container>
+					</ng-container>
+					<ng-mf-bs-noresultados [length]="pagination?.length??0"></ng-mf-bs-noresultados>
+				</div>
+
+				<mat-paginator
+					class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+					[ngClass]="{'pointer-events-none': isLoading}" [length]="pagination?.length??0"
+					[pageIndex]="pagination?.page" [pageSize]="pagination?.size" [pageSizeOptions]="[5, 10, 25, 100]"
+					[showFirstLastButtons]="true"></mat-paginator>
+
+			</ng-container>
+
+		</div>
+
+	</div>
+
+</div>
+
+<div [hidden]="!mostrarPanelForm" class="flex flex-col flex-auto min-w-0">
+	<!-- Main -->
+	<div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+		<div class="flex flex-col w-full">
+			<ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+			<!-- Form -->
+			<div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+				<!-- Alert -->
+				<ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+					{{alert.message}}
+				</ng-mf-bs-alert>
+				<form class="space-y-3" [formGroup]="frmGroup">
+					<div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+						<!-- columna -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="columna" [required]="true">
+							<mat-label>{{'columna' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('columna') )">
+								<span *ngIf="invalid('columna')">{{getError('columna')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- atributo -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="atributo" [required]="true">
+							<mat-label>{{'atributo' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('atributo') )">
+								<span *ngIf="invalid('atributo')">{{getError('atributo')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- esNull -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="esNull" [required]="true">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'esNull' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('esNull') )">
+								<span *ngIf="invalid('esNull')">{{getError('esNull')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- type -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="type" [required]="true">
+							<mat-label>{{'type' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('type') )">
+								<span *ngIf="invalid('type')">{{getError('type')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- length -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="length" [required]="false">
+							<mat-label>{{'length' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('length') )">
+								<span *ngIf="invalid('length')">{{getError('length')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- comentario -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="comentario" [required]="false">
+							<mat-label>{{'comentario' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('comentario') )">
+								<span *ngIf="invalid('comentario')">{{getError('comentario')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- tipoLLave -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="tipoLLave" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaTipoLlave" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'tipoLLave' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('tipoLLave') )">
+								<span *ngIf="invalid('tipoLLave')">{{getError('tipoLLave')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idModeloRef -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idModeloRef" [required]="false">
+								<mat-option *ngFor="let it of listaModelo" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'modeloRef' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idModeloRef') )">
+								<span *ngIf="invalid('idModeloRef')">{{getError('idModeloRef')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- mostrarGrilla -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="mostrarGrilla" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'mostrarGrilla' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('mostrarGrilla') )">
+								<span *ngIf="invalid('mostrarGrilla')">{{getError('mostrarGrilla')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- requieredFiltro -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="requieredFiltro" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'requieredFiltro' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('requieredFiltro') )">
+								<span *ngIf="invalid('requieredFiltro')">{{getError('requieredFiltro')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- requieredFrm -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="requieredFrm" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'requieredFrm' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('requieredFrm') )">
+								<span *ngIf="invalid('requieredFrm')">{{getError('requieredFrm')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- tipoComponente -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="tipoComponente" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaComponente" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'tipoComponente' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('tipoComponente') )">
+								<span *ngIf="invalid('tipoComponente')">{{getError('tipoComponente')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- indice -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="indice" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'indice' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('indice') )">
+								<span *ngIf="invalid('indice')">{{getError('indice')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- indiceGrupo -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="indiceGrupo" [required]="false">
+							<mat-label>{{'indiceGrupo' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('indiceGrupo') )">
+								<span *ngIf="invalid('indiceGrupo')">{{getError('indiceGrupo')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- alterAdd -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="alterAdd" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'alterAdd' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('alterAdd') )">
+								<span *ngIf="invalid('alterAdd')">{{getError('alterAdd')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- alterMod -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="alterMod" [required]="false">
+								<mat-option *ngFor="let it of typeService.listaRespuestaNatural" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'alterMod' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('alterMod') )">
+								<span *ngIf="invalid('alterMod')">{{getError('alterMod')}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<!-- Actions -->
+					<div class="flex items-center justify-end">
+						<button mat-stroked-button (click)="cancelar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'cancelar' | transloco}}
+						</button>
+						<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+							(click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'guardar' | transloco}}
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

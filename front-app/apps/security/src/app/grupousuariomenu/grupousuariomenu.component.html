@@ -1,0 +1,96 @@
+<form name="frmGrupoUsuarioMenu" #frmGrupoUsuarioMenu="ngForm" novalidate>
+	<input type="hidden" name="sistemaID" #sistemaID="ngModel" [(ngModel)]="menu.sistema.idSistema">
+	<input type="hidden" name="menuPadreID" #menuPadreID="ngModel" [(ngModel)]="menuDependencia.idMenu">
+	<input type="hidden" name="grupoUsuarioID" #grupoUsuarioID="ngModel" [(ngModel)]="grupoUsuario.idGrupoUsuario">
+	<div name="pnlGridListGrupoUsuarioMenu">
+		<mat-card>
+			<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+				<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+				<button matPrefix [style.visibility]="(descripcion != '')  ? 'visible' : 'hidden'" mat-icon-button
+					(click)="regresarDependencia()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<button *ngIf="term.value" matSuffix mat-icon-button aria-label="Clear" (click)="term.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+					<mat-icon class="mat-24">search</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'guardar' | transloco}}" (click)="listo()"
+					[disabled]="frmGrupoUsuarioMenu.invalid" color="accent">
+					<mat-icon class="mat-24">check</mat-icon>
+				</button>
+			</mat-form-field>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'grupoUsuario' | transloco}}</mat-label>
+								<input [required]=true matInput 
+									name="grupoUsuarioView" #grupoUsuarioView="ngModel"
+									[(ngModel)]="grupoUsuario.descripcionView"
+									(change)="abrirModalGrupoUsuarioInput($event.target.value)">
+								<mat-error
+									*ngIf="(grupoUsuarioView.errors  || grupoUsuarioID.errors ) && (grupoUsuarioView.dirty || grupoUsuarioView.touched)">
+									<span *ngIf="grupoUsuarioView.errors?.required">{{'requiered' |
+										translate}}</span>
+									<span *ngIf="grupoUsuarioID.errors?.required">{{'no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalGrupoUsuario()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'sistema' | transloco}}</mat-label>
+								<input [required]=true matInput 
+									name="sistemaParam" #sistemaParam="ngModel" [(ngModel)]="sistema.descripcionView"
+									(change)="abrirModalSistemaInput($event.target.value)">
+								<mat-error
+									*ngIf="(sistemaParam.errors  || sistemaID.errors ) && (sistemaParam.dirty || sistemaParam.touched)">
+									<span *ngIf="sistemaParam.errors?.required">{{'requiered' |
+										translate}}</span>
+									<span *ngIf="sistemaID.errors?.required">{{'no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalSistema()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="descripcion != ''">{{descripcion}}</h3>
+						<h3 mat-subheader>{{'menu.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let grupoUsuarioMenu of listaGrupoUsuarioMenu; let i = index"
+							class="noright">
+							<p mat-line (click)="verDependecia(grupoUsuarioMenu)"> {{grupoUsuarioMenu.nombre}}</p>
+							<p mat-line (click)="verDependecia(grupoUsuarioMenu)"> {{grupoUsuarioMenu.descripcion}}</p>
+							<mat-checkbox *ngIf="grupoUsuarioMenu.url != null &&  grupoUsuarioMenu.url != '' "
+								color="accent" (change)="agregarCheck(grupoUsuarioMenu)" name="checkedView{{i}}"
+								#checkedView="ngModel" [(ngModel)]="grupoUsuarioMenu.checked">
+							</mat-checkbox>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+	</div>
+	<app-privilegiogrupousuario [grupoUsuario]="grupoUsuario" [listaIdMenu]="listaIdMenu"
+		[listaPrivilegioGrupoUsuarioSelectMap]="listaPrivilegioGrupoUsuarioSelectMap" [fechaActual]="fechaActual">
+	</app-privilegiogrupousuario>
+</form>

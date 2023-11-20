@@ -1,0 +1,43 @@
+<form name="frmPrivilegioPersonalizado" #frmPrivilegioPersonalizado="ngForm" novalidate>
+	<div name="pnlGridListPrivilegioPersonalizado" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<span>{{'privilegio.pnl.title' | transloco}}</span>
+			<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+				<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+				<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+					<mat-icon class="mat-24">search</mat-icon>
+				</button>
+			</mat-form-field>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'privilegio.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item
+							*ngFor="let privilegioPersonalizado of listaPrivilegioPersonalizado; let i = index"
+							class="noright">
+							<p mat-line> {{privilegioPersonalizado.menu.nombre}}</p>
+							<p mat-line> {{privilegioPersonalizado.privilegio.acronimo}}</p>
+							<p mat-line> {{privilegioPersonalizado.privilegio.nombre}}</p>
+							<mat-checkbox color="accent" (change)="agregarCheck(privilegioPersonalizado)"
+								name="checkedView{{i}}" #checkedView="ngModel"
+								[(ngModel)]="privilegioPersonalizado.checked">
+							</mat-checkbox>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</form>

@@ -1,0 +1,120 @@
+<form name="frmFacturacion" #frmFacturacion="ngForm" novalidate>
+    <mat-tab-group class="demo-tab-group" mat-stretch-tabs>
+        <mat-tab>
+            <ng-template mat-tab-label>Bandeja Sunat</ng-template>
+            <div name="pnlGridListFacturacion" *ngIf="!mostrarPanelForm">
+                <mat-card>
+                    <mat-toolbar color="primary">
+                        <mat-icon color="accent" class="mat-24 cursorStil">select_all</mat-icon>
+                        <span class="app-fill-remaining"></span>
+                        <button matTooltip="Generar Archivos Planos"  matTooltipPosition="left"    mat-stroked-button (click)="generarExtracionXML()"  >
+                              Generar Archivos Planos (1)
+                        </button>
+                        <!-- <span class="span"></span>
+                        <button matTooltip="Generar Archivos Anulados" matTooltipPosition="left" *ngIf="showAccionNuevo && !esAlumno" [disabled]="esGenerarXMLAnulado || !esGenerarXML" mat-stroked-button (click)="generarExtracionXMLAnulados()" class="mat-24">
+                            <i class="ti ti-na" style="line-height: 5px !important;"></i> Generar Archivos Anulados
+                        </button> -->
+                        <!-- <span class="span"></span>
+                        <button matTooltip="Actualizar Bandeja" matTooltipPosition="left" *ngIf="showAccionNuevo && !esAlumno" mat-stroked-button (click)="actualizarComprobante()" class="mat-24">
+                            <i class="ti ti-loop" style="line-height: 5px !important;"></i>Actualizar Bandeja
+                        </button> -->
+                        <span class="span"></span>
+                        <button matTooltip="Limpiar Bandeja"  matTooltipPosition="left"   mat-stroked-button (click)="limpiarBandeja()" >
+                             Limpiar Bandeja (2)
+                        </button>
+                        
+                    </mat-toolbar>
+
+
+                    <mat-card-content>
+                        <mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+                        <div class="example-container mat-elevation-z8">
+                            <mat-table #table [dataSource]="dataSourceBandeja">
+
+                                <ng-container matColumnDef="nro">
+                                    <mat-header-cell *matHeaderCellDef> Nro </mat-header-cell>
+                                    <mat-cell *matCellDef="let element; let i = index">{{i+1}}</mat-cell>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="nrodoc2">
+                                    <mat-header-cell *matHeaderCellDef> Nro. RUC </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">{{element.num_ruc}}</mat-cell>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="tipodoc">
+                                    <mat-header-cell *matHeaderCellDef> Tipo Doc. </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">{{typeSelectItemService.tipoDocSunattaMap.get(element.tip_docu)}}</mat-cell>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="numerodoc">
+                                    <mat-header-cell *matHeaderCellDef> Número Doc. </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">{{element.num_docu}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="fgenera">
+                                    <mat-header-cell *matHeaderCellDef> Fecha Generación </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">{{element.fec_gene}} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="fenvio">
+                                    <mat-header-cell *matHeaderCellDef> Fecha Envío </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">{{element.fec_envi}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="situacion">
+                                    <mat-header-cell *matHeaderCellDef> Situación </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">{{typeSelectItemService.situacionSunatMap.get(element.ind_situ)}}</mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="observ">
+                                    <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">{{element.des_obse}} </mat-cell>
+                                </ng-container>
+
+
+                                <ng-container matColumnDef="Ac">
+                                    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <!-- <button mat-mini-fab color="accent" matTooltip="Descargar XML" (click)="generarComprobante(element)">
+                                                    <mat-icon >description</mat-icon>
+                                                  </button>
+                                        <span class="span"></span>
+                                        <button mat-mini-fab color="primary" matTooltip="Generar Comprobante" [disabled]="element.ind_situ =='02' || element.ind_situ =='03' || element.ind_situ =='04' || element.ind_situ =='08'" (click)="generarComprobante(element)">
+                                                    <mat-icon >open_in_browser</mat-icon>
+                                                  </button>
+                                        <span class="span"></span>
+                                        <button mat-mini-fab color="primary" [disabled]="element.ind_situ !='02' " matTooltip="Enviar Comprobante" (click)="enviarComprobante(element)">
+                                                        <mat-icon >import_export</mat-icon>
+                                                      </button> -->
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedColumnsBandeja"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumnsBandeja;"></mat-row>
+                            </mat-table>
+                            <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+                        </div>
+                        <mat-card-footer>
+                            <mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+                        </mat-card-footer>
+                    </mat-card-content>
+                </mat-card>
+
+
+            </div>
+
+        </mat-tab>
+
+    </mat-tab-group>
+
+    <div *ngIf="!isEnviarSuant" class="modal">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+</form>

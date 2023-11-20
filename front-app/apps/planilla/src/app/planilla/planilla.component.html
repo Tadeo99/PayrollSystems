@@ -1,0 +1,222 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+	<ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+		(changeEmitter)="changeEmitterEvent($event)" [keyButtonLabel]="'generar'"
+		[invalid]="frmGroup.invalid ||idTipoPlanilla.invalid || idAnhio.invalid || idPeriodoPlanilla.invalid"
+		[disabled]="disabled">
+		<div class="grid sm:grid-cols-6 gap-6 w-full px-6">
+			<!-- listaTipoPlanilla -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idTipoPlanilla" [required]="true"
+					(selectionChange)="onTipoPlanillaChange($event)">
+					<mat-option *ngFor="let it of listaTipoPlanilla " [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'tipoPlanilla' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idTipoPlanilla') )">
+					<span *ngIf="invalid('idTipoPlanilla')">{{getError('idTipoPlanilla')}}</span>
+				</mat-error>
+			</mat-form-field>
+			<!-- listaAnhio -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idAnhio" [required]="true" (selectionChange)="onAnhioChange($event)">
+					<mat-option *ngFor="let it of listaAnhio" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'anhio' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idAnhio') )">
+					<span *ngIf="invalid('idAnhio')">{{getError('idAnhio')}}</span>
+				</mat-error>
+			</mat-form-field>
+			<!-- listaPeriodoPlanilla -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idPeriodoPlanilla" [required]="true"
+					(selectionChange)="onPeriodoPlanillaChange($event)">
+					<mat-option *ngFor="let it of listaPeriodoPlanilla" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'periodoPlanilla' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('periodoPlanilla') )">
+					<span *ngIf="invalid('periodoPlanilla')">{{getError('periodoPlanilla')}}</span>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</ng-mf-bs-cabeceragrilla>
+	<!-- Main -->
+	<div class="flex flex-auto overflow-hidden">
+		<!-- ListaData list -->
+		<div class="flex flex-col flex-auto sm:overflow-y-auto">
+			<ng-container>
+				<div class="grid">
+					<!-- Header -->
+					<div class="planilla-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+						matSort matSortDisableClear>
+						<div class="hidden md:block" [mat-sort-header]="'idPersonal'">
+							{{ 'id' | transloco }}
+						</div>
+						<div [mat-sort-header]="'nombres'">{{ 'nombre' | transloco }}</div>
+						<div [mat-sort-header]="'totalIngreso'">{{ 'total Ingreso' | transloco }}</div>
+						<div [mat-sort-header]="'totalDescuento'">{{ 'total Descuento' | transloco }}</div>
+						<div [mat-sort-header]="'totalAportaciones'">{{ 'total Aportaciones' | transloco }}</div>
+						<div [mat-sort-header]="'netoPagar'">{{ 'netoPagar' | transloco }}</div>
+						<div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+					</div>
+					<!-- Rows -->
+					<ng-container *ngIf="(listaData$ | async) as listaData">
+						<ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+							<div class="planilla-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+								<!-- SKU -->
+								<div class="hidden md:block truncate" (click)="find(objData)">
+									{{objData.personal?.nroDoc}}
+								</div>
+								<!-- nombre -->
+								<div class="truncate" (click)="find(objData)">
+									{{objData?.personal?.nombres??''}}
+								</div>
+								<div class="truncate" (click)="find(objData)">
+									{{objData?.totalIngreso??0}}
+								</div>
+								<div class="truncate" (click)="find(objData)">
+									{{objData?.totalDescuento??0}}
+								</div>
+								<div class="truncate" (click)="find(objData)">
+									{{objData?.totalAportaciones??0}}
+								</div>
+								<div class="truncate" (click)="find(objData)">
+									{{objData?.netoPagar??0}}
+								</div>
+								<!-- accion -->
+								<div>
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
+										matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5"
+											[svgIcon]="selectedData?.idPersonal === objData.idPersonal ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'">
+										</mat-icon>
+									</button>
+								</div>
+							</div>
+							<div class="grid">
+								<ng-container *ngIf="selectedData?.idPersonal === objData.idPersonal">
+									<ng-container
+										*ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: objData}"></ng-container>
+								</ng-container>
+							</div>
+						</ng-container>
+					</ng-container>
+					<ng-mf-bs-noresultados [length]="(listaData$ | async)?.length??0"></ng-mf-bs-noresultados>
+				</div>
+			</ng-container>
+			<ng-template #rowDetailsTemplate let-product>
+				<div class="shadow-lg overflow-hidden">
+					<div class="flex border-b">
+						<!-- Selected product form -->
+						<form class="flex flex-col w-full">
+							<div class="flex flex-col sm:flex-row p-8">
+								<mat-tab-group class="sm:px-2 w-full" mat-stretch-tabs="false" [animationDuration]="'0'"
+									[animationDuration]="'0'">
+									<mat-tab
+										*ngFor="let valueDet of selectedData?.detallePlanillaDetallePlanillaConceptoList??[]; let j= index">
+										<ng-template mat-tab-label>
+											<p>{{typeService.tipoPDTMap.get(valueDet.concepto.conceptoPdt.tipo)}}
+											</p>
+										</ng-template>
+										<div class="flex flex-col divide-y border-t border-b">
+											<ng-container
+												*ngFor="let obj of valueDet.detallePlanillaDetallePlanillaConceptoList; trackBy: trackByFn; let i= index">
+												<div
+													class="grid grid-cols-4 flex flex-col sm:flex-row sm:items-center py-3">
+													<div class="col-span-2 flex items-center">
+														<div
+															class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+															<ng-container>
+																<div
+																	class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+																	{{obj.concepto.descripcion?.charAt(0)}}
+																</div>
+															</ng-container>
+														</div>
+														<div class="ml-4">
+															<div class="font-medium">
+																{{obj.concepto.descripcion}}
+															</div>
+														</div>
+													</div>
+													<div class="col-span-2 flex items-center mt-4 sm:mt-0 sm:ml-auto">
+														<div class="order-2 sm:order-1 ml-4 sm:ml-0">
+															<mat-form-field class="bs-mat-dense w-32"
+																[subscriptSizing]="'dynamic'">
+																<input [readonly]="true" type="number" matInput
+																	[required]="true"
+																	name="montoV{{obj.concepto.idConceptosTipoPlanilla}}{{i}}"
+																	#montoV="ngModel" [(ngModel)]="obj.monto">
+															</mat-form-field>
+														</div>
+													</div>
+												</div>
+											</ng-container>
+
+											<div
+												class="grid grid-cols-4 flex flex-col sm:flex-row sm:items-center py-3">
+												<div class="col-span-2 flex items-center">
+													<div
+														class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+														<ng-container>
+															<div
+																class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+																{{'Total'.charAt(0)}}
+															</div>
+														</ng-container>
+													</div>
+													<div class="ml-4">
+														<div class="font-medium">
+															{{'Total'}}
+														</div>
+													</div>
+												</div>
+												<div class="col-span-2 flex items-center mt-4 sm:mt-0 sm:ml-auto">
+													<div class="order-2 sm:order-1 ml-4 sm:ml-0">
+														<mat-form-field class="bs-mat-dense w-32"
+															[subscriptSizing]="'dynamic'"
+															*ngIf="valueDet.concepto.conceptoPdt.tipo === 'I'">
+															<input [readonly]="true" type="number" matInput
+																[required]="true"
+																name="montoV{{valueDet.concepto.idConceptosTipoPlanilla}}{{j}}"
+																#montoI="ngModel"
+																[(ngModel)]="selectedData!.totalIngreso">
+														</mat-form-field>
+														<mat-form-field class="bs-mat-dense w-32"
+															[subscriptSizing]="'dynamic'"
+															*ngIf="valueDet.concepto.conceptoPdt.tipo === 'D'">
+															<input [readonly]="true" type="number" matInput
+																[required]="true"
+																name="montoV{{valueDet.concepto.idConceptosTipoPlanilla}}{{j}}"
+																#montoD="ngModel"
+																[(ngModel)]="selectedData!.totalDescuento">
+														</mat-form-field>
+														<mat-form-field class="bs-mat-dense w-32"
+															[subscriptSizing]="'dynamic'"
+															*ngIf="valueDet.concepto.conceptoPdt.tipo === 'A'">
+															<input [readonly]="true" type="number" matInput
+																[required]="true"
+																name="montoV{{valueDet.concepto.idConceptosTipoPlanilla}}{{j}}"
+																#montoA="ngModel"
+																[(ngModel)]="selectedData!.totalAportaciones">
+														</mat-form-field>
+													</div>
+												</div>
+											</div>
+
+										</div>
+									</mat-tab>
+								</mat-tab-group>
+							</div>
+						</form>
+					</div>
+				</div>
+			</ng-template>
+		</div>
+	</div>
+</div>

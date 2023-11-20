@@ -1,0 +1,17 @@
+<mat-list dense>
+	<!-- <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+	  <h3 mat-subheader>{{'desempenho.grilla.pnl.title' | transloco}} ({{listasize}})</h3> -->
+	<mat-list-item  *ngFor="let desempenho of listaDesempenho" class="noright">
+	  <mat-icon style="margin-left: 40px;" mat-list-icon >folder</mat-icon>
+		<p  mat-line >{{desempenho.abreviatura}} {{desempenho.descripcion}}</p>	 			   
+	   <button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+					   (click)="abrirModalCapacidadEdit(desempenho)" mat-icon-button color="accent">
+		   <mat-icon class="mat-24">edit</mat-icon>
+	   </button>
+	   <button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+					   (click)="confirmarEliminar(desempenho)" mat-icon-button color="accent">
+		   <mat-icon class="mat-24">delete</mat-icon>
+	   </button>
+	   <mat-divider></mat-divider>
+   </mat-list-item>
+</mat-list>

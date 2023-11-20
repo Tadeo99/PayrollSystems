@@ -1,0 +1,168 @@
+<div [hidden]="mostrarPanelForm"
+    class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+    <ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+        (changeEmitter)="changeEmitterEvent($event)"></ng-mf-bs-cabeceragrilla>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+        <!-- ListaData list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container>
+                <div class="grid">
+                    <!-- Header -->
+                    <div class="tecnologia-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                        matSort matSortDisableClear>
+                        <div class="hidden md:block" [mat-sort-header]="'idTecnologia'">
+                            {{ 'id' | transloco }}
+                        </div>
+                        <div [mat-sort-header]="'nombre'">{{ 'nombre' | transloco }}</div>
+                        <div class="hidden lg:block" [mat-sort-header]="'estado'">{{ 'activo' | transloco }}</div>
+                        <div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+                    </div>
+                    <!-- Rows -->
+                    <ng-container *ngIf="(listaData$ | async) as listaData">
+                        <ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+                            <div class="tecnologia-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+                                <!-- SKU -->
+                                <div class="hidden md:block truncate">
+                                    {{objData.idTecnologia}}
+                                </div>
+
+                                <!-- Name -->
+                                <div class="truncate">
+                                    {{objData.nombre}}
+                                </div>
+
+                                <!-- Active -->
+                                <div class="hidden lg:block">
+                                    <ng-container *ngIf="objData.estado">
+                                        <mat-icon class="text-green-400 icon-size-5"
+                                            [svgIcon]="'heroicons_solid:check'"></mat-icon>
+                                    </ng-container>
+                                    <ng-container *ngIf="!objData.estado">
+                                        <mat-icon class="text-gray-400 icon-size-5" [svgIcon]="'heroicons_solid:x'">
+                                        </mat-icon>
+                                    </ng-container>
+                                </div>
+
+                                <!-- accion -->
+                                <div>
+                                    <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+                                        matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+                                        [ngClass]="{'pointer-events-none': isLoading}">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+                                        </mat-icon>
+                                    </button>
+
+                                    <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+                                        matTooltip="{{'eliminar' | transloco }}" (click)="confirmarEliminar(objData)"
+                                        [ngClass]="{'pointer-events-none': isLoading}">
+                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+                                        </mat-icon>
+                                    </button>
+
+                                </div>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-mf-bs-noresultados [length]="pagination?.length??0"></ng-mf-bs-noresultados>
+                </div>
+
+                <mat-paginator
+                    class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                    [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination?.length??0"
+                    [pageIndex]="pagination?.page" [pageSize]="pagination?.size" [pageSizeOptions]="[5, 10, 25, 100]"
+                    [showFirstLastButtons]="true"></mat-paginator>
+
+            </ng-container>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div *ngIf="mostrarPanelForm" class="flex flex-col w-full min-w-0 sm:absolute sm:inset-0 sm:overflow-hidden">
+
+    <mat-drawer-container class="flex-auto sm:h-full">
+
+        <!-- Drawer -->
+        <mat-drawer class="sm:w-96 dark:bg-gray-900" [autoFocus]="false" [mode]="drawerMode" [opened]="drawerOpened"
+            #drawer>
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+                <!-- Title -->
+                <div class="text-4xl font-extrabold tracking-tight leading-none"></div>
+                <!-- Close button -->
+                <div class="lg:hidden">
+                    <button mat-icon-button (click)="drawer.close()">
+                        <mat-icon [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                    </button>
+                </div>
+            </div>
+            <!-- Panel links -->
+            <div class="flex flex-col divide-y border-t border-b">
+                <ng-container *ngFor="let panel of panels; trackBy: trackByFn">
+                    <div class="flex px-8 py-5 cursor-pointer" [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel !== panel.id,
+                                    'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel === panel.id}"
+                        (click)="goToPanel(panel.id)">
+                        <mat-icon
+                            [ngClass]="{'text-hint': !selectedPanel || selectedPanel !== panel.id,
+                                        'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}"
+                            [svgIcon]="panel.icon"></mat-icon>
+                        <div class="ml-3">
+                            <div class="font-medium leading-6"
+                                [ngClass]="{'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}">
+                                {{panel.title}}
+                            </div>
+                            <div class="mt-0.5 text-secondary">
+                                {{panel.description}}
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </mat-drawer>
+        <!-- Drawer content -->
+        <mat-drawer-content class="flex flex-col">
+            <!-- Main -->
+            <div class="flex-auto px-3 pt-4 pb-6 md:p-4 md:pb-6 lg:p-6">
+                <!-- Panel header -->
+                <div class="flex items-center">
+                    <!-- Drawer toggle -->
+                    <button mat-icon-button (click)="drawer.toggle()">
+                        <mat-icon [svgIcon]="'heroicons_outline:menu-alt-2'"></mat-icon>
+                    </button>
+                    <!-- Panel title -->
+                    <a class="ml-2 lg:ml-0 text-3xl font-bold tracking-tight leading-none" mat-button
+                        [color]="'primary'" (click)="cancelar()" [ngClass]="{'pointer-events-none': isLoading}">
+                        <mat-icon [svgIcon]="'heroicons_outline:reply'"></mat-icon>
+                        <span class="ml-2"> {{getPanelInfo(selectedPanel)?.title}}</span>
+                    </a>
+                </div>
+                <!-- Load settings panel -->
+                <div class="mt-1">
+                    <ng-container [ngSwitch]="selectedPanel">
+                        <!-- Account -->
+                        <ng-container *ngSwitchCase="'basico'">
+                            <ng-mf-bs-tecnologiafrm (changeEmitter)="changeEmitterEventCrear($event)"
+                                [data]="selectedData"></ng-mf-bs-tecnologiafrm>
+                        </ng-container>
+                        <!-- plantilla -->
+                        <ng-container *ngSwitchCase="'plantilla'">
+                            <ng-mf-bs-plantilla [data]="selectedData"
+                                [id]="selectedData?.idTecnologia??''"></ng-mf-bs-plantilla>
+                        </ng-container>
+                        <!-- equivalenciatype -->
+                        <ng-container *ngSwitchCase="'equivalenciaType'">
+                            <ng-mf-bs-equivalenciatype [data]="selectedData"
+                                [id]="selectedData?.idTecnologia??''"></ng-mf-bs-equivalenciatype>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

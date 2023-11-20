@@ -1,0 +1,52 @@
+ <form [formGroup]="frmGroup"  novalidate>
+   <div name="pnlGridFrmPlanPagos" *ngIf="!mostrarPanelForm"  >  
+    <mat-card >	
+		<mat-card-content>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  formGroupName="anhio" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'anhio' | transloco }}</mat-label>
+						<input  matInput   formControlName="descripcionView" 
+						required >
+						<mat-error *ngIf="(invalid('anhio.descripcionView')  )" > 
+							<span *ngIf="invalid('anhio.descripcionView')">{{getError('anhio.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAnhioanhio()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-text" formGroupName="periodo"  >
+					  <mat-form-field class="input-full-width">
+						  <mat-label>{{'periodo' | transloco }}</mat-label>
+						  <input  matInput  formControlName="descripcionView" 
+						  required>
+						  <mat-error *ngIf="(invalid('periodo.descripcionView')  )" > 
+							  <span *ngIf="invalid('periodo.descripcionView')">{{getError('periodo.descripcionView')}}</span>
+						  </mat-error>
+						  <mat-icon matSuffix class="lupa-ico" (click)="abrirModalPeriodoidPeriodo()" >search</mat-icon>
+					  </mat-form-field>
+					 </div>					
+				  </div>
+			</div>				
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="100%" fxFlex.xs="100%"> 
+				  <div class="div-input-text" formGroupName="alumno" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'alumno' | transloco }}</mat-label>
+						<input  matInput   formControlName="descripcionView"   required
+						  >
+						<mat-error *ngIf="(invalid('alumno.descripcionView')  )" > 
+							<span *ngIf="invalid('alumno.descripcionView')">{{getError('alumno.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAlumnoalumno()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>	
+		 </mat-card-content>	
+		 <app-detplanpagos [data]="planPagos"  [idNivel]="idNivel" (change)="listarDetPago($event)" [btonAdd]="frmGroup.invalid" [listaDetPlanPagosTemp]="detPlanPagosList"></app-detplanpagos>		
+	   </mat-card>
+	</div>
+</form>

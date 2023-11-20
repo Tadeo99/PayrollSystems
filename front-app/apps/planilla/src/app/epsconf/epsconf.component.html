@@ -1,0 +1,187 @@
+<div [hidden]="mostrarPanelForm"
+	class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+	<ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+		(changeEmitter)="changeEmitterEvent($event)">
+		<div class="grid sm:grid-cols-6 gap-6 w-full px-6">
+
+			<!-- idItemByEPS -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idEPS" [required]="true" (selectionChange)="onEPSChange($event)">
+					<mat-option *ngFor="let it of listaEPS " [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'EPS' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idEPS') )">
+					<span *ngIf="invalid('idEPS')">{{getError('idEPS')}}</span>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</ng-mf-bs-cabeceragrilla>
+
+	<!-- Main -->
+	<div class="flex flex-auto overflow-hidden">
+
+		<!-- ListaData list -->
+		<div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+			<ng-container>
+				<div class="grid">
+					<!-- Header -->
+					<div class="epsconf-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+						matSort matSortDisableClear>
+						<div [mat-sort-header]="'idItemByRegimenPensionario'">{{ 'EPS' | transloco }}</div>
+						<div [mat-sort-header]="'planBase'">{{ 'planBase' | transloco }}</div>
+						<div [mat-sort-header]="'planAdicional1'">{{ 'planAdicional1' |
+							transloco }}</div>
+						<div [mat-sort-header]="'planAdicional2'">{{ 'planAdicional2' | transloco }}</div>
+						<div [mat-sort-header]="'planAdicional3'">{{ 'planAdicional3' | transloco }}</div>
+						<div [mat-sort-header]="'planAdicional4'">{{ 'planAdicional4' |
+							transloco }}</div>
+						<div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+					</div>
+					<!-- Rows -->
+					<ng-container *ngIf="(listaData$ | async) as listaData">
+						<ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+							<div class="epsconf-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+								<!-- afp -->
+								<div class="truncate">
+									{{objData.itemByEps.nombre}}
+								</div>
+								<!-- planBase -->
+								<div class="truncate">
+									{{objData.planBase}}
+								</div>
+								<!-- planAdicional1 -->
+								<div class="truncate">
+									{{objData.planAdicional1}}
+								</div>
+								<!-- planAdicional2 -->
+								<div class="truncate">
+									{{objData.planAdicional2}}
+								</div>
+								<!-- planAdicional3 -->
+								<div class="truncate">
+									{{objData.planAdicional3}}
+								</div>
+								<!-- planAdicional4 -->
+								<div class="truncate">
+									{{objData.planAdicional4}}
+								</div>
+
+								<!-- accion -->
+								<div>
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+										</mat-icon>
+									</button>
+
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'eliminar' | transloco }}" (click)="confirmarEliminar(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+										</mat-icon>
+									</button>
+
+								</div>
+							</div>
+						</ng-container>
+					</ng-container>
+					<ng-mf-bs-noresultados [length]="pagination?.length??0"></ng-mf-bs-noresultados>
+				</div>
+
+				<mat-paginator
+					class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+					[ngClass]="{'pointer-events-none': isLoading}" [length]="pagination?.length??0"
+					[pageIndex]="pagination?.page" [pageSize]="pagination?.size" [pageSizeOptions]="[5, 10, 25, 100]"
+					[showFirstLastButtons]="true"></mat-paginator>
+
+			</ng-container>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="mostrarPanelForm" class="flex flex-col flex-auto min-w-0">
+	<!-- Main -->
+	<div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+		<div class="flex flex-col w-full">
+			<ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+			<!-- Form -->
+			<div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+				<!-- Alert -->
+				<ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+					{{alert.message}}
+				</ng-mf-bs-alert>
+				<form class="space-y-3" [formGroup]="frmGroup">
+					<div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+						<!-- idItemByEps -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByEps" [required]="true">
+								<mat-option *ngFor="let it of listaEPS " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByEps' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByEps') )">
+								<span *ngIf="invalid('idItemByEps')">{{getError('idItemByEps')}}</span>
+							</mat-error>
+						</mat-form-field>
+
+						<!-- planBase -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="planBase" [required]="true">
+							<mat-label>{{'planBase' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('planBase') )">
+								<span *ngIf="invalid('planBase')">{{getError('planBase')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- planAdicional1 -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="planAdicional1" [required]="true">
+							<mat-label>{{'planAdicional1' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('planAdicional1') )">
+								<span *ngIf="invalid('planAdicional1')">{{getError('planAdicional1')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- planAdicional2 -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="planAdicional2" [required]="true">
+							<mat-label>{{'planAdicional2' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('planAdicional2') )">
+								<span *ngIf="invalid('planAdicional2')">{{getError('planAdicional2')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- planAdicional3 -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="planAdicional3" [required]="true">
+							<mat-label>{{'planAdicional3' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('planAdicional3') )">
+								<span *ngIf="invalid('planAdicional3')">{{getError('planAdicional3')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- planAdicional4 -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="planAdicional4" [required]="true">
+							<mat-label>{{'planAdicional4' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('planAdicional4') )">
+								<span *ngIf="invalid('planAdicional4')">{{getError('planAdicional4')}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<!-- Actions -->
+					<div class="flex items-center justify-end">
+						<button mat-stroked-button (click)="cancelar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'cancelar' | transloco}}
+						</button>
+						<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+							(click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'guardar' | transloco}}
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

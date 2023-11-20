@@ -1,0 +1,76 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ng-mf/shared/bs": [
+        "libs/shared/bs/src/index.ts",
+        "libs/shared/bs/src/lib/animations/index.ts",
+        "libs/shared/bs/src/lib/directives/scroll-reset/index.ts",
+        "libs/shared/bs/src/lib/directives/scrollbar/index.ts",
+        "libs/shared/bs/src/lib/directives/hide/index.ts",
+        "libs/shared/bs/src/lib/directives/image/index.ts",
+        "libs/shared/bs/src/lib/pipes/index.ts",
+        "libs/shared/bs/src/lib/validators/index.ts",
+        "libs/shared/bs/src/lib/version/index.ts",
+        "libs/shared/bs/src/lib/color/index.ts"
+      ],
+      "@ng-mf/shared/components/core": [
+        "libs/shared/components/core/src/index.ts",
+        "libs/shared/components/core/src/lib/base/index.ts",
+        "libs/shared/components/core/src/lib/util/index.ts",
+        "libs/shared/components/core/src/lib/alert/index.ts",
+        "libs/shared/components/core/src/lib/card/index.ts",
+        "libs/shared/components/core/src/lib/drawer/index.ts",
+        "libs/shared/components/core/src/lib/fullscreen/fullscreen.module.ts",
+        "libs/shared/components/core/src/lib/highlight/index.ts",
+        "libs/shared/components/core/src/lib/loading-bar/index.ts",
+        "libs/shared/components/core/src/lib/masonry/index.ts",
+        "libs/shared/components/core/src/lib/navigation/index.ts",
+        "libs/shared/components/core/src/lib/cabeceragrilla/index.ts",
+        "libs/shared/components/core/src/lib/titlefrm/index.ts",
+        "libs/shared/components/core/src/lib/paginacion/index.ts",
+        "libs/shared/components/core/src/lib/noresultados/index.ts",
+        "libs/shared/components/core/src/lib/upload/index.ts",
+        "libs/shared/components/core/src/lib/avatar/index.ts",
+        "libs/shared/components/core/src/lib/selectitem/index.ts",
+        "libs/shared/components/core/src/lib/shared.module"
+      ],
+      "@ng-mf/shared/service/aas": [
+        "libs/shared/service/aas/src/index.ts",
+        "libs/shared/service/aas/src/lib/user/index.ts"
+      ],
+      "@ng-mf/shared/service/comun": [
+        "libs/shared/service/comun/src/index.ts",
+        "libs/shared/service/comun/src/lib/type/index.ts"
+      ],
+      "@ng-mf/shared/service/core": [
+        "libs/shared/service/core/src/index.ts",
+        "libs/shared/service/core/src/lib/base/index.ts",
+        "libs/shared/service/core/src/lib/config/index.ts",
+        "libs/shared/service/core/src/lib/confirmation/index.ts",
+        "libs/shared/service/core/src/lib/loading/index.ts",
+        "libs/shared/service/core/src/lib/media-watcher/index.ts",
+        "libs/shared/service/core/src/lib/navigation/index.ts",
+        "libs/shared/service/core/src/lib/platform/index.ts",
+        "libs/shared/service/core/src/lib/splash-screen/index.ts",
+        "libs/shared/service/core/src/lib/utils/index.ts",
+        "libs/shared/service/core/src/lib/typeselectitem/index.ts",
+        "libs/shared/service/core/src/lib/websocket/index.ts"        
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

@@ -1,0 +1,38 @@
+.example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+    margin-left: 8px;
+  }
+  .acordionPer {
+    margin-left: -8px!important;
+    margin-right: -20px!important;
+  }
+
+  
+.card-seleccionado {
+    box-shadow: 3px -3px 5px 0px #0078c18f !important;
+    border: 1px solid #0078C1 !important;
+    margin-left: -8px!important;
+    margin-right: -18px!important;
+    margin-top: 8px;
+  }
+
+  .card-per {
+    box-shadow: 3px -3px 5px 0px #3638398f !important;
+    border: 1px solid #6d7174 !important;
+    margin-left: -8px!important;
+    margin-right: -18px!important;
+    margin-top: 8px;
+  }
+  
+  .estado-no-disponible {
+    color: #DE022A!important;
+    font-size: small!important;
+  }
+  
+  .estado-disponible {
+    color: #00CE53!important;
+    font-size: small!important;
+  }

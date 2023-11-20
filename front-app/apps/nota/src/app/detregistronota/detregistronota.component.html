@@ -1,0 +1,148 @@
+<form name="fmrDetRegistroNota" #fmrDetRegistroNota="ngForm" novalidate>
+	<div name="pnlGridListDetRegistroNota">
+		<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button mat-stroked-button color="accent" (click)="regresar()">
+					<mat-icon>reply_all</mat-icon>
+					Atras
+				</button>
+				<span>Curso: {{detCargaAcademica.detMallaCurricular.descripcionCurso}} - ({{listasize}})</span>
+				<span class="app-fill-remaining"></span>
+				<section>
+					<div class="example-button-row">
+						<!-- <button mat-mini-fab (click)="abrirModalCriterioEvaluacion()"
+							matTooltip="Agregar Concepto de nota" matTooltipPosition="left">
+							<mat-icon>add_circle</mat-icon>
+						</button> -->
+						<button color="primary" (click)="guardar()" [disabled]="(disabledBotonGuardar)"
+							mat-raised-button>{{'guardar' |
+							translate}}
+						</button>
+					</div>
+				</section>
+
+
+			</mat-toolbar>
+			<mat-card-content>
+				<table mat-table [dataSource]="dataSourceBandeja" multiTemplateDataRows>
+
+					<ng-container matColumnDef="view">
+						<th mat-header-cell *matHeaderCellDef> </th>
+						<td mat-cell *matCellDef="let element">
+							<button mat-icon-button
+								(click)="detRegistroNota = detRegistroNota === element ? null : element">
+								<mat-icon [@indicatorRotate]="element == detRegistroNota ? 'expanded': 'collapsed'">
+									arrow_drop_down</mat-icon>
+							</button>
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="personal">
+						<th mat-header-cell *matHeaderCellDef> Nombres </th>
+						<td mat-cell *matCellDef="let element">{{element.detMatricula.matricula.alumno.nombres}}
+							{{element.detMatricula.matricula.alumno.apellidoPaterno}}
+							{{element.detMatricula.matricula.alumno.apellidoMaterno}}</td>
+					</ng-container>
+
+					<ng-container matColumnDef="prom1">
+						<th mat-header-cell *matHeaderCellDef> Prom. Unidad </th>
+						<td mat-cell *matCellDef="let element">
+							<div *ngIf="element.detRegistroNotaCursoNotaUnidadPromList[0].nota != 0">
+								<p *ngIf="detCargaAcademica.detMallaCurricular.tipoCalculo!='L'">
+									{{element.detRegistroNotaCursoNotaUnidadPromList[0].nota}}</p>
+								<p *ngIf="detCargaAcademica.detMallaCurricular.tipoCalculo=='L'">
+									{{typeSelectItemService.NotaLetraMap.get(element.detRegistroNotaCursoNotaUnidadPromList[0].nota)}}
+								</p>
+							</div>
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="prom2">
+						<th mat-header-cell *matHeaderCellDef> Prom. Periodo </th>
+						<td mat-cell *matCellDef="let element"> </td>
+					</ng-container>
+
+					<ng-container matColumnDef="nota">
+						<th mat-header-cell *matHeaderCellDef> Nota Final </th>
+						<td mat-cell *matCellDef="let element">
+							<div *ngIf="element.notaLetra != 0">
+								<p *ngIf="detCargaAcademica.detMallaCurricular.tipoCalculo!='L'">{{element.notaLetra}}
+								</p>
+								<p *ngIf="detCargaAcademica.detMallaCurricular.tipoCalculo=='L'">
+									{{typeSelectItemService.NotaLetraMap.get(element.notaLetra)}}</p>
+							</div>
+						</td>
+					</ng-container>
+
+					<ng-container matColumnDef="expandedDetail">
+						<td mat-cell *matCellDef="let element ; let f = dataIndex"
+							[attr.colspan]="columnsToDisplay.length">
+							<div class="example-element-detail"
+								[@detailExpand]="element == detRegistroNota ? 'expanded' : 'collapsed'">
+								<mat-list mat-line class="horizontal-mat-list-item"
+									style="list-style: none; text-align: center;"
+									*ngFor="let criterioEvaluacion of listaCriterioEvaluacionDisponible ; let i = index">
+									<mat-list-item class="menu-perP" dense>
+										<p mat-line>{{criterioEvaluacion.codigo}}</p>
+									</mat-list-item>
+									<mat-nav-list *ngIf="(criterioEvaluacion.criterioEvaluacionHijos.length > 0)">
+										<app-criterioevaluacionrecursive [detRegistroNota]="element"
+											[element]="detRegistroNota" [indexTemp]="i"
+											[listaCriterioEvaluacionDisponible]="criterioEvaluacion.criterioEvaluacionHijos">
+										</app-criterioevaluacionrecursive>
+									</mat-nav-list>
+								</mat-list>
+							</div>
+							<div class="example-element-detail"
+								[@detailExpand]="element == detRegistroNota ? 'expanded' : 'collapsed'">
+								<mat-list mat-line class="horizontal-mat-list-item"
+									*ngFor="let criterioEvaluacion of listaCriterioEvaluacionDisponibleEvaluar ; let i = index">
+									<!-- {{listaCriterioEvaluacionDisponibleEvaluar.length}} -->
+									<mat-form-field appearance="outline" style="width: 60px !important;"
+										*ngIf="detCargaAcademica.detMallaCurricular.tipoCalculo!='L'"
+										color="{{ !idNotaLetra.valid ? 'warn' : 'primary' }}"
+										[ngClass]="{'aprobado': element.cursoNotaEvaluarUnidad[i].nota >=11, 'desaprobado':element.cursoNotaEvaluarUnidad[i].nota <=10}">
+										<mat-label>{{criterioEvaluacion.codigo}}</mat-label>
+										<input number [range]="[1-20]" matInput
+											[disabled]="criterioEvaluacion.codigo=='Prom.'"
+											[(ngModel)]="element.cursoNotaEvaluarUnidad[i].nota"
+											name="idNotaLetra{{element.idDetRegistroNota}}{{i}}" #idNotaLetra="ngModel"
+											(change)="actualizarFormularioPadre(fmrDetRegistroNota.invalid,criterioEvaluacion,element,f)">
+										<mat-error
+											*ngIf="idNotaLetra.errors  && (idNotaLetra.dirty || idNotaLetra.touched)">
+											<span *ngIf="idNotaLetra.errors?.required">requerido</span>
+											<span *ngIf="idNotaLetra.errors?.range">fuera de rango</span>
+											<span *ngIf="idNotaLetra.errors?.number">no es numero</span>
+										</mat-error>
+									</mat-form-field>
+
+
+									<mat-form-field appearance="outline" style="width: 60px !important;"
+										*ngIf="detCargaAcademica.detMallaCurricular.tipoCalculo =='L'">
+										<mat-label>{{criterioEvaluacion.codigo}}</mat-label>
+										<mat-select number 
+											[(ngModel)]="element.cursoNotaEvaluarUnidad[i].nota"
+											name="idNotaLetra{{element.idDetRegistroNota}}{{i}}" #idNotaLetra="ngModel">
+											<mat-option *ngFor="let it of typeSelectItemService.listaNotaLetra"
+												[value]="it.id">
+												 {{it.nombre}}
+											</mat-option>
+										</mat-select>
+									</mat-form-field>
+
+								</mat-list>
+							</div>
+						</td>
+					</ng-container>
+					<tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+					<tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+						[class.example-expanded-row]="detRegistroNota === element">
+					</tr>
+					<tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+				</table>
+			</mat-card-content>
+			<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+		</mat-card>
+	</div>
+</form>

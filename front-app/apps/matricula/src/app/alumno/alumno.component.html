@@ -1,0 +1,380 @@
+<form [formGroup]="frmGroup" novalidate>
+	<div name="pnlGridListAlumno" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<span *ngIf="showModal">{{'alumno.pnl.title' | transloco}}</span>
+			<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+				<mat-icon class="mat-24">reply</mat-icon>
+			</button>
+			<mat-form-field class="search-full-width" color="accent">
+				<mat-icon matPrefix>search</mat-icon>
+				<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'buscar' | transloco}}">
+				<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+					<mat-icon class="mat-24">replay</mat-icon>
+				</button>
+				<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx">
+					<mat-icon>add</mat-icon>
+				</button>
+			</mat-form-field>
+			<mat-card-content>
+				<div fxLayout="row wrap" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" >
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'grado' | transloco}}</mat-label>
+								<input matInput  [formControl]="filtroGrado">
+
+								<mat-icon class="lupa-ico" matSuffix *ngIf="filtroGrado.value!=null" (click)="clearModal()">close
+								</mat-icon>
+
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalGradogrado2()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'estado' | transloco}}</mat-label>
+								<mat-select  [formControl]="filtroEstado"
+									(selectionChange)="changeEstado()">
+									<mat-option *ngFor="let it of typeSelectItemService.listaTipoEstado"
+										[value]="it.id">
+										 {{it.nombre}}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'alumno.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let alumno of listaAlumno" class="noright">
+							<mat-icon mat-list-icon (click)="buscarID(alumno)">person</mat-icon>
+							<p mat-line>{{alumno.apellidoPaterno}} {{alumno.apellidoMaterno}} {{alumno.nombres}}</p>
+							<p mat-line>{{alumno.grado.itemByNivel.nombre}} - {{alumno.grado.nombre}}</p>
+							<mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(alumno)"
+								name="checkedView" #checkedView="ngModel" [(ngModel)]="alumno.checked">
+							</mat-checkbox>
+							<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck"
+								mat-icon-button (click)="asociar(alumno)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+							</button>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(alumno)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">edit</mat-icon>
+							</button>
+							<button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+								(click)="confirmarEliminar(alumno)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">delete</mat-icon>
+							</button>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+			</mat-card-content>
+		</mat-card>
+		<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+			(click)="dialogRef.close(listaAlumnoSelectMap)">
+			<mat-icon>check_circle</mat-icon>
+		</button>
+	</div>
+
+	<div name="pnlGridFrmAlumno" *ngIf="mostrarPanelForm">
+		<mat-card>
+			<mat-card-header>
+				<div mat-card-avatar>
+					<mat-icon>person</mat-icon>
+				</div>
+				<mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }}</mat-card-title>
+				<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</mat-card-title>
+			</mat-card-header>
+			<mat-divider></mat-divider>
+			<p></p>
+			<mat-card-content>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="40%" fxFlex.xs="40%"></div>
+					<div fxFlex="15%" fxFlex.xs="15%">
+						<app-fileuploader [uploader]="uploader"></app-fileuploader>
+					</div>
+					<div fxFlex="45%" fxFlex.xs="45%"></div>
+				</div>
+				<!-- <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					 <div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="postulante">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'postulante' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView">
+								<mat-error *ngIf="(invalid('postulante.descripcionView')  )">
+									<span
+										*ngIf="invalid('postulante.descripcionView')">{{getError('postulante.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPostulantepostulante()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>  
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="grado">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'grado' | transloco}}</mat-label>
+								<input matInput  formControlName="descripcionView"
+									required>
+								<mat-error *ngIf="(invalid('grado.descripcionView')  )">
+									<span
+										*ngIf="invalid('grado.descripcionView')">{{getError('grado.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalGradogrado()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div> -->
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text" formGroupName="grado">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'grado' | transloco}}</mat-label>
+								<input matInput  formControlName="descripcionView"
+									required>
+								<mat-error *ngIf="(invalid('grado.descripcionView')  )">
+									<span
+										*ngIf="invalid('grado.descripcionView')">{{getError('grado.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalGradogrado()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'codigo' | transloco}}</mat-label>
+								<input [maxlength]="150" matInput 
+									formControlName="codigo">
+								<mat-error *ngIf="(invalid('codigo') )">
+									<span *ngIf="invalid('codigo')">{{getError('codigo')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'estado' | transloco}}</mat-label>
+								<mat-select  formControlName="estado"
+									[required]="true">
+									<mat-option *ngFor="let it of typeSelectItemService.listaTipoEstado"
+										[value]="it.id">
+										 {{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="(invalid('estado') )">
+									<span *ngIf="invalid('estado')">{{getError('estado')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="itemByDocIdentidad">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'docIdentidad' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView" required>
+								<mat-error *ngIf="(invalid('itemByDocIdentidad.descripcionView')  )">
+									<span
+										*ngIf="invalid('itemByDocIdentidad.descripcionView')">{{getError('itemByDocIdentidad.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItemitemByDocIdentidad()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'nroDocIdentidad' | transloco}}</mat-label>
+								<input [maxlength]="20" matInput 
+									formControlName="nroDoc" required>
+								<mat-error *ngIf="(invalid('nroDoc') )">
+									<span *ngIf="invalid('nroDoc')">{{getError('nroDoc')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'apellidoPaterno' | transloco}}</mat-label>
+								<input [maxlength]="150" matInput 
+									formControlName="apellidoPaterno" required>
+								<mat-error *ngIf="(invalid('apellidoPaterno') )">
+									<span *ngIf="invalid('apellidoPaterno')">{{getError('apellidoPaterno')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'apellidoMaterno' | transloco}}</mat-label>
+								<input [maxlength]="150" matInput 
+									formControlName="apellidoMaterno" required>
+								<mat-error *ngIf="(invalid('apellidoMaterno') )">
+									<span *ngIf="invalid('apellidoMaterno')">{{getError('apellidoMaterno')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'nombres' | transloco}}</mat-label>
+								<input [maxlength]="150" matInput 
+									formControlName="nombres" required>
+								<mat-error *ngIf="(invalid('nombres') )">
+									<span *ngIf="invalid('nombres')">{{getError('nombres')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'fechaNacimiento' | transloco}}</mat-label>
+								<input matInput [matDatepicker]="ffechaNacimiento"
+									 formControlName="fechaNacimiento">
+								<mat-datepicker-toggle matSuffix [for]="ffechaNacimiento"></mat-datepicker-toggle>
+								<mat-error *ngIf="invalid('fechaNacimiento')">
+									<span *ngIf="invalid('fechaNacimiento')">{{getError('fechaNacimiento')}}</span>
+								</mat-error>
+								<mat-datepicker #ffechaNacimiento [touchUi]="touch"></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'telefono1' | transloco}}</mat-label>
+								<input [maxlength]="20" matInput 
+									formControlName="telefono1">
+								<mat-error *ngIf="(invalid('telefono1') )">
+									<span *ngIf="invalid('telefono1')">{{getError('telefono1')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'telefono2' | transloco}}</mat-label>
+								<input [maxlength]="20" matInput 
+									formControlName="telefono2">
+								<mat-error *ngIf="(invalid('telefono2') )">
+									<span *ngIf="invalid('telefono2')">{{getError('telefono2')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'celular' | transloco}}</mat-label>
+								<input [maxlength]="20" matInput 
+									formControlName="celular">
+								<mat-error *ngIf="(invalid('celular') )">
+									<span *ngIf="invalid('celular')">{{getError('celular')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'email' | transloco}}</mat-label>
+								<input [maxlength]="100" matInput 
+									formControlName="email">
+								<mat-error *ngIf="(invalid('email') )">
+									<span *ngIf="invalid('email')">{{getError('email')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'sexo' | transloco}}</mat-label>
+								<mat-select  formControlName="sexo"
+									[required]="true">
+									<mat-option *ngFor="let it of typeSelectItemService.listaGenero" [value]="it.id">
+										 {{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="(invalid('sexo') )">
+									<span *ngIf="invalid('sexo')">{{getError('sexo')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text" formGroupName="lugarNacimiento">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'lugarNacimiento' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView">
+								<mat-error *ngIf="(invalid('lugarNacimiento.descripcionView')  )">
+									<span
+										*ngIf="invalid('lugarNacimiento.descripcionView')">{{getError('lugarNacimiento.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalUbigeolugarNacimiento()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text" formGroupName="itemByNacionalidad">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'nacionalidad' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView">
+								<mat-error *ngIf="(invalid('itemByNacionalidad.descripcionView')  )">
+									<span
+										*ngIf="invalid('itemByNacionalidad.descripcionView')">{{getError('itemByNacionalidad.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItemitemByNacionalidad()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+
+			</mat-card-content>
+			<mat-card-actions>
+				<button (click)="guardar()" color="primary" [disabled]="frmGroup.invalid" mat-raised-button>{{'guardar'
+					| transloco}}</button>
+
+				<button (click)="cancelar()" color="accent" mat-raised-button>{{'cancelar' | transloco}}</button>
+			</mat-card-actions>
+		</mat-card>
+	</div>
+</form>

@@ -1,0 +1,209 @@
+<form *ngIf="!pnlFromCompetencia" [formGroup]="frmGroup"  novalidate>
+	<div name="pnlGridListDetMallaCurricular" *ngIf="!mostrarPanelForm"  >
+   <mat-card>	 
+	   <mat-form-field class="search-full-width" color="accent">
+		   <mat-icon matPrefix>search</mat-icon>
+		   <input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+				   placeholder="{{'search' | transloco}}">
+		   <button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+			   <mat-icon>close</mat-icon>
+		   </button>
+		   <button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+			   <mat-icon class="mat-24">replay</mat-icon>
+		   </button>
+		   <button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+				   (click)="nuevo()" color="accent" class="app-fabx">
+			   <mat-icon>add</mat-icon>
+		   </button>
+	   </mat-form-field>	  
+	   <mat-card-content>
+		<mat-nav-list>
+		   <mat-list dense>
+		   <h3 mat-subheader *ngIf="descripcion != ''" > <button  mat-icon-button *ngIf="(descripcion != '')"  (click)="regresarDependencia()" color="accent"><mat-icon class="mat-24">reply</mat-icon></button> {{descripcion}}</h3>
+			  <h3 mat-subheader>{{'detMallaCurricular.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+			<mat-list-item *ngFor="let detMallaCurricular of listaDetMallaCurricular; let i=index" class="noright">
+			  <mat-icon mat-list-icon  >book</mat-icon>
+			  <p mat-line  mat-line>{{detMallaCurricular.codigoAsignatura}} - {{detMallaCurricular.descripcionCurso}}</p>
+			  <p mat-line   >{{typeSelectItemService.TipoAsignaturaMap.get(detMallaCurricular.tipoAsignatura)}}</p>
+				<mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(detMallaCurricular)"  
+				name="checkedView" #checkedView="ngModel" [(ngModel)]="detMallaCurricular.checked">
+				</mat-checkbox>
+			   <button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck" mat-icon-button (click)="asociar(detMallaCurricular)" color="accent">
+				   <mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+			   </button>
+			   <button matTooltip="Competencias" *ngIf="showAccionModificar"
+			   (click)="verCompetencia(detMallaCurricular)" mat-icon-button color="accent">
+				   <mat-icon class="mat-24">layers</mat-icon>
+			   </button>				   
+			   <button matTooltip="Sub Cursos" *ngIf="showAccionModificar"
+			   (click)="verDependecia(detMallaCurricular)" mat-icon-button color="accent">
+				   <mat-icon class="mat-24">visibility</mat-icon>
+			   </button>		   
+			   <button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+							   (click)="buscarID(detMallaCurricular)" mat-icon-button color="accent">
+				   <mat-icon class="mat-24">edit</mat-icon>
+			   </button>
+			   <button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+							   (click)="confirmarEliminar(detMallaCurricular)" mat-icon-button color="accent">
+				   <mat-icon class="mat-24">delete</mat-icon>
+			   </button>
+			   <mat-divider></mat-divider>
+		   </mat-list-item>
+			</mat-list>
+	   </mat-nav-list>
+	   <app-paginacion [dataProvider]="dataProvider" [cantidadPage] = "cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+	 </mat-card-content>			
+   </mat-card >	
+   <button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab (click)="dialogRef.close(listaDetMallaCurricularSelectMap)"  >
+	   <mat-icon>check_circle</mat-icon>
+   </button>	
+  </div>	
+   
+  <div name="pnlGridFrmDetMallaCurricular" *ngIf="mostrarPanelForm"  >  
+   <mat-card >
+	   <mat-card-header>
+		   <div mat-card-avatar>
+			   <mat-icon>folder</mat-icon>
+		   </div>
+		   <mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }} Curso</mat-card-title>
+		   <mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }} Curso</mat-card-title>
+	   </mat-card-header>
+	   <mat-divider></mat-divider>
+	   <p></p>
+	   <mat-card-content>
+		   <div  *ngIf="detMallaCurricularDependencia.idDetMallaCurricular != null" fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="100%" fxFlex.xs="100%"> 
+				 <div class="div-input-text"  formGroupName="detMallaCurricularPadre" >
+				   <mat-form-field class="input-full-width">
+					   <mat-label>{{'detMallaCurricularPadre' | transloco}}</mat-label>
+					   <input  matInput    formControlName="descripcionView"  >
+					   <mat-error *ngIf="(invalid('detMallaCurricularPadre.descripcionView')  )" > 
+						   <span *ngIf="invalid('detMallaCurricularPadre.descripcionView')">{{getError('detMallaCurricularPadre.descripcionView')}}</span>
+					   </mat-error>						
+				   </mat-form-field>
+				  </div>					
+			   </div>
+		   </div>			
+		   <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				 <div class="div-input-text"  >
+				   <mat-form-field class="input-full-width">
+					   <mat-label>{{'descripcionCurso' | transloco}}</mat-label>
+					   <input [maxlength]="200" matInput  formControlName="descripcionCurso"  required >
+					   <mat-error *ngIf="(invalid('descripcionCurso') )" > 
+						   <span *ngIf="invalid('descripcionCurso')">{{getError('descripcionCurso')}}</span>
+					   </mat-error>
+				   </mat-form-field>
+				  </div>					
+			   </div>
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				   <div class="div-input-text"  >
+					 <mat-form-field class="input-full-width">
+						<mat-label>{{'codigoAsignatura' | transloco}}</mat-label>
+						 <input [maxlength]="10" matInput  formControlName="codigoAsignatura"  required >
+						 <mat-error *ngIf="(invalid('codigoAsignatura') )" > 
+							 <span *ngIf="invalid('codigoAsignatura')">{{getError('codigoAsignatura')}}</span>
+						 </mat-error>
+					 </mat-form-field>
+					</div>					
+				 </div>
+		   </div>			
+		   <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				 <div class="div-input-text"  >
+				   <mat-form-field class="input-full-width">
+					   <mat-label>{{'horaTeorica' | transloco}}</mat-label>
+					   <input [maxlength]="18" matInput formControlName="horaTeorica"  required >
+					   <mat-error *ngIf="(invalid('horaTeorica') )" > 
+						   <span *ngIf="invalid('horaTeorica')">{{getError('horaTeorica')}}</span>
+					   </mat-error>
+				   </mat-form-field>
+				  </div>					
+			   </div>
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				   <div class="div-input-text"  >
+					 <mat-form-field class="input-full-width">
+						 <mat-label>{{'horaPractica' | transloco}}</mat-label>
+						 <input [maxlength]="18" matInput formControlName="horaPractica"  required >
+						 <mat-error *ngIf="(invalid('horaPractica') )" > 
+							 <span *ngIf="invalid('horaPractica')">{{getError('horaPractica')}}</span>
+						 </mat-error>
+					 </mat-form-field>
+					</div>					
+				 </div>
+		   </div>		
+		   <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				   <div class="div-input-select">
+					   <mat-form-field class="input-full-width" >
+						   <mat-label>{{'tipoAsignatura' | transloco}}</mat-label>
+						   <mat-select class="input-full-width"  
+							   formControlName="tipoAsignatura">					
+							   <mat-option *ngFor="let it of typeSelectItemService.listaTipoAsignatura" [value]="it.id" >
+							   {{it.nombre}}
+							   </mat-option>
+						   </mat-select>
+						   <mat-error *ngIf="(invalid('tipoAsignatura') )">
+							   <span *ngIf="invalid('tipoAsignatura')">{{getError('tipoAsignatura')}}</span>
+						   </mat-error>
+					   </mat-form-field>
+				   </div>	
+			   </div>					
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				   <div class="div-input-text"  >
+					 <mat-form-field class="input-full-width">
+						 <mat-label>{{'peso' | transloco}}</mat-label>
+						 <input [maxlength]="18" matInput formControlName="peso" >
+						 <mat-error *ngIf="(invalid('peso') )" > 
+							 <span *ngIf="invalid('peso')">{{getError('peso')}}</span>
+						 </mat-error>
+					 </mat-form-field>
+					</div>					
+				 </div>
+		   </div>			
+		   <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 				 				   
+				  <div class="div-input-select">
+				   <mat-form-field class="input-full-width" >
+					   <mat-label>{{'tipoCalculo' | transloco}}</mat-label>
+					   <mat-select class="input-full-width" 
+						   formControlName="tipoCalculo">					
+						   <mat-option *ngFor="let it of typeSelectItemService.listaTipoCalculo" [value]="it.id" >
+						   {{it.nombre}}
+						   </mat-option>
+					   </mat-select>
+					   <mat-error *ngIf="(invalid('tipoCalculo') )">
+						   <span *ngIf="invalid('tipoCalculo')">{{getError('tipoCalculo')}}</span>
+					   </mat-error>
+				   </mat-form-field>
+				   </div>
+			   </div>
+			   <div fxFlex="50%" fxFlex.xs="50%"> 					
+					<div class="div-input-select">
+					   <mat-form-field class="input-full-width" >
+						   <mat-label>{{'tipoPromedio' | transloco}}</mat-label>
+						   <mat-select class="input-full-width" 
+							   formControlName="tipoPromedio">					
+							   <mat-option *ngFor="let it of typeSelectItemService.listaTipoPromedio" [value]="it.id" >
+							   {{it.nombre}}
+							   </mat-option>
+						   </mat-select>
+						   <mat-error *ngIf="(invalid('tipoPromedio') )">
+							   <span *ngIf="invalid('tipoPromedio')">{{getError('tipoPromedio')}}</span>
+						   </mat-error>
+					   </mat-form-field>
+				   </div>				
+				 </div>
+		   </div>		
+		</mat-card-content>
+		<mat-card-actions>
+		   <button  (click)="guardar()" color="primary"
+				   [disabled]="frmGroup.invalid" mat-raised-button>{{'guardar' | transloco}}</button>
+
+		   <button  (click)="cancelar()" color="accent"
+				   mat-raised-button>{{'cancelar' | transloco}}</button>
+		</mat-card-actions>		 
+	  </mat-card>
+   </div>
+</form>  
+<app-criterioevaluacion *ngIf="pnlFromCompetencia" [showComponentPage]="true" [pnlFromCompetencia]="pnlFromCompetencia" [data]="detMallaCurricular" (change)="changeCompetencia($event)"></app-criterioevaluacion>

@@ -1,0 +1,262 @@
+<div [hidden]="mostrarPanelForm"
+	class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+	<ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+		(changeEmitter)="changeEmitterEvent($event)">
+		<div class="grid sm:grid-cols-6 gap-6 w-full px-6">
+			<!-- anhio -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idAnhio" [required]="true" (selectionChange)="onAnhioChange($event)">
+					<mat-option *ngFor="let it of listaAnhio " [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'anhio' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idAnhio') )">
+					<span *ngIf="invalid('idAnhio')">{{getError('idAnhio')}}</span>
+				</mat-error>
+			</mat-form-field>
+
+			<!-- idItemByMesByDevengue -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idMesByDevengue" [required]="true"
+					(selectionChange)="onMesByDevengeChange($event)">
+					<mat-option *ngFor="let it of typeService.listaMes " [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'itemByMesByDevengue' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idMesByDevengue') )">
+					<span *ngIf="invalid('idMesByDevengue')">{{getError('idMesByDevengue')}}</span>
+				</mat-error>
+			</mat-form-field>
+
+			<!-- idItemByRegimenPensionario -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idRegimenPensionario" [required]="false"
+					(selectionChange)="onRegimenPensionarioChange($event)">
+					<mat-option *ngFor="let it of listaRegimenPensionario " [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'itemByRegimenPensionario' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idRegimenPensionario') )">
+					<span *ngIf="invalid('idRegimenPensionario')">{{getError('idRegimenPensionario')}}</span>
+				</mat-error>
+			</mat-form-field>
+
+		</div>
+	</ng-mf-bs-cabeceragrilla>
+
+	<!-- Main -->
+	<div class="flex flex-auto overflow-hidden">
+
+		<!-- ListaData list -->
+		<div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+			<ng-container>
+				<div class="grid">
+					<!-- Header -->
+					<div class="conceptoregimenpensionario-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+						matSort matSortDisableClear>
+						<div [mat-sort-header]="'idItemByRegimenPensionario'">{{ 'afp' | transloco }}</div>
+						<div [mat-sort-header]="'comisionSobreFlujo'">{{ 'comisionSobreFlujo' | transloco }}</div>
+						<div [mat-sort-header]="'comisionAnualSobreSaldoMixto'">{{ 'comisionAnualSobreSaldoMixto' |
+							transloco }}</div>
+						<div [mat-sort-header]="'primaSeguros'">{{ 'primaSeguros' | transloco }}</div>
+						<div [mat-sort-header]="'aporteObligatorio'">{{ 'aporteObligatorio' | transloco }}</div>
+						<div [mat-sort-header]="'remuneracionMaximaAsegurable'">{{ 'remuneracionMaximaAsegurable' |
+							transloco }}</div>
+						<div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+					</div>
+					<!-- Rows -->
+					<ng-container *ngIf="(listaData$ | async) as listaData">
+						<ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+							<div
+								class="conceptoregimenpensionario-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+								<!-- afp -->
+								<div class="truncate">
+									{{objData.itemByRegimenPensionario.nombre}}
+								</div>
+								<!-- comisionSobreFlujo -->
+								<div class="truncate">
+									{{objData.comisionSobreFlujo}}
+								</div>
+								<!-- comisionAnualSobreSaldoMixto -->
+								<div class="truncate">
+									{{objData.comisionAnualSobreSaldoMixto}}
+								</div>
+								<!-- primaSeguros -->
+								<div class="truncate">
+									{{objData.primaSeguros}}
+								</div>
+								<!-- aporteObligatorio -->
+								<div class="truncate">
+									{{objData.aporteObligatorio}}
+								</div>
+								<!-- remuneracionMaximaAsegurable -->
+								<div class="truncate">
+									{{objData.remuneracionMaximaAsegurable}}
+								</div>
+
+								<!-- accion -->
+								<div>
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+										</mat-icon>
+									</button>
+
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'eliminar' | transloco }}" (click)="confirmarEliminar(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+										</mat-icon>
+									</button>
+
+								</div>
+							</div>
+						</ng-container>
+					</ng-container>
+					<ng-mf-bs-noresultados [length]="pagination?.length??0"></ng-mf-bs-noresultados>
+				</div>
+
+				<mat-paginator
+					class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+					[ngClass]="{'pointer-events-none': isLoading}" [length]="pagination?.length??0"
+					[pageIndex]="pagination?.page" [pageSize]="pagination?.size" [pageSizeOptions]="[5, 10, 25, 100]"
+					[showFirstLastButtons]="true"></mat-paginator>
+
+			</ng-container>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="mostrarPanelForm" class="flex flex-col flex-auto min-w-0">
+	<!-- Main -->
+	<div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+		<div class="flex flex-col w-full">
+			<ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+			<!-- Form -->
+			<div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+				<!-- Alert -->
+				<ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+					{{alert.message}}
+				</ng-mf-bs-alert>
+				<form class="space-y-3" [formGroup]="frmGroup">
+					<div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+						<!-- idItemByRegimenPensionario -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByRegimenPensionario" [required]="true">
+								<mat-option *ngFor="let it of listaRegimenPensionario " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByRegimenPensionario' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByRegimenPensionario') )">
+								<span
+									*ngIf="invalid('idItemByRegimenPensionario')">{{getError('idItemByRegimenPensionario')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- anhio -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idAnhio" [required]="true">
+								<mat-option *ngFor="let it of listaAnhio " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'anhio' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idAnhio') )">
+								<span *ngIf="invalid('idAnhio')">{{getError('idAnhio')}}</span>
+							</mat-error>
+						</mat-form-field>
+
+						<!-- idItemByMesByDevengue -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByMesByDevengue" [required]="true">
+								<mat-option *ngFor="let it of typeService.listaMes " [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByMesByDevengue' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByMesByDevengue') )">
+								<span
+									*ngIf="invalid('idItemByMesByDevengue')">{{getError('idItemByMesByDevengue')}}</span>
+							</mat-error>
+						</mat-form-field>
+
+						<!-- comisionFija -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="comisionFija" [required]="true">
+							<mat-label>{{'comisionFija' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('comisionFija') )">
+								<span *ngIf="invalid('comisionFija')">{{getError('comisionFija')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- comisionSobreFlujo -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="comisionSobreFlujo" [required]="true">
+							<mat-label>{{'comisionSobreFlujo' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('comisionSobreFlujo') )">
+								<span *ngIf="invalid('comisionSobreFlujo')">{{getError('comisionSobreFlujo')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- comisionSobreFlujoMixto -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="comisionSobreFlujoMixto" [required]="true">
+							<mat-label>{{'comisionSobreFlujoMixto' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('comisionSobreFlujoMixto') )">
+								<span
+									*ngIf="invalid('comisionSobreFlujoMixto')">{{getError('comisionSobreFlujoMixto')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- comisionAnualSobreSaldoMixto -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="comisionAnualSobreSaldoMixto" [required]="true">
+							<mat-label>{{'comisionAnualSobreSaldoMixto' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('comisionAnualSobreSaldoMixto') )">
+								<span
+									*ngIf="invalid('comisionAnualSobreSaldoMixto')">{{getError('comisionAnualSobreSaldoMixto')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- primaSeguros -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="primaSeguros" [required]="true">
+							<mat-label>{{'primaSeguros' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('primaSeguros') )">
+								<span *ngIf="invalid('primaSeguros')">{{getError('primaSeguros')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- aporteObligatorio -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="aporteObligatorio" [required]="true">
+							<mat-label>{{'aporteObligatorio' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('aporteObligatorio') )">
+								<span *ngIf="invalid('aporteObligatorio')">{{getError('aporteObligatorio')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- remuneracionMaximaAsegurable -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="remuneracionMaximaAsegurable" [required]="true">
+							<mat-label>{{'remuneracionMaximaAsegurable' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('remuneracionMaximaAsegurable') )">
+								<span
+									*ngIf="invalid('remuneracionMaximaAsegurable')">{{getError('remuneracionMaximaAsegurable')}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<!-- Actions -->
+					<div class="flex items-center justify-end">
+						<button mat-stroked-button (click)="cancelar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'cancelar' | transloco}}
+						</button>
+						<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+							(click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'guardar' | transloco}}
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

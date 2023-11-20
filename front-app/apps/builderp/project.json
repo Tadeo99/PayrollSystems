@@ -1,0 +1,126 @@
+{
+  "name": "builderp",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/builderp/src",
+  "prefix": "ng-mf",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/builderp",
+        "index": "apps/builderp/src/index.html",
+        "main": "apps/builderp/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/builderp/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "allowedCommonJsDependencies": [
+          "apexcharts",
+          "highlight.js",
+          "crypto-js/enc-utf8",
+          "crypto-js/hmac-sha256",
+          "crypto-js/enc-base64",
+          "flat",
+          "moment",
+          "quill"
+        ],
+        "assets": [
+          "apps/builderp/src/favicon.ico",
+          "apps/builderp/src/favicon-16x16.png",
+          "apps/builderp/src/favicon-32x32.png",
+          "apps/builderp/src/assets"
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/builderp/src/@bs/styles"]
+        },
+        "styles": [
+          "apps/builderp/src/styles.scss",
+          "apps/builderp/src/app-theme.scss",
+          "apps/builderp/src/@bs/styles/tailwind.scss",
+          "apps/builderp/src/@bs/styles/themes.scss",
+          "apps/builderp/src/styles/vendors.scss",
+          "apps/builderp/src/@bs/styles/main.scss",
+          "apps/builderp/src/styles/styles.scss",
+          "apps/builderp/src/styles/tailwind.scss"
+        ],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/builderp/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/builderp/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nrwl/angular:module-federation-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "builderp:build:production"
+        },
+        "development": {
+          "browserTarget": "builderp:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200,
+        "publicHost": "http://localhost:4200"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "builderp:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/builderp/**/*.ts", "apps/builderp/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/builderp/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

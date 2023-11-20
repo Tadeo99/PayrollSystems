@@ -1,0 +1,130 @@
+
+<div *ngFor="let configuracionAtributo of listaConfiguracionAtributo; let i = index" class="noright">
+	<div  [formGroup]="form" *ngIf="(configuracionAtributo.listaItem?.idListaItems > 0 &&
+		( configuracionAtributo.itemByIdComponte?.nombre =='MODAL')
+		||  configuracionAtributo.itemByIdComponte?.nombre =='MODAL-MULTIPLE')" >
+		<input type="hidden" [formControlName]="configuracionAtributo.nombreAtributoID" >
+	</div>  
+</div>
+			<div fxLayout="row wrap" fxLayout.lt-sm="column" fxLayoutGap="1px" fxLayoutAlign="flex-start">
+				<div fxFlex="0 1 calc(50% - 1px)" fxFlex.lt-md="0 1 calc(50% - 1px)" fxFlex.lt-sm="100%" *ngFor="let configuracionAtributo of listaConfiguracionAtributo; let i = index"> 
+				  <div class="div-input-text" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='INPUT')" >
+						<mat-form-field class="input-full-width" *ngIf="(configuracionAtributo.tipoDato =='N')">
+							     <mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+								<input  matInput number  name="atributo{{i}}" #atributoInput = "ngModel"  [(ngModel)]="configuracionAtributo.valueNumeric"  [required] = "true" >
+								<mat-error *ngIf="(atributoInput.errors ) && (atributoInput.dirty || atributoInput.touched)" > 
+									<span *ngIf="atributoInput.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						<mat-form-field class="input-full-width" *ngIf="(configuracionAtributo.tipoDato =='T')">
+							         <mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+									<input  matInput   name="atributo{{i}}" #atributoInput = "ngModel"  [(ngModel)]="configuracionAtributo.valueText"  [required] = "true" >
+									<mat-error *ngIf="(atributoInput.errors ) && (atributoInput.dirty || atributoInput.touched)" > 
+										<span *ngIf="atributoInput.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+									</mat-error>
+						</mat-form-field>
+				   </div>	
+				   <div class="div-input-text" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='TEXTAREA')" >
+						<mat-form-field class="input-full-width">
+							     <mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+								<textarea matInput   name="atributo{{i}}" #atributoTextarea = "ngModel"  [(ngModel)]="configuracionAtributo.valueText"  [required] = "true" ></textarea>
+								<mat-error *ngIf="(atributoTextarea.errors ) && (atributoTextarea.dirty || atributoTextarea.touched)" > 
+									<span *ngIf="atributoTextarea.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+				   </div>
+				   <div class="div-input-text" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='DATEPICKER')" >
+						<mat-form-field class="input-full-width">
+							    <mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+								<input matInput [matDatepicker]="fatributo"   name="atributo{{i}}" #atributoDatepicker = "ngModel" [(ngModel)]="configuracionAtributo.valueDate" >
+								<mat-datepicker-toggle matSuffix [for]="fatributo"></mat-datepicker-toggle>
+								<mat-error *ngIf="(atributoDatepicker.errors ) && (atributoDatepicker.dirty || atributoDatepicker.touched)" > 
+									<span *ngIf="atributoDatepicker.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+								</mat-error>
+								<mat-datepicker #fatributo [touchUi]="touch" ></mat-datepicker>
+							</mat-form-field>
+				   </div>	
+				   <div class="div-input-check" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='RADIO-BUTTONS')" >
+						<mat-radio-group   class="app-radio-groupx"   name="atributo{{i}}" [(ngModel)]="configuracionAtributo.valueNumeric" 
+								#atributoRadio = "ngModel" #drinkControl="ngModel" [required] = "true" in>					
+								<mat-radio-button class="app-radio-buttonx" *ngFor="let it of configuracionAtributo.listaSelectItemVO" [value]="it.id" >
+								{{it.nombre}}
+							</mat-radio-button>
+						</mat-radio-group>
+							<mat-error *ngIf="atributoRadio.errors && (atributoRadio.dirty || atributoRadio.touched)" > 
+								<span *ngIf="atributoRadio.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+							</mat-error>
+					</div>
+					<div class="div-input-select" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='SELECT')" >
+							<mat-form-field class="input-full-width" >
+								<mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+								<mat-select class="input-full-width"   name="atributo{{i}}" [(ngModel)]="configuracionAtributo.valueNumeric" 
+									#atributoSelect = "ngModel" #drinkControl="ngModel" [required] = "true" >					
+									<mat-option *ngFor="let it of configuracionAtributo.listaSelectItemVO" [value]="it.id" >
+									{{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="atributoSelect.errors && (atributoSelect.dirty || atributoSelect.touched)" > 
+									<span *ngIf="atributoSelect.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+					</div>
+					<div class="div-input-select" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='SELECT-MULTIPLE')" >
+							<mat-form-field class="input-full-width" >
+								<mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+								<mat-select class="input-full-width"    name="atributoMultiple{{i}}" [(ngModel)]="configuracionAtributo.listaSelectItemSelectedVO" 
+									#atributoSelectMultiple = "ngModel" #drinkControl="ngModel" [required] = "true" multiple>					
+									<mat-option *ngFor="let it of configuracionAtributo.listaSelectItemVO" [value]="it.id" >
+									{{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="atributoSelectMultiple.errors && (atributoSelectMultiple.dirty || atributoSelectMultiple.touched)" > 
+									<span *ngIf="atributoSelectMultiple.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+					</div>					
+					<div class="div-input-silder" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='SLIDE-TOGGLE')" >
+								<mat-slide-toggle   name="atributo{{i}}" [(ngModel)]="configuracionAtributo.valueBoolean" 
+									#atributoSlide = "ngModel" #drinkControl="ngModel" [required] = "true" >					
+									{{configuracionAtributo.keyLabel | transloco }}
+								</mat-slide-toggle>
+								<mat-error *ngIf="atributoSlide.errors && (atributoSlide.dirty || atributoSlide.touched)" > 
+									<span *ngIf="atributoSlide.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+								</mat-error>
+					</div>
+					<div class="div-input-check" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='CHECKBOX')">
+							<mat-checkbox   name="atributo{{i}}"  #atributoCheckbox="ngModel"	[(ngModel)]="configuracionAtributo.valueBoolean"  >
+							{{configuracionAtributo.keyLabel | transloco}}
+							</mat-checkbox>
+							<mat-error *ngIf="atributoCheckbox.errors && (atributoCheckbox.dirty || atributoCheckbox.touched)" > 
+									<span *ngIf="atributoCheckbox.errors?.required">{{configuracionAtributo.keyLabel | transloco}}</span>
+							</mat-error>
+					</div>
+					<div class="div-input-text" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='MODAL')">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+								<input  matInput   name="itemAtributo{{i}}" #itemAtributo = "ngModel"  [(ngModel)]="configuracionAtributo.itemAtributoValue.descripcionView"  [required] = "true" 
+								 (change)="abrirModalItemInput(configuracionAtributo.listaItem?.idListaItems,configuracionAtributo,false,$event.target.value)" >
+								<mat-error *ngIf="(itemAtributo.errors  || frm[configuracionAtributo.nombreAtributoID].errors ) && (itemAtributo.dirty || itemAtributo.touched)" > 
+									<span *ngIf="itemAtributo.errors?.required">{{configuracionAtributo.keyLabel || '.requiered' | transloco}}</span>
+									<span *ngIf="frm[configuracionAtributo.nombreAtributoID].errors?.required">{{configuracionAtributo.keyLabel || '.no.existe.bd' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItem(configuracionAtributo.listaItem?.idListaItems,configuracionAtributo,false,'')" >search</mat-icon>
+							</mat-form-field>
+						   </div>	
+
+						   <div class="div-input-text" *ngIf="(configuracionAtributo.itemByIdComponte?.nombre =='MODAL-MULTIPLE')">
+								<mat-form-field class="input-full-width">
+									<mat-label>{{configuracionAtributo.keyLabel | transloco}}</mat-label>
+									<input  matInput   name="itemAtributoMultiple{{i}}" #itemAtributoMultiple = "ngModel"  [(ngModel)]="configuracionAtributo.itemAtributoValue.descripcionView"  [required] = "true" 
+									 (change)="abrirModalItemInput(configuracionAtributo.listaItem?.idListaItems,configuracionAtributo,true,$event.target.value)" >
+									<mat-error *ngIf="(itemAtributoMultiple.errors  || frm[configuracionAtributo.nombreAtributoID].errors ) && (itemAtributoMultiple.dirty || itemAtributoMultiple.touched)" > 
+										<span *ngIf="itemAtributoMultiple.errors?.required">{{configuracionAtributo.keyLabel || '.requiered' | transloco}}</span>
+										<span *ngIf="frm[configuracionAtributo.nombreAtributoID].errors?.required">{{configuracionAtributo.keyLabel || '.no.existe.bd' | transloco}}</span>
+									</mat-error>
+									<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItem(configuracionAtributo.listaItem?.idListaItems,configuracionAtributo,true,'')" >search</mat-icon>
+								</mat-form-field>
+							   </div>	
+				</div>
+			</div>
+	

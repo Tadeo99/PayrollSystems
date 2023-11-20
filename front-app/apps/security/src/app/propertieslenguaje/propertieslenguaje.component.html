@@ -1,0 +1,147 @@
+<form name="frmPropertiesLenguaje" #frmPropertiesLenguaje="ngForm" novalidate>
+	<div name="pnlGridListPropertiesLenguaje" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span>{{'propertiesLenguaje.pnl.title' | transloco}}</span>
+				<span class="app-fill-remaining">
+					<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+						<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+							placeholder="{{'search' | transloco}}">
+					</mat-form-field>
+				</span>
+				<mat-icon matTooltip="{{'buscar' | transloco}}" (click)="buscar()" class="app-toolbar-icon">search
+				</mat-icon>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'propertiesLenguaje.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let propertiesLenguaje of listaPropertiesLenguaje" class="noright">
+							<mat-icon mat-list-icon (click)="buscarID(propertiesLenguaje)">folder</mat-icon>
+							<p mat-line (click)="buscarID(propertiesLenguaje)"> {{propertiesLenguaje.value}}</p>
+							<mat-checkbox *ngIf="showAccionCheck" color="accent"
+								(change)="agregarCheck(propertiesLenguaje)" name="checkedView" #checkedView="ngModel"
+								[(ngModel)]="propertiesLenguaje.checked">
+							</mat-checkbox>
+							<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck"
+								mat-icon-button (click)="asociar(propertiesLenguaje)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+							</button>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(propertiesLenguaje)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">chevron_right</mat-icon>
+							</button>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+		<button matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo" mat-fab (click)="nuevo()" class="app-fab">
+			<mat-icon>add</mat-icon>
+		</button>
+		<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+			(click)="dialogRef.close(listaPropertiesLenguajeSelectMap)">
+			<mat-icon>check_circle</mat-icon>
+		</button>
+	</div>
+
+	<div name="pnlGridFrmPropertiesLenguaje" *ngIf="mostrarPanelForm">
+		<input type="hidden" name="itemByLenguajeID" #itemByLenguajeID="ngModel"
+			[(ngModel)]="propertiesLenguaje.itemByLenguaje.idItem">
+		<input type="hidden" name="propertiesID" #propertiesID="ngModel"
+			[(ngModel)]="propertiesLenguaje.properties.idProperties" [required]="true">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button matTooltip="{{'cancelar' | transloco}}" mat-icon-button (click)="cancelar()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span *ngIf="accionNuevo">{{'title.crear' | transloco }}</span>
+				<span *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</span>
+				<span class="app-fill-remaining"></span>
+				<button matTooltip="{{'guardar' | transloco}}" mat-icon-button (click)="listo()"
+					[disabled]="frmPropertiesLenguaje.invalid" color="accent">
+					<mat-icon class="mat-24">check</mat-icon>
+				</button>
+				<button *ngIf="!accionNuevo" mat-icon-button [matMenuTriggerFor]="posXMenu"
+					aria-label="Open x-positioned menu">
+					<mat-icon>more_vert</mat-icon>
+				</button>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'itemByLenguaje' | transloco}}</mat-label>
+								<input matInput name="itemByLenguaje" #itemByLenguaje="ngModel"
+									[(ngModel)]="propertiesLenguaje.itemByLenguaje.descripcionView"
+									(change)="abrirModalItemInput($event.target.value)">
+								<mat-error
+									*ngIf="(itemByLenguaje.errors  || itemByLenguajeID.errors ) && (itemByLenguaje.dirty || itemByLenguaje.touched)">
+									<span *ngIf="itemByLenguaje.errors?.required">{{'requiered' | transloco}}</span>
+									<span *ngIf="itemByLenguajeID.errors?.required">{{'no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItem()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'properties' | transloco}}</mat-label>
+								<input matInput name="properties" #properties="ngModel"
+									[(ngModel)]="propertiesLenguaje.properties.descripcionView" [required]="true"
+									(change)="abrirModalPropertiesInput($event.target.value)">
+								<mat-error
+									*ngIf="(properties.errors  || propertiesID.errors ) && (properties.dirty || properties.touched)">
+									<span *ngIf="properties.errors?.required">{{'requiered' | transloco}}</span>
+									<span *ngIf="propertiesID.errors?.required">{{'no.existe.bd' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalProperties()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'value' | transloco}}</mat-label>
+								<input [maxlength]="100" matInput name="value" #value="ngModel"
+									[(ngModel)]="propertiesLenguaje.value">
+								<mat-error *ngIf="(value.errors ) && (value.dirty || value.touched)">
+									<span *ngIf="value.errors?.required">{{'requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</mat-card-content>
+			<mat-card-footer>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+			</mat-card-footer>
+		</mat-card>
+		<mat-menu x-position="before" #posXMenu="matMenu" class="before">
+			<button mat-menu-item *ngFor="let item of iconAccionItems" (click)="accionMenu(item)"
+				[disabled]="item.disabled">
+				<mat-icon>{{ item.icon }}</mat-icon>
+				{{ item.text }}
+			</button>
+		</mat-menu>
+	</div>
+</form>

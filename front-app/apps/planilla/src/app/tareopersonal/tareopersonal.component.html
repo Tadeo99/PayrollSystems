@@ -1,0 +1,289 @@
+<div [hidden]="mostrarPanelForm"
+class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+	<ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+		(changeEmitter)="changeEmitterEvent($event)" [showBotonNuevo]="false">
+		<div class="grid sm:grid-cols-6 gap-6 w-full px-6">
+			<!-- listaAnhio -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idAnhio" [required]="true" (selectionChange)="onAnhioChange($event)">
+					<mat-option *ngFor="let it of listaAnhio" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'anhio' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idAnhio') )">
+					<span *ngIf="invalid('idAnhio')">{{getError('idAnhio')}}</span>
+				</mat-error>
+			</mat-form-field>
+			<!-- listaCategoriaOcupacional -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idCategoriaTrabajador" [required]="true"
+					(selectionChange)="onCategoriaTrabajadorChange($event)">
+					<mat-option *ngFor="let it of listaCategoriaOcupacional" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'categoriaTrabajador' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idCategoriaTrabajador') )">
+					<span *ngIf="invalid('idCategoriaTrabajador')">{{getError('idCategoriaTrabajador')}}</span>
+				</mat-error>
+			</mat-form-field>
+			<!-- listaMes -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idItemByMes" [required]="true" (selectionChange)="onMesChange($event)">
+					<mat-option *ngFor="let it of typeService.listaMes" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'itemByMes' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idItemByMes') )">
+					<span *ngIf="invalid('idItemByMes')">{{getError('idItemByMes')}}</span>
+				</mat-error>
+			</mat-form-field>
+		</div>
+	</ng-mf-bs-cabeceragrilla>
+	<!-- Main -->
+	<div class="flex flex-auto overflow-hidden">
+		<!-- ListaData list -->
+		<div class="flex flex-col flex-auto sm:overflow-y-auto">
+			<ng-container>
+				<div class="grid">
+					<!-- Header -->
+					<div class="tareopersonal-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+						matSort matSortDisableClear>
+						<div class="hidden md:block" [mat-sort-header]="'idTareoPersonal'">
+							{{ 'id' | transloco }}
+						</div>
+						<div [mat-sort-header]="'nombres'">{{ 'nombres' | transloco }}</div>
+						<div class="hidden lg:block" [mat-sort-header]="'diasLab'">{{ 'diasLab' | transloco }}</div>
+						<div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+					</div>
+					<!-- Rows -->
+					<ng-container *ngIf="(listaData$ | async) as listaData">
+						<ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+							<div class="tareopersonal-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+								<!-- SKU -->
+								<div class="hidden md:block truncate">
+									{{objData.personal?.nroDoc}}
+								</div>
+
+								<!-- Name -->
+								<div class="truncate">
+									{{objData.personal?.nombres??''}}
+								</div>
+
+								<!-- diasLab -->
+								<div class="hidden lg:block">
+									{{objData.diasLab}}
+								</div>
+								<!-- accion -->
+								<div>
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
+										matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5"
+											[svgIcon]="selectedData?.idPersonal === objData.idPersonal ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'">
+										</mat-icon>
+									</button>
+								</div>
+							</div>
+							<div class="grid">
+								<ng-container *ngIf="selectedData?.idPersonal === objData.idPersonal">
+									<ng-container
+										*ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: objData}"></ng-container>
+								</ng-container>
+							</div>
+						</ng-container>
+					</ng-container>
+					<ng-mf-bs-noresultados [length]="(listaData$ | async)?.length??0"></ng-mf-bs-noresultados>
+				</div>
+			</ng-container>
+			<ng-template #rowDetailsTemplate let-personal>
+				<div class="shadow-lg overflow-hidden">
+					<div class="flex border-b">
+						<!-- Selected personal form -->
+						<form class="flex flex-col w-full" [formGroup]="frmGroup">
+							<div class="w-full flex flex-col sm:flex-row p-8">
+								<div class="grid sm:grid-cols-6 gap-6 w-full mt-4">
+									<!-- idItemByPeriocidad -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<mat-select formControlName="idItemByPeriocidad" [required]="true">
+											<mat-option *ngFor="let it of listaPeriocidad" [value]="it.id">
+												{{it.nombre}}
+											</mat-option>
+										</mat-select>
+										<mat-label>{{'itemByPeriocidad' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('idItemByPeriocidad') )">
+											<span
+												*ngIf="invalid('idItemByPeriocidad')">{{getError('idItemByPeriocidad')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- diasLab -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="diasLab" [required]="true">
+										<mat-label>{{'diasLab' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('diasLab') )">
+											<span *ngIf="invalid('diasLab')">{{getError('diasLab')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- diasTra -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="diasTra" [required]="true">
+										<mat-label>{{'diasTra' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('diasTra') )">
+											<span *ngIf="invalid('diasTra')">{{getError('diasTra')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- dominical -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="dominical" [required]="false">
+										<mat-label>{{'dominical' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('dominical') )">
+											<span *ngIf="invalid('dominical')">{{getError('dominical')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- horasNormal -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="horasNormal" [required]="false">
+										<mat-label>{{'horasNormal' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('horasNormal') )">
+											<span *ngIf="invalid('horasNormal')">{{getError('horasNormal')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- horasExtras25 -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="horasExtras25" [required]="true">
+										<mat-label>{{'horasExtras25' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('horasExtras25') )">
+											<span *ngIf="invalid('horasExtras25')">{{getError('horasExtras25')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- horasExtras35 -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="horasExtras35" [required]="true">
+										<mat-label>{{'horasExtras35' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('horasExtras35') )">
+											<span *ngIf="invalid('horasExtras35')">{{getError('horasExtras35')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- horasExtras100 -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="horasExtras100" [required]="true">
+										<mat-label>{{'horasExtras100' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('horasExtras100') )">
+											<span
+												*ngIf="invalid('horasExtras100')">{{getError('horasExtras100')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- horasNocturna -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="horasNocturna" [required]="true">
+										<mat-label>{{'horasNocturna' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('horasNocturna') )">
+											<span *ngIf="invalid('horasNocturna')">{{getError('horasNocturna')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- vacaciones -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="vacaciones" [required]="true">
+										<mat-label>{{'vacaciones' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('vacaciones') )">
+											<span *ngIf="invalid('vacaciones')">{{getError('vacaciones')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- permisoSinGoceHaber -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="permisoSinGoceHaber" [required]="true">
+										<mat-label>{{'permisoSinGoceHaber' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('permisoSinGoceHaber') )">
+											<span
+												*ngIf="invalid('permisoSinGoceHaber')">{{getError('permisoSinGoceHaber')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- falta -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="falta" [required]="true">
+										<mat-label>{{'falta' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('falta') )">
+											<span *ngIf="invalid('falta')">{{getError('falta')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- subsidio -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="subsidio" [required]="true">
+										<mat-label>{{'subsidio' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('subsidio') )">
+											<span *ngIf="invalid('subsidio')">{{getError('subsidio')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- tardanza -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="tardanza" [required]="true">
+										<mat-label>{{'tardanza' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('tardanza') )">
+											<span *ngIf="invalid('tardanza')">{{getError('tardanza')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- rmv -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="rmv" [required]="true">
+										<mat-label>{{'rmv' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('rmv') )">
+											<span *ngIf="invalid('rmv')">{{getError('rmv')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- bonifiNocturna -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="bonifiNocturna" [required]="true">
+										<mat-label>{{'bonifiNocturna' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('bonifiNocturna') )">
+											<span
+												*ngIf="invalid('bonifiNocturna')">{{getError('bonifiNocturna')}}</span>
+										</mat-error>
+									</mat-form-field>
+								</div>
+							</div>
+							<!-- Actions -->
+							<div class="flex items-center justify-end p-8">
+								<button mat-stroked-button (click)="cancelar()"
+									[ngClass]="{'pointer-events-none': isLoading}">
+									{{'cancelar' | transloco}}
+								</button>
+								<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+									(click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+									{{'guardar' | transloco}}
+								</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</ng-template>
+		</div>
+	</div>
+</div>
+
+<div *ngIf="mostrarPanelForm" class="flex flex-col flex-auto min-w-0">
+	<!-- Main -->
+	<div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+		<div class="flex flex-col w-full">
+			<ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+			<!-- Form -->
+			<div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+				<form class="space-y-3" [formGroup]="frmGroup">
+
+					<!-- Actions -->
+					<div class="flex items-center justify-end">
+						<button mat-stroked-button (click)="cancelar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'cancelar' | transloco}}
+						</button>
+						<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+							(click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'guardar' | transloco}}
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

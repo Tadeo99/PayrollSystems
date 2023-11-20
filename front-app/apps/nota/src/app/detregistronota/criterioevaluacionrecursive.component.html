@@ -1,0 +1,24 @@
+<mat-list class="horizontal-mat-list-item" dense
+	*ngFor="let criterioEvaluacion of listaCriterioEvaluacionDisponible ; let i = index">
+	<!-- <div *ngIf="(criterioEvaluacion.criterioEvaluacionHijos.length > 0)">
+		<mat-list-item class="menu-perP" *ngIf="(!criterioEvaluacion.checked)" dense>
+			<p mat-line>{{criterioEvaluacion.codigo}} - {{i}}</p>
+		</mat-list-item>
+		<mat-divider *ngIf="element == detRegistroNota "></mat-divider>
+	</div> -->
+	<!-- {{listaCriterioEvaluacionDisponible.length}} -->
+	<div
+		*ngIf="( criterioEvaluacion.checked && criterioEvaluacion.criterioEvaluacionPadre.idCriterioEvaluacion != null && criterioEvaluacion.criterioEvaluacionPadre.idCriterioEvaluacion != '')">
+		<mat-list-item class="menu-perH"
+			*ngIf="( criterioEvaluacion.checked && criterioEvaluacion.criterioEvaluacionPadre.idCriterioEvaluacion != null && criterioEvaluacion.criterioEvaluacionPadre.idCriterioEvaluacion != '')"
+			dense>
+			<p mat-line>{{criterioEvaluacion.codigo}} </p>
+		</mat-list-item>
+		<mat-divider *ngIf="element == detRegistroNota "></mat-divider>
+	</div>
+	<mat-nav-list *ngIf="(criterioEvaluacion.criterioEvaluacionHijos.length > 0)" dense>
+		<app-criterioevaluacionrecursive [indexTemp]="i"
+			[listaCriterioEvaluacionDisponible]="criterioEvaluacion.criterioEvaluacionHijos">
+		</app-criterioevaluacionrecursive>
+	</mat-nav-list>
+</mat-list>

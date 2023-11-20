@@ -1,0 +1,177 @@
+ <form [formGroup]="frmGroup"  novalidate>
+ 	<div name="pnlGridListCriterioEvaluacion" *ngIf="!mostrarPanelForm"  >
+	<mat-card>
+	    <span *ngIf="showModal" >{{'criterioEvaluacion.pnl.title' | transloco}}</span>
+		<button mat-icon-button *ngIf="showComponentPage" (click)="regresarDetMalla()" color="accent">
+			<mat-icon class="mat-24">reply</mat-icon>
+		</button>
+		<span>{{data.descripcionCurso}}</span>
+		<mat-form-field class="search-full-width" color="accent">
+			<mat-icon matPrefix>search</mat-icon>
+			<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+			<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+				<mat-icon class="mat-24">replay</mat-icon>
+			</button>
+			<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx">
+				<mat-icon>add</mat-icon>
+			</button>
+		</mat-form-field>	  
+	    <mat-card-content>
+		 <mat-nav-list>
+      	  <mat-list dense>
+			<h3 mat-subheader *ngIf="descripcion != ''" > <button  mat-icon-button *ngIf="(descripcion != '')"  (click)="regresarDependencia()" color="accent"><mat-icon class="mat-24">reply</mat-icon></button> {{descripcion}}</h3>
+      	     <h3 mat-subheader>{{'criterioEvaluacion.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+			 <mat-list-item *ngFor="let criterioEvaluacion of listaCriterioEvaluacion" class="noright">
+			   <mat-icon mat-list-icon (click)="buscarID(criterioEvaluacion)" >folder</mat-icon>
+			   <p mat-line>{{criterioEvaluacion.abreviatura}} {{criterioEvaluacion.nombre}}</p>
+				 <mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(criterioEvaluacion)"  
+				 name="checkedView" #checkedView="ngModel" [(ngModel)]="criterioEvaluacion.checked">
+				 </mat-checkbox>
+				<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck" mat-icon-button (click)="asociar(criterioEvaluacion)" color="accent">
+					<mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+				</button>			
+				<button matTooltip="Sub detalle" *ngIf="showAccionModificar"
+				(click)="verDependecia(criterioEvaluacion)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">visibility</mat-icon>
+				</button>   
+				<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(criterioEvaluacion)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">edit</mat-icon>
+				</button>
+				<button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+								(click)="confirmarEliminar(criterioEvaluacion)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">delete</mat-icon>
+				</button>
+				<mat-divider></mat-divider>
+			</mat-list-item>
+       	  </mat-list>
+		</mat-nav-list>
+		<app-paginacion [dataProvider]="dataProvider" [cantidadPage] = "cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+	  </mat-card-content>			
+	</mat-card >	
+	<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab (click)="dialogRef.close(listaCriterioEvaluacionSelectMap)"  >
+		<mat-icon>check_circle</mat-icon>
+	</button>	
+   </div>	
+	
+   <div name="pnlGridFrmCriterioEvaluacion" *ngIf="mostrarPanelForm"  >  
+    <mat-card >
+		<mat-card-header>
+			<div mat-card-avatar>
+				<mat-icon>folder</mat-icon>
+			</div>
+			<mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }}</mat-card-title>
+			<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</mat-card-title>
+		</mat-card-header>
+		<mat-divider></mat-divider>
+		<p></p>
+		<mat-card-content>
+		
+			<div *ngIf="criterioEvaluacionDependencia.idCriterioEvaluacion != null" fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="100%" fxFlex.xs="100%"> 
+				  <div class="div-input-text"  formGroupName="criterioEvaluacionPadre" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'criterioEvaluacion' | transloco}}</mat-label>
+						<input  matInput  formControlName="descripcionView" 
+					      >
+						<mat-error *ngIf="(invalid('criterioEvaluacionPadre.descripcionView')  )" > 
+							<span *ngIf="invalid('criterioEvaluacionPadre.descripcionView')">{{getError('criterioEvaluacionPadre.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalDetMallaCurricularcriterioEvaluacion()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'codigo' | transloco}}</mat-label>
+						<input [maxlength]="20" matInput    formControlName="codigo" >
+						<mat-error *ngIf="(invalid('codigo') )" > 
+							<span *ngIf="invalid('codigo')">{{getError('codigo')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-text"  >
+					  <mat-form-field class="input-full-width">
+						  <mat-label>{{'nombre' | transloco}}</mat-label>
+						  <input [maxlength]="200" matInput  formControlName="nombre" >
+						  <mat-error *ngIf="(invalid('nombre') )" > 
+							  <span *ngIf="invalid('nombre')">{{getError('nombre')}}</span>
+						  </mat-error>
+					  </mat-form-field>
+					 </div>					
+				  </div>
+			</div>		
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'abreviatura' | transloco}}</mat-label>
+						<input [maxlength]="50" matInput formControlName="abreviatura" >
+						<mat-error *ngIf="(invalid('abreviatura') )" > 
+							<span *ngIf="invalid('abreviatura')">{{getError('abreviatura')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-text"  >
+					  <mat-form-field class="input-full-width">
+						  <mat-label>{{'peso' | transloco}}</mat-label>
+						  <input [maxlength]="18" matInput   formControlName="peso" >
+						  <mat-error *ngIf="(invalid('peso') )" > 
+							  <span *ngIf="invalid('peso')">{{getError('peso')}}</span>
+						  </mat-error>
+					  </mat-form-field>
+					 </div>					
+				  </div>
+			</div>		
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'nroOrden' | transloco}}</mat-label>
+						<input [maxlength]="18" matInput    formControlName="nroOrden" >
+						<mat-error *ngIf="(invalid('nroOrden') )" > 
+							<span *ngIf="invalid('nroOrden')">{{getError('nroOrden')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-select">
+						<mat-form-field class="input-full-width" >
+							<mat-label>{{'estado' | transloco}}</mat-label>
+							<mat-select class="input-full-width" 
+								formControlName="estado">					
+								<mat-option *ngFor="let it of typeSelectItemService.listaEstado" [value]="it.id" >
+								 {{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-error *ngIf="(invalid('estado') )">
+								<span *ngIf="invalid('estado')">{{getError('estado')}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>	
+				</div>
+			</div>			
+		 </mat-card-content>
+		 <mat-card-actions>
+			<button  (click)="guardar()" color="primary"
+					[disabled]="frmGroup.invalid" mat-raised-button>{{'guardar' | transloco}}</button>
+
+			<button  (click)="cancelar()" color="accent"
+					mat-raised-button>{{'cancelar' | transloco}}</button>
+		 </mat-card-actions>		 
+	   </mat-card>
+	</div>
+</form>

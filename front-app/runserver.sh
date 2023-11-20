@@ -1,0 +1,1 @@
+nx serve builderp --host 0.0.0.0 --poll=2000 --devRemotes=aas,comun,security,admision,escalafon,hora,matricula,nota,pago,planilla,generador

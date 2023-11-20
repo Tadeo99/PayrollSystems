@@ -1,0 +1,148 @@
+<form name="frmPrivilegioMenu" #frmPrivilegioMenu="ngForm" novalidate>
+	<div name="pnlGridListPrivilegioMenu" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span>{{'privilegioMenu.pnl.title' | transloco}}</span>
+				<span class="app-fill-remaining">
+					<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+						<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+							placeholder="{{'search' | transloco}}">
+					</mat-form-field>
+				</span>
+				<mat-icon matTooltip="{{'buscar' | transloco}}" (click)="buscar()" class="app-toolbar-icon">search
+				</mat-icon>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'privilegioMenu.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let privilegioMenu of listaPrivilegioMenu" class="noright">
+							<mat-icon mat-list-icon (click)="buscarID(privilegioMenu)">folder</mat-icon>
+							<p mat-line (click)="buscarID(privilegioMenu)">
+								{{typeSelectItemService.estadoMap.get(privilegioMenu.estado)}}</p>
+							<mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(privilegioMenu)"
+								name="checkedView" #checkedView="ngModel" [(ngModel)]="privilegioMenu.checked">
+							</mat-checkbox>
+							<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck"
+								mat-icon-button (click)="asociar(privilegioMenu)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+							</button>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(privilegioMenu)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">chevron_right</mat-icon>
+							</button>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+		<button matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo" mat-fab (click)="nuevo()" class="app-fab">
+			<mat-icon>add</mat-icon>
+		</button>
+		<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+			(click)="dialogRef.close(listaPrivilegioMenuSelectMap)">
+			<mat-icon>check_circle</mat-icon>
+		</button>
+	</div>
+
+	<div name="pnlGridFrmPrivilegioMenu" *ngIf="mostrarPanelForm">
+		<input type="hidden" name="menuID" #menuID="ngModel" [(ngModel)]="privilegioMenu.menu.idMenu">
+		<input type="hidden" name="privilegioID" #privilegioID="ngModel"
+			[(ngModel)]="privilegioMenu.privilegio.idPrivilegio">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button matTooltip="{{'cancelar' | transloco}}" mat-icon-button (click)="cancelar()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span *ngIf="accionNuevo">{{'pnl.title.crear' | transloco }}</span>
+				<span *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</span>
+				<span class="app-fill-remaining"></span>
+				<button matTooltip="{{'guardar' | transloco}}" mat-icon-button (click)="listo()"
+					[disabled]="frmPrivilegioMenu.invalid" color="accent">
+					<mat-icon class="mat-24">check</mat-icon>
+				</button>
+				<button *ngIf="!accionNuevo" mat-icon-button [matMenuTriggerFor]="posXMenu"
+					aria-label="Open x-positioned menu">
+					<mat-icon>more_vert</mat-icon>
+				</button>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'menu' | transloco}}</mat-label>
+								<input matInput name="menu" #menu="ngModel"
+									[(ngModel)]="privilegioMenu.menu.descripcionView"
+									(change)="abrirModalMenuInput($event.target.value)">
+								<mat-error *ngIf="(menu.errors  || menuID.errors ) && (menu.dirty || menu.touched)">
+									<span *ngIf="menu.errors?.required">{{'requiered' | transloco}}</span>
+									<span *ngIf="menuID.errors?.required">{{'no.existe.bd' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalMenu()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'privilegio' | transloco}}</mat-label>
+								<input matInput name="privilegio" #privilegio="ngModel"
+									[(ngModel)]="privilegioMenu.privilegio.descripcionView"
+									(change)="abrirModalPrivilegioInput($event.target.value)">
+								<mat-error
+									*ngIf="(privilegio.errors  || privilegioID.errors ) && (privilegio.dirty || privilegio.touched)">
+									<span *ngIf="privilegio.errors?.required">{{'requiered' | transloco}}</span>
+									<span *ngIf="privilegioID.errors?.required">{{'no.existe.bd' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPrivilegio()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-select">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'estado' | transloco}}</mat-label>
+								<mat-select class="input-full-width" name="estado" [(ngModel)]="privilegioMenu.estado"
+									#estado="ngModel" #drinkControl="ngModel">
+									<mat-option *ngFor="let it of typeSelectItemService.listaEstado" [value]="it.id">
+										 {{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="estado.errors && (estado.dirty || estado.touched)">
+									<span *ngIf="estado.errors?.required">{{'requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</mat-card-content>
+			<mat-card-footer>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+			</mat-card-footer>
+		</mat-card>
+		<mat-menu x-position="before" #posXMenu="matMenu" class="before">
+			<button mat-menu-item *ngFor="let item of iconAccionItems" (click)="accionMenu(item)"
+				[disabled]="item.disabled">
+				<mat-icon>{{ item.icon }}</mat-icon>
+				{{ item.text }}
+			</button>
+		</mat-menu>
+	</div>
+</form>

@@ -1,0 +1,123 @@
+{
+  "name": "matricula",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/matricula/src",
+  "prefix": "ng-mf",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/matricula",
+        "index": "apps/matricula/src/index.html",
+        "main": "apps/matricula/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/matricula/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/matricula/src/favicon.ico",
+          "apps/matricula/src/assets"
+        ],
+        "styles": ["apps/matricula/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/matricula/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/matricula/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nrwl/angular:webpack-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "matricula:build:production"
+        },
+        "development": {
+          "browserTarget": "matricula:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4207,
+		"host": "0.0.0.0",
+        "publicHost": "http://localhost:4207"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "matricula:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "apps/matricula/**/*.ts",
+          "apps/matricula/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/matricula/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/angular:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "matricula:build",
+		"host": "0.0.0.0",
+        "port": 4207
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "matricula:build:development"
+        },
+        "production": {
+          "buildTarget": "matricula:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

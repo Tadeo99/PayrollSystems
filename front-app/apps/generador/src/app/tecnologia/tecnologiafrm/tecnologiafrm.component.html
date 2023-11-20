@@ -1,0 +1,46 @@
+<div *ngIf="mostrarPanelForm" class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full">
+            <ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+            <!-- Form -->
+            <div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+                    {{alert.message}}
+                </ng-mf-bs-alert>
+                <form class="space-y-3" [formGroup]="frmGroup">
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <!-- nombre -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="nombre" [required]="true">
+                            <mat-label>{{'nombre' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('nombre') )">
+                                <span *ngIf="invalid('nombre')">{{getError('nombre')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- tipo -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <mat-select formControlName="tipo" [required]="true">
+                                <mat-option *ngFor="let it of typeService.listaTipoTecnologia" [value]="it.id">
+                                    {{it.nombre}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-label>{{'tipo' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('tipo') )">
+                                <span *ngIf="invalid('tipo')">{{getError('tipo')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+                            (click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+                            {{'guardar' | transloco}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

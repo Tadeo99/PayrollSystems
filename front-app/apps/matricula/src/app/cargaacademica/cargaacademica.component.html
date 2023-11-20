@@ -1,0 +1,517 @@
+<div name="pnlGridListCargaAcademica" *ngIf="!mostrarPanelForm">
+	<mat-card>
+		<form [formGroup]="frmGroup" novalidate>
+			<span *ngIf="showModal">{{'cargaAcademica.pnl.title' | transloco}}</span>
+			<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+				<mat-icon class="mat-24">reply</mat-icon>
+			</button>
+			<mat-form-field class="search-full-width" color="accent">
+				<mat-icon matPrefix>search</mat-icon>
+				<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+				<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+					<mat-icon class="mat-24">replay</mat-icon>
+				</button>
+				<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx">
+					<mat-icon>add</mat-icon>
+				</button>
+			</mat-form-field>
+			<mat-card-content>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="anhio">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'anhio' | transloco}}</mat-label>
+								<input matInput  formControlName="descripcionView">
+								<mat-error *ngIf="(invalid('anhio.descripcionView')  )">
+									<span
+										*ngIf="invalid('anhio.descripcionView')">{{getError('anhio.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAnhioanhio()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'cargaAcademica.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let cargaAcademica of listaCargaAcademica" class="noright">
+							<mat-icon mat-list-icon (click)="buscarID(cargaAcademica)">view_carousel</mat-icon>
+							<p mat-line>{{cargaAcademica.nombre}}</p>
+							<p mat-line>{{cargaAcademica.seccion.nombre}}</p>
+							<p mat-line>{{cargaAcademica.seccion.grado.nombre}}</p>
+							<p mat-line>{{cargaAcademica.aula.descripcion}}</p>
+							<mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(cargaAcademica)"
+								name="checkedView" #checkedView="ngModel" [(ngModel)]="cargaAcademica.checked">
+							</mat-checkbox>
+							<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck"
+								mat-icon-button (click)="asociar(cargaAcademica)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+							</button>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(cargaAcademica)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">edit</mat-icon>
+							</button>
+							<button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+								(click)="confirmarEliminar(cargaAcademica)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">delete</mat-icon>
+							</button>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+			</mat-card-content>
+		</form>
+	</mat-card>
+	<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+		(click)="dialogRef.close(listaCargaAcademicaSelectMap)">
+		<mat-icon>check_circle</mat-icon>
+	</button>
+</div>
+
+<div name="pnlGridFrmCargaAcademica" *ngIf="mostrarPanelForm">
+	<mat-card>
+		<form [formGroup]="frmGroup" novalidate>
+			<mat-card-header>
+				<div mat-card-avatar>
+					<mat-icon>folder</mat-icon>
+				</div>
+				<mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }}</mat-card-title>
+				<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</mat-card-title>
+				<div fxFlex></div>
+				<button style="margin-right: 10px;" (click)="guardar()" color="primary" [disabled]="(frmGroup.invalid)"
+					mat-raised-button>{{'guardar' | transloco}}</button>
+				<button (click)="cancelar()" color="accent" mat-raised-button>{{'cancelar' | transloco}}</button>
+			</mat-card-header>
+			<mat-divider></mat-divider>
+			<p></p>
+			<mat-card-content>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'observacion' | transloco}}</mat-label>
+								<input [maxlength]="200" matInput 
+									formControlName="observacion">
+								<mat-error *ngIf="(invalid('observacion') )">
+									<span *ngIf="invalid('observacion')">{{getError('observacion')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'codigoSalon' | transloco}}</mat-label>
+								<input [maxlength]="10" matInput 
+									formControlName="codigoSalon">
+								<mat-error *ngIf="(invalid('codigoSalon') )">
+									<span *ngIf="invalid('codigoSalon')">{{getError('codigoSalon')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'nombre' | transloco}}</mat-label>
+								<input [maxlength]="100" matInput 
+									formControlName="nombre">
+								<mat-error *ngIf="(invalid('nombre') )">
+									<span *ngIf="invalid('nombre')">{{getError('nombre')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="anhio">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'anhio' | transloco}}</mat-label>
+								<input matInput  formControlName="descripcionView"
+									required [disabled]="true" readonly="true">
+								<mat-error *ngIf="(invalid('anhio.descripcionView')  )">
+									<span
+										*ngIf="invalid('anhio.descripcionView')">{{getError('anhio.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="seccion">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'seccion' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView" required>
+								<mat-error *ngIf="(invalid('seccion.descripcionView')  )">
+									<span
+										*ngIf="invalid('seccion.descripcionView')">{{getError('seccion.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalSeccionseccion()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-select" formGroupName="itemByTurno">
+							<mat-form-field class="input-full-width" >
+								<mat-label>{{'itemByTurno' | transloco}}</mat-label>
+								<mat-select  class="input-full-width" 
+								formControlName="idItem"				>					
+									<mat-option *ngFor="let it of listaTurno" [value]="it.id" >
+										{{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="(invalid('serie') )">
+									<span *ngIf="invalid('serie')">{{getError('serie')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+						<!-- <div class="div-input-text" formGroupName="itemByTurno">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'itemByTurno' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView" required>
+								<mat-error *ngIf="(invalid('itemByTurno.descripcionView')  )">
+									<span
+										*ngIf="invalid('itemByTurno.descripcionView')">{{getError('itemByTurno.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItemitemByTurno()">search
+								</mat-icon>
+							</mat-form-field>
+						</div> -->
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="aula">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'aula' | transloco}}</mat-label>
+								<input matInput  formControlName="descripcionView"
+									required>
+								<mat-error *ngIf="(invalid('aula.descripcionView')  )">
+									<span
+										*ngIf="invalid('aula.descripcionView')">{{getError('aula.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAulaaula()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="personalByTutor">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'personalByTutor' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView" required>
+								<mat-error *ngIf="(invalid('personalByTutor.descripcionView')  )">
+									<span
+										*ngIf="invalid('personalByTutor.descripcionView')">{{getError('personalByTutor.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPersonalpersonalByTutor()">
+									search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="personalByCoTutor">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'personalByCoTutor' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView" required>
+								<mat-error *ngIf="(invalid('personalByCoTutor.descripcionView')  )">
+									<span
+										*ngIf="invalid('personalByCoTutor.descripcionView')">{{getError('personalByCoTutor.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPersonalpersonalByCoTutor()">
+									search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text" formGroupName="personalByCoordinador">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'personalByCoordinador' | transloco}}</mat-label>
+								<input matInput 
+									formControlName="descripcionView" required>
+								<mat-error *ngIf="(invalid('personalByCoordinador.descripcionView')  )">
+									<span
+										*ngIf="invalid('personalByCoordinador.descripcionView')">{{getError('personalByCoordinador.descripcionView')}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico"
+									(click)="abrirModalPersonalpersonalByCoordinador()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<!-- <div fxFlex="50%" fxFlex.xs="50%"> 
+					 <div style="height: 60px;" class="div-input-select">
+						 <mat-form-field class="input-full-width" >
+							 <mat-label>{{'tipoPeriodo' | transloco}}</mat-label>
+							 <mat-select class="input-full-width"   
+								 formControlName="tipoPeriodo"
+								 [required] = "true">					
+								 <mat-option *ngFor="let it of typeSelectItemService.listaTipoPeriodo" [value]="it.id" >
+								 {{it.nombre}}
+								 </mat-option>
+							 </mat-select>
+							 <mat-error *ngIf="(invalid('tipoPeriodo') )">
+								 <span *ngIf="invalid('tipoPeriodo')">{{getError('tipoPeriodo')}}</span>
+							 </mat-error>
+						 </mat-form-field>
+					 </div>								
+					</div> -->
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'nroVacante' | transloco}}</mat-label>
+								<input [maxlength]="18" matInput 
+									formControlName="nroVacante" required>
+								<mat-error *ngIf="(invalid('nroVacante') )">
+									<span *ngIf="invalid('nroVacante')">{{getError('nroVacante')}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</mat-card-content>
+		</form>
+		<div fxLayout="row wrap" fxLayout.xs="column" fxLayout.sm="row">
+			<div fxFlex="100%" fxFlex.xs="100%">
+				<div class="example-container mat-elevation-z8">
+					<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+					<mat-toolbar color="primary" id="toolbarId">
+						<span>Listado Cursos Disponibles ({{listasize}})</span>
+						<span class="app-fill-remaining"></span>
+						<button
+							*ngIf="showAccionNuevo && privilegioMap('cargaLectiva.frm.accion.buscarSemestre') && mostrarBtn"
+							matTooltip="Guardar Cargalectiva" [disabled]="mostrasEditT" matTooltipPosition="left"
+							mat-mini-fab color="accent">
+							<mat-icon class="mat-24">playlist_add_check</mat-icon>
+						</button>
+					</mat-toolbar>
+					<table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+						<ng-container matColumnDef="view">
+							<th mat-header-cell *matHeaderCellDef> </th>
+							<td mat-cell *matCellDef="let element">
+								<button mat-icon-button *ngIf="element.esPadre"
+									(click)="detCargaAcademica = detCargaAcademica === element ? null : element">
+									<mat-icon
+										[@indicatorRotate]="element == detCargaAcademica ? 'expanded': 'collapsed'">
+										arrow_drop_down</mat-icon>
+								</button>
+							</td>
+						</ng-container>
+						<ng-container matColumnDef="c">
+							<th mat-header-cell *matHeaderCellDef>
+								<mat-checkbox (change)="masterToggle()"
+									[checked]="selection.hasValue() && isAllSelected()">
+								</mat-checkbox>
+							</th>
+							<td mat-cell *matCellDef="let element">
+								<mat-checkbox (change)="togleCheck(element)" *ngIf="!element.esPadre"
+									name="chec{{element.detMallaCurricular.idDetMallaCurricular}}" #chec="ngModel"
+									[(ngModel)]="element.checked">
+								</mat-checkbox>
+							</td>
+						</ng-container>
+						<ng-container matColumnDef="curso">
+							<th mat-header-cell *matHeaderCellDef> Curso </th>
+							<td mat-cell *matCellDef="let element;let i = index">
+								{{element.detMallaCurricular.descripcionCurso}}
+								<!-- {{element.detMallaCurricular.idDetMallaCurricular}} -->
+							</td>
+						</ng-container>
+						<ng-container matColumnDef="donceteP">
+							<th mat-header-cell *matHeaderCellDef> Docente Principal </th>
+							<td mat-cell *matCellDef="let element;let i = index">
+								<div style="height: 60px;" class="div-input-select input-full-width"
+									*ngIf="!element.esPadre">
+									<mat-form-field appearance="outline" class="input-full-width cursorStil"
+										(click)="abrirModalPersonal(personalBydocente,element)">
+										<mat-label>Docente Principal</mat-label>
+										<input [maxlength]="50" class="cursorStil" matInput
+											name="docente{{element.detMallaCurricular.idDetMallaCurricular}}"
+											#docente="ngModel"
+											[(ngModel)]="element.personalByDocentePrincipal.descripcionView"
+											[required]="true" [disabled]="!element.checked">
+										<mat-error [ngClass]="{'requiered': (docente.errors  )}"
+											*ngIf="(docente.errors ) && (docente.dirty || docente.touched)">
+											<span
+												*ngIf="docente.errors?.required">{{'docente.frm.input.docente.requiered'
+												| transloco}}</span>
+											<span
+												*ngIf="docente.errors?.required">{{'docente.frm.input.docente.no.existe.bd'
+												| transloco}}</span>
+										</mat-error>
+										<mat-icon matSuffix class="cursorStil" *ngIf="element.checked">search</mat-icon>
+									</mat-form-field>
+								</div>
+							</td>
+						</ng-container>
+						<ng-container matColumnDef="docenteA">
+							<th mat-header-cell *matHeaderCellDef> Docente Auxiliar </th>
+							<td mat-cell *matCellDef="let element;let i = index">
+								<div style="height: 60px;" class="div-input-select input-full-width"
+									*ngIf="!element.esPadre">
+									<mat-form-field appearance="outline" class="input-full-width cursorStil"
+										(click)="abrirModalPersonal(personalBydocentePractica,element)">
+										<mat-label>Docente Auxiliar</mat-label>
+										<input [maxlength]="50" matInput class="cursorStil"
+											name="docentepractica{{element.idDetMallaCurricular}}"
+											#docentepractica="ngModel"
+											[(ngModel)]="element.personalByDocenteAuxiliar.descripcionView"
+											[disabled]="!element.checked">
+										<mat-error [ngClass]="{'requiered': (docentepractica.errors  )}"
+											*ngIf="(docentepractica.errors ) && (docentepractica.dirty || docentepractica.touched)">
+											<span
+												*ngIf="docentepractica.errors?.required">{{'docentepractica.frm.input.docentepractica.requiered'
+												| transloco}}</span>
+											<span
+												*ngIf="docentepractica.errors?.required">{{'docentepractica.frm.input.docentepractica.no.existe.bd'
+												| transloco}}</span>
+										</mat-error>
+										<mat-icon matSuffix class="cursorStil" *ngIf="element.checked">search</mat-icon>
+									</mat-form-field>
+								</div>
+							</td>
+						</ng-container>
+						<ng-container matColumnDef="grupo">
+							<th mat-header-cell *matHeaderCellDef>Grupo</th>
+							<td mat-cell *matCellDef="let element;let i = index">
+								<div style="height: 60px;" class="div-input-select input-full-width"
+									*ngIf="!element.esPadre">
+									<mat-form-field appearance="outline" class="input-full-width cursorStil"
+										(click)="abrirModalGrupogrupo(element)">
+										<mat-label>Grupo</mat-label>
+										<input [maxlength]="100" class="cursorStil" matInput 
+											name="grupo{{element.detMallaCurricular.idDetMallaCurricular}}"
+											#grupo="ngModel" [(ngModel)]="element.grupo.descripcionView"
+											[required]="true" [disabled]="!element.checked">
+										<mat-error [ngClass]="{'requiered': (grupo.errors  )}"
+											*ngIf="(grupo.errors ) && (grupo.dirty || grupo.touched)"
+											(click)="abrirModalGrupogrupo(element)">
+											<span *ngIf="grupo.errors?.required">{{'grupo.frm.input.grupo.requiered' |
+												translate}}</span>
+											<span *ngIf="grupo.errors?.required">{{'grupo.frm.input.grupo.no.existe.bd'
+												| transloco}}</span>
+										</mat-error>
+										<mat-icon matSuffix class="cursorStil" *ngIf="element.checked">search</mat-icon>
+									</mat-form-field>
+								</div>
+							</td>
+						</ng-container>
+
+						<ng-container matColumnDef="A">
+							<th mat-header-cell *matHeaderCellDef></th>
+							<td mat-cell *matCellDef="let element;let i = index">
+								<button matTooltip="Quitar Curso" *ngIf="element.idDetalleCargaAcademica != null"
+									mat-icon-button color="warn" (click)="confirmarEliminarDetCargaAcademica(element)">
+									<mat-icon>backspace</mat-icon>
+								</button>
+							</td>
+						</ng-container>
+
+
+						<ng-container matColumnDef="expandedDetail">
+							<td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+								<div class="example-element-detail"
+									[@detailExpand]="element == detCargaAcademica ? 'expanded' : 'collapsed'">
+									<mat-nav-list class="input-full-width">
+										<mat-list dense>
+											<mat-list-item
+												*ngFor="let detalleCargaAcademica of element.detalleCargaAcademicaDTOList ; let i = index"
+												class="noright">
+												<mat-checkbox mat-list-icon
+													(change)="togleCheckSub(detalleCargaAcademica,element)"
+													name="chec{{detalleCargaAcademica.detMallaCurricular.idDetMallaCurricular}}"
+													#chec="ngModel" [(ngModel)]="detalleCargaAcademica.checked">
+												</mat-checkbox>
+												<p mat-line>
+													{{detalleCargaAcademica.detMallaCurricular.descripcionCurso}}</p>
+												<!-- <p mat-line> {{detalleCargaAcademica.detMallaCurricular.detMallaCurricularPadre.idDetMallaCurricular}}</p> -->
+												<!-- <p mat-line>
+													{{detalleCargaAcademica.detMallaCurricular.idDetMallaCurricular}}
+												</p> -->
+												<div style="height: 50px;" class="div-input-select input-full-width">
+													<mat-form-field appearance="outline"
+														class="input-full-width cursorStil">
+														<mat-label>Docente Principal</mat-label>
+														<input [maxlength]="50" class="cursorStil" matInput
+															name="docente{{detalleCargaAcademica.detMallaCurricular.idDetMallaCurricular}}"
+															#docente="ngModel"
+															[disabled]="!detalleCargaAcademica.checked"
+															[(ngModel)]="detalleCargaAcademica.personalByDocentePrincipal.descripcionView">
+														<mat-icon matSuffix class="cursorStil"
+															(click)="abrirModalPersonal(personalBydocente,detalleCargaAcademica)">
+															search</mat-icon>
+													</mat-form-field>
+												</div>
+												<div style="height: 50px;" class="div-input-select input-full-width">
+													<mat-form-field appearance="outline"
+														class="input-full-width cursorStil">
+														<mat-label>Docente Auxiliar</mat-label>
+														<input [maxlength]="50" matInput class="cursorStil"
+															name="docentepractica{{detalleCargaAcademica.detMallaCurricular.idDetMallaCurricular}}"
+															#docentepractica="ngModel"
+															[disabled]="!detalleCargaAcademica.checked"
+															[(ngModel)]="detalleCargaAcademica.personalByDocenteAuxiliar.descripcionView">
+														<mat-icon
+															(click)="abrirModalPersonal(personalBydocentePractica,detalleCargaAcademica)"
+															matSuffix class="cursorStil">search</mat-icon>
+													</mat-form-field>
+												</div>
+												<div style="height: 50px;" class="div-input-select input-full-width">
+													<mat-form-field appearance="outline"
+														class="input-full-width cursorStil">
+														<mat-label>Grupo</mat-label>
+														<input [maxlength]="100" class="cursorStil" matInput
+															name="grupo{{detalleCargaAcademica.detMallaCurricular.idDetMallaCurricular}}"
+															#grupo="ngModel" [disabled]="!detalleCargaAcademica.checked"
+															[(ngModel)]="detalleCargaAcademica.grupo.descripcionView">
+														<mat-icon (click)="abrirModalGrupogrupo(detalleCargaAcademica)"
+															matSuffix class="cursorStil">
+															search</mat-icon>
+													</mat-form-field>
+												</div>
+
+												<button matTooltip="Quitar Curso"
+													*ngIf="detalleCargaAcademica.idDetalleCargaAcademica != null" mat-icon-button
+													color="warn" (click)="confirmarEliminarDetCargaAcademica(detalleCargaAcademica)">
+													<mat-icon>backspace</mat-icon>
+												</button>
+												<mat-divider></mat-divider>
+											</mat-list-item>
+										</mat-list>
+									</mat-nav-list>
+								</div>
+							</td>
+						</ng-container>
+
+						<tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+						<tr mat-row *matRowDef="let element; columns: columnsToDisplay;" class="example-element-row"
+							[class.example-expanded-row]="detCargaAcademica === element">
+						</tr>
+						<tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+					</table>
+					<mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+					</mat-paginator>
+				</div>
+			</div>
+		</div>
+	</mat-card>
+
+</div>

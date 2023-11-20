@@ -1,0 +1,41 @@
+.example-element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+tr.example-detail-row {
+  height: 0;
+}
+
+.horizontal-mat-list-item {
+  float: left;
+  display: list-item;
+  text-align: center;
+  list-style: none;
+}
+
+.menu-perP{
+  height: 25px !important;
+  border-left: 1px solid #2a2a2a !important;
+
+}
+
+.menu-perH{
+  height: 25px !important;
+  border-left: 1px solid #2a2a2a !important;
+  border-right: 1px solid #2a2a2a !important;
+  width: 60px !important;
+}
+
+.mat-list-base  {
+  padding-top: 0px !important; 
+}
+ 

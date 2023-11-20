@@ -1,0 +1,93 @@
+<form name="frmMenuPersonalizado" #frmMenuPersonalizado="ngForm" novalidate>
+	<input type="hidden" name="sistemaID" #sistemaID="ngModel" [(ngModel)]="menu.sistema.idSistema">
+	<input type="hidden" name="menuPadreID" #menuPadreID="ngModel" [(ngModel)]="menuDependencia.idMenu">
+	<input type="hidden" name="usuarioID" #usuarioID="ngModel" [(ngModel)]="usuario.idUsuario">
+	<div name="pnlGridListMenuPersonalizado" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+				<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+				<button matPrefix mat-icon-button [style.visibility]="(descripcion != '')  ? 'visible' : 'hidden'"
+					(click)="regresarDependencia()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+					<mat-icon class="mat-24">search</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'guardar' | transloco}}" (click)="listo()"
+					[disabled]="frmMenuPersonalizado.invalid" color="accent">
+					<mat-icon class="mat-24">check</mat-icon>
+				</button>
+			</mat-form-field>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'usuario' | transloco}}</mat-label>
+								<input [required]=true matInput 
+									name="usuarioView" #usuarioView="ngModel" [(ngModel)]="usuario.descripcionView"
+									(change)="abrirModalPersonaInput($event.target.value)">
+								<mat-error
+									*ngIf="(usuarioView.errors  || usuarioID.errors ) && (usuarioView.dirty || usuarioView.touched)">
+									<span *ngIf="usuarioView.errors?.required">{{'requiered' |
+										translate}}</span>
+									<span *ngIf="usuarioID.errors?.required">{{'no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPersona()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'sistema' | transloco}}</mat-label>
+								<input [required]=true matInput 
+									name="sistemaParam" #sistemaParam="ngModel" [(ngModel)]="sistema.descripcionView"
+									(change)="abrirModalSistemaInput($event.target.value)">
+								<mat-error
+									*ngIf="(sistemaParam.errors  || sistemaID.errors ) && (sistemaParam.dirty || sistemaParam.touched)">
+									<span *ngIf="sistemaParam.errors?.required">{{'requiered' |
+										translate}}</span>
+									<span *ngIf="sistemaID.errors?.required">{{'no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalSistema()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="descripcion != ''">{{descripcion}}</h3>
+						<h3 mat-subheader>{{'menu.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let menuPersonalizado of listaMenuPersonalizado; let i = index"
+							class="noright">
+							<p mat-line (click)="verDependecia(menuPersonalizado)"> {{menuPersonalizado.nombre}}</p>
+							<p mat-line (click)="verDependecia(menuPersonalizado)"> {{menuPersonalizado.descripcion}}
+							</p>
+							<mat-checkbox *ngIf="menuPersonalizado.url != null && menuPersonalizado.url != ''"
+								color="accent" (change)="agregarCheck(menuPersonalizado)" name="checkedView{{i}}"
+								#checkedView="ngModel" [(ngModel)]="menuPersonalizado.checked">
+							</mat-checkbox>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+	</div>
+	<app-privilegiopersonalizado [listaPrivilegioPersonalizadoSelectMap]="listaPrivilegioPersonalizadoSelectMap"
+		[usuario]="usuario" [listaIdMenu]="listaIdMenu" [fechaActual]="fechaActual">
+	</app-privilegiopersonalizado>
+</form>

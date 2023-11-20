@@ -1,0 +1,263 @@
+ <form [formGroup]="frmGroup"  novalidate>
+ 	<div name="pnlGridListCalendarioAcademico" *ngIf="!mostrarPanelForm"  >
+	<mat-card>
+	    <span *ngIf="showModal" >{{'calendarioAcademico.pnl.title' | transloco}}</span>
+		<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+			<mat-icon class="mat-24">reply</mat-icon>
+		</button>
+		<mat-form-field class="search-full-width" color="accent">
+			<mat-icon matPrefix>search</mat-icon>
+			<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+			<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+				<mat-icon class="mat-24">replay</mat-icon>
+			</button>
+			<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx">
+				<mat-icon>add</mat-icon>
+			</button>
+		</mat-form-field>	  
+	    <mat-card-content>
+		 <mat-nav-list>
+      	  <mat-list dense>
+			 <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+      	     <h3 mat-subheader>{{'calendarioAcademico.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+			 <mat-list-item *ngFor="let calendarioAcademico of listaCalendarioAcademico" class="noright">
+			   <mat-icon mat-list-icon (click)="buscarID(calendarioAcademico)" >folder</mat-icon>
+				 <mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(calendarioAcademico)"  
+				 name="checkedView" #checkedView="ngModel" [(ngModel)]="calendarioAcademico.checked">
+				 </mat-checkbox>
+				<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck" mat-icon-button (click)="asociar(calendarioAcademico)" color="accent">
+					<mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+				</button>			   
+				<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(calendarioAcademico)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">edit</mat-icon>
+				</button>
+				<button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+								(click)="confirmarEliminar(calendarioAcademico)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">delete</mat-icon>
+				</button>
+				<mat-divider></mat-divider>
+			</mat-list-item>
+       	  </mat-list>
+		</mat-nav-list>
+		<app-paginacion [dataProvider]="dataProvider" [cantidadPage] = "cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+	  </mat-card-content>			
+	</mat-card >	
+	<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab (click)="dialogRef.close(listaCalendarioAcademicoSelectMap)"  >
+		<mat-icon>check_circle</mat-icon>
+	</button>	
+   </div>	
+	
+   <div name="pnlGridFrmCalendarioAcademico" *ngIf="mostrarPanelForm"  >  
+    <mat-card >
+		<mat-card-header>
+			<div mat-card-avatar>
+				<mat-icon>folder</mat-icon>
+			</div>
+			<mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }}</mat-card-title>
+			<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</mat-card-title>
+		</mat-card-header>
+		<mat-divider></mat-divider>
+		<p></p>
+		<mat-card-content>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  formGroupName="anhio" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'anhio' | transloco}}</mat-label>
+						<input  matInput    formControlName="descripcionView" 
+					      >
+						<mat-error *ngIf="(invalid('anhio.descripcionView')  )" > 
+							<span *ngIf="invalid('anhio.descripcionView')">{{getError('anhio.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAnhioanhio()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  formGroupName="periodo" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'periodo' | transloco}}</mat-label>
+						<input  matInput   formControlName="descripcionView" 
+					      >
+						<mat-error *ngIf="(invalid('periodo.descripcionView')  )" > 
+							<span *ngIf="invalid('periodo.descripcionView')">{{getError('periodo.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPeriodoperiodo()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  formGroupName="unidad" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'unidad' | transloco}}</mat-label>
+						<input  matInput    formControlName="descripcionView" 
+					      >
+						<mat-error *ngIf="(invalid('unidad.descripcionView')  )" > 
+							<span *ngIf="invalid('unidad.descripcionView')">{{getError('unidad.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalUnidadunidad()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  formGroupName="itemByNivel" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'itemByNivel' | transloco}}</mat-label>
+						<input  matInput    formControlName="descripcionView" 
+					      >
+						<mat-error *ngIf="(invalid('itemByNivel.descripcionView')  )" > 
+							<span *ngIf="invalid('itemByNivel.descripcionView')">{{getError('itemByNivel.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItemitemByNivel()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'descripcion' | transloco}}</mat-label>
+						<input [maxlength]="100" matInput  formControlName="descripcion" >
+						<mat-error *ngIf="(invalid('descripcion') )" > 
+							<span *ngIf="invalid('descripcion')">{{getError('descripcion')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'codigoCronograma' | transloco}}</mat-label>
+						<input [maxlength]="18" matInput formControlName="codigoCronograma" >
+						<mat-error *ngIf="(invalid('codigoCronograma') )" > 
+							<span *ngIf="invalid('codigoCronograma')">{{getError('codigoCronograma')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				<div class="div-input-text">
+				      <mat-form-field>
+						<mat-label>{{'fechaInicio' | transloco}}</mat-label>
+						<input matInput [matDatepicker]="ffechaInicio"   formControlName="fechaInicio" >
+						<mat-datepicker-toggle matSuffix [for]="ffechaInicio"></mat-datepicker-toggle>
+						<mat-error *ngIf="invalid('fechaInicio')" > 
+							<span *ngIf="invalid('fechaInicio')">{{getError('fechaInicio')}}</span>
+						</mat-error>
+						<mat-datepicker #ffechaInicio [touchUi]="touch" ></mat-datepicker>
+					  </mat-form-field>					  
+				</div>
+			   </div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				<div class="div-input-text">
+				      <mat-form-field>
+						<mat-label>{{'fechaFin' | transloco}}</mat-label>
+						<input matInput [matDatepicker]="ffechaFin"   formControlName="fechaFin" >
+						<mat-datepicker-toggle matSuffix [for]="ffechaFin"></mat-datepicker-toggle>
+						<mat-error *ngIf="invalid('fechaFin')" > 
+							<span *ngIf="invalid('fechaFin')">{{getError('fechaFin')}}</span>
+						</mat-error>
+						<mat-datepicker #ffechaFin [touchUi]="touch" ></mat-datepicker>
+					  </mat-form-field>					  
+				</div>
+			   </div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'estado' | transloco}}</mat-label>
+						<input [maxlength]="1" matInput   formControlName="estado" >
+						<mat-error *ngIf="(invalid('estado') )" > 
+							<span *ngIf="invalid('estado')">{{getError('estado')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'usuarioCreacion' | transloco}}</mat-label>
+						<input [maxlength]="50" matInput   formControlName="usuarioCreacion" >
+						<mat-error *ngIf="(invalid('usuarioCreacion') )" > 
+							<span *ngIf="invalid('usuarioCreacion')">{{getError('usuarioCreacion')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				<div class="div-input-text">
+				      <mat-form-field>
+						<mat-label>{{'fechaCreacion' | transloco}}</mat-label>
+						<input matInput [matDatepicker]="ffechaCreacion"   formControlName="fechaCreacion" >
+						<mat-datepicker-toggle matSuffix [for]="ffechaCreacion"></mat-datepicker-toggle>
+						<mat-error *ngIf="invalid('fechaCreacion')" > 
+							<span *ngIf="invalid('fechaCreacion')">{{getError('fechaCreacion')}}</span>
+						</mat-error>
+						<mat-datepicker #ffechaCreacion [touchUi]="touch" ></mat-datepicker>
+					  </mat-form-field>					  
+				</div>
+			   </div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'usuarioModificacion' | transloco}}</mat-label>
+						<input [maxlength]="50" matInput formControlName="usuarioModificacion" >
+						<mat-error *ngIf="(invalid('usuarioModificacion') )" > 
+							<span *ngIf="invalid('usuarioModificacion')">{{getError('usuarioModificacion')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+			   <div fxFlex="50%" fxFlex.xs="50%"> 
+				<div class="div-input-text">
+				      <mat-form-field>
+						<mat-label>{{'fechaModificacion' | transloco}}</mat-label>
+						<input matInput [matDatepicker]="ffechaModificacion" formControlName="fechaModificacion" >
+						<mat-datepicker-toggle matSuffix [for]="ffechaModificacion"></mat-datepicker-toggle>
+						<mat-error *ngIf="invalid('fechaModificacion')" > 
+							<span *ngIf="invalid('fechaModificacion')">{{getError('fechaModificacion')}}</span>
+						</mat-error>
+						<mat-datepicker #ffechaModificacion [touchUi]="touch" ></mat-datepicker>
+					  </mat-form-field>					  
+				</div>
+			   </div>
+			</div>
+		 </mat-card-content>
+		 <mat-card-actions>
+			<button  (click)="guardar()" color="primary"
+					[disabled]="frmGroup.invalid" mat-raised-button>{{'guardar' | transloco}}</button>
+
+			<button  (click)="cancelar()" color="accent"
+					mat-raised-button>{{'cancelar' | transloco}}</button>
+		 </mat-card-actions>		 
+	   </mat-card>
+	</div>
+</form>

@@ -1,0 +1,263 @@
+<form name="frmConfiguracionMenu" #frmConfiguracionMenu="ngForm" novalidate>
+	<div name="pnlGridListConfiguracionMenu" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span>{{'configuracionMenu.pnl.title' | transloco}}</span>
+				<span class="app-fill-remaining">
+					<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+						<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+							placeholder="{{'search' | transloco}}">
+					</mat-form-field>
+				</span>
+				<mat-icon matTooltip="{{'buscar' | transloco}}" (click)="buscar()" class="app-toolbar-icon">search
+				</mat-icon>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'configuracionMenu.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let configuracionMenu of listaConfiguracionMenu" class="noright">
+							<mat-icon mat-list-icon (click)="buscarID(configuracionMenu)">folder</mat-icon>
+							<p mat-line (click)="buscarID(configuracionMenu)"> {{configuracionMenu.required}}</p>
+							<p mat-line (click)="buscarID(configuracionMenu)"> {{configuracionMenu.readonly}}</p>
+							<mat-checkbox *ngIf="showAccionCheck" color="accent"
+								(change)="agregarCheck(configuracionMenu)" name="checkedView" #checkedView="ngModel"
+								[(ngModel)]="configuracionMenu.checked">
+							</mat-checkbox>
+							<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck"
+								mat-icon-button (click)="asociar(configuracionMenu)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+							</button>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(configuracionMenu)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">chevron_right</mat-icon>
+							</button>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+		<button matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo" mat-fab (click)="nuevo()" class="app-fab">
+			<mat-icon>add</mat-icon>
+		</button>
+		<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+			(click)="dialogRef.close(listaConfiguracionMenuSelectMap)">
+			<mat-icon>check_circle</mat-icon>
+		</button>
+	</div>
+
+	<div name="pnlGridFrmConfiguracionMenu" *ngIf="mostrarPanelForm">
+		<input type="hidden" name="menuID" #menuID="ngModel" [(ngModel)]="configuracionMenu.menu.idMenu">
+		<input type="hidden" name="itemByComponenteID" #itemByComponenteID="ngModel"
+			[(ngModel)]="configuracionMenu.itemByComponente.idItem">
+		<input type="hidden" name="propertiesID" #propertiesID="ngModel"
+			[(ngModel)]="configuracionMenu.properties.idProperties" [required]="true">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button matTooltip="{{'cancelar' | transloco}}" mat-icon-button (click)="cancelar()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span *ngIf="accionNuevo">{{'title.crear' | transloco }}</span>
+				<span *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</span>
+				<span class="app-fill-remaining"></span>
+				<button matTooltip="{{'guardar' | transloco}}" mat-icon-button (click)="listo()"
+					[disabled]="frmConfiguracionMenu.invalid" color="accent">
+					<mat-icon class="mat-24">check</mat-icon>
+				</button>
+				<button *ngIf="!accionNuevo" mat-icon-button [matMenuTriggerFor]="posXMenu"
+					aria-label="Open x-positioned menu">
+					<mat-icon>more_vert</mat-icon>
+				</button>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'menu' | transloco}}</mat-label>
+								<input matInput name="menu" #menu="ngModel"
+									[(ngModel)]="configuracionMenu.menu.descripcionView"
+									(change)="abrirModalMenuInput($event.target.value)">
+								<mat-error *ngIf="(menu.errors  || menuID.errors ) && (menu.dirty || menu.touched)">
+									<span *ngIf="menu.errors?.required">{{'menu.requiered' | transloco}}</span>
+									<span *ngIf="menuID.errors?.required">{{'menu.no.existe.bd' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalMenu()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'itemByComponente' | transloco}}</mat-label>
+								<input matInput name="itemByComponente" #itemByComponente="ngModel"
+									[(ngModel)]="configuracionMenu.itemByComponente.descripcionView"
+									(change)="abrirModalItemInput($event.target.value)">
+								<mat-error
+									*ngIf="(itemByComponente.errors  || itemByComponenteID.errors ) && (itemByComponente.dirty || itemByComponente.touched)">
+									<span *ngIf="itemByComponente.errors?.required">{{'itemByComponente.requiered' |
+										translate}}</span>
+									<span *ngIf="itemByComponenteID.errors?.required">{{'itemByComponente.no.existe.bd'
+										| transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItem()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'properties' | transloco}}</mat-label>
+								<input matInput name="properties" #properties="ngModel"
+									[(ngModel)]="configuracionMenu.properties.descripcionView" [required]="true"
+									(change)="abrirModalPropertiesInput($event.target.value)">
+								<mat-error
+									*ngIf="(properties.errors  || propertiesID.errors ) && (properties.dirty || properties.touched)">
+									<span *ngIf="properties.errors?.required">{{'properties.requiered' |
+										translate}}</span>
+									<span *ngIf="propertiesID.errors?.required">{{'properties.no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalProperties()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'required' | transloco}}</mat-label>
+								<input [maxlength]="" matInput name="required" #required="ngModel"
+									[(ngModel)]="configuracionMenu.required">
+								<mat-error *ngIf="(required.errors ) && (required.dirty || required.touched)">
+									<span *ngIf="required.errors?.required">{{'required.requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'readonly' | transloco}}</mat-label>
+								<input [maxlength]="" matInput name="readonly" #readonly="ngModel"
+									[(ngModel)]="configuracionMenu.readonly">
+								<mat-error *ngIf="(readonly.errors ) && (readonly.dirty || readonly.touched)">
+									<span *ngIf="readonly.errors?.required">{{'readonly.requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'rendered' | transloco}}</mat-label>
+								<input [maxlength]="" matInput name="rendered" #rendered="ngModel"
+									[(ngModel)]="configuracionMenu.rendered">
+								<mat-error *ngIf="(rendered.errors ) && (rendered.dirty || rendered.touched)">
+									<span *ngIf="rendered.errors?.required">{{'rendered.requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'disabled' | transloco}}</mat-label>
+								<input [maxlength]="" matInput name="disabled" #disabled="ngModel"
+									[(ngModel)]="configuracionMenu.disabled">
+								<mat-error *ngIf="(disabled.errors ) && (disabled.dirty || disabled.touched)">
+									<span *ngIf="disabled.errors?.required">{{'disabled.requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-select">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'estado' | transloco}}</mat-label>
+								<mat-select class="input-full-width" name="estado"
+									[(ngModel)]="configuracionMenu.estado" #estado="ngModel" #drinkControl="ngModel">
+									<mat-option *ngFor="let it of typeSelectItemService.listaEstado" [value]="it.id">
+										 {{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="estado.errors && (estado.dirty || estado.touched)">
+									<span *ngIf="estado.errors?.required">{{'estado.requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'usuarioModificacion' | transloco}}</mat-label>
+								<input [maxlength]="50" matInput name="usuarioModificacion"
+									#usuarioModificacion="ngModel" [(ngModel)]="configuracionMenu.usuarioModificacion">
+								<mat-error
+									*ngIf="(usuarioModificacion.errors ) && (usuarioModificacion.dirty || usuarioModificacion.touched)">
+									<span *ngIf="usuarioModificacion.errors?.required">{{'usuarioModificacion.requiered'
+										| transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field>
+								<mat-label>{{'fechaModificacion' | transloco}}</mat-label>
+								<input matInput [matDatepicker]="ffechaModificacion" name="fechaModificacion"
+									#fechaModificacion="ngModel" [(ngModel)]="configuracionMenu.fechaModificacion">
+								<mat-datepicker-toggle matSuffix [for]="ffechaModificacion"></mat-datepicker-toggle>
+								<mat-error
+									*ngIf="fechaModificacion.errors && (fechaModificacion.dirty || fechaModificacion.touched)">
+									<span *ngIf="fechaModificacion.errors?.required">{{'fechaModificacion.requiered' |
+										translate}}</span>
+								</mat-error>
+								<mat-datepicker #ffechaModificacion [touchUi]="touch"></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</mat-card-content>
+			<mat-card-footer>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+			</mat-card-footer>
+		</mat-card>
+		<mat-menu x-position="before" #posXMenu="matMenu" class="before">
+			<button mat-menu-item *ngFor="let item of iconAccionItems" (click)="accionMenu(item)"
+				[disabled]="item.disabled">
+				<mat-icon>{{ item.icon }}</mat-icon>
+				{{ item.text }}
+			</button>
+		</mat-menu>
+	</div>
+</form>

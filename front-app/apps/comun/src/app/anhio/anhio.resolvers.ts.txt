@@ -1,0 +1,34 @@
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import { BasePagination } from '@ng-mf/shared/service/core';
+import { catchError, Observable, throwError } from 'rxjs';
+import { AnhioService } from './anhio.service';
+import {
+    Anhio
+} from './anhio.types';
+
+@Injectable({
+    providedIn: 'root'
+})
+export class AnhioResolver implements Resolve<any>
+{
+    /**
+     * Constructor
+     */
+    constructor(private _Service: AnhioService) {
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Resolver
+     *
+     * @param route
+     * @param state
+     */
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: BasePagination; listaResultado: Anhio[] }> {
+        return this._Service.paginador();
+    }
+}

@@ -1,0 +1,36 @@
+module.exports = {
+  name: 'escalafon',
+  exposes: {
+    './Module': 'apps/escalafon/src/app/remote-entry/entry.module.ts',
+    './InstitucionModule': 'apps/escalafon/src/app/institucion/institucion.module.ts',
+    './CarreraModule': 'apps/escalafon/src/app/carrera/carrera.module.ts',
+    './CentroCostoModule': 'apps/escalafon/src/app/centrocosto/centrocosto.module.ts',
+    './PersonalModule': 'apps/escalafon/src/app/personal/personal.module.ts',
+  },
+  // adds vue as shared module
+  // version is inferred from package.json
+  // it will always use the shared version, but print a warning when the shared vue is < 2.6.5 or >= 3
+  additionalShared: [
+    {
+      libraryName: 'highlight.js',
+      sharedConfig: {
+        requiredVersion: '^11.7.0',
+        singleton: true,
+      },
+    },
+    {
+      libraryName: 'luxon',
+      sharedConfig: {
+        requiredVersion: '^3.2.1',
+        singleton: true,
+      },
+    },
+    {
+      libraryName: 'lodash',
+      sharedConfig: {
+        requiredVersion: '^4.17.21',
+        singleton: true,
+      },
+    },
+  ],
+};

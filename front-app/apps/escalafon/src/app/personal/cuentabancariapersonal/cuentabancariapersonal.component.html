@@ -1,0 +1,127 @@
+<div class="flex flex-col flex-auto min-w-0">
+	<!-- Main -->
+	<div class="flex flex-col flex-auto items-center">
+		<div class="flex flex-col w-full">
+			<!-- Form -->
+			<div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+				<!-- Alert -->
+				<ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+					{{alert.message}}
+				</ng-mf-bs-alert>
+				<form class="space-y-3" [formGroup]="frmGroup">
+
+					<div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+						<!-- idItemByBanco -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByBanco" [required]="true">
+								<mat-option *ngFor="let it of listaBanco" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByBanco' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByBanco') )">
+								<span *ngIf="invalid('idItemByBanco')">{{getError('idItemByBanco')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- nroCuenta -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="nroCuenta" [required]="true">
+							<mat-label>{{'nroCuenta' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('nroCuenta') )">
+								<span *ngIf="invalid('nroCuenta')">{{getError('nroCuenta')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- nroCCI -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="nroCCI" [required]="true">
+							<mat-label>{{'nroCCI' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('nroCCI') )">
+								<span *ngIf="invalid('nroCCI')">{{getError('nroCCI')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- fechaApertura -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput [matDatepicker]="ffechaApertura" formControlName="fechaApertura">
+							<mat-datepicker-toggle matSuffix [for]="ffechaApertura">
+							</mat-datepicker-toggle>
+							<mat-datepicker #ffechaApertura touchUi></mat-datepicker>
+							<mat-label>{{'fechaApertura' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('fechaApertura') )">
+								<span *ngIf="invalid('fechaApertura')">{{getError('fechaApertura')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idItemByMoneda -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByMoneda" [required]="true">
+								<mat-option *ngFor="let it of listaMoneda" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByMoneda' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByMoneda') )">
+								<span *ngIf="invalid('idItemByMoneda')">{{getError('idItemByMoneda')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idItemByTipoCuenta -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByTipoCuenta" [required]="true">
+								<mat-option *ngFor="let it of listaTipoCuenta" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByTipoCuenta' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByTipoCuenta') )">
+								<span *ngIf="invalid('idItemByTipoCuenta')">{{getError('idItemByTipoCuenta')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- modulo -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="modulo" [required]="true">
+							<mat-label>{{'modulo' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('modulo') )">
+								<span *ngIf="invalid('modulo')">{{getError('modulo')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- sucursal -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="sucursal" [required]="true">
+							<mat-label>{{'sucursal' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('sucursal') )">
+								<span *ngIf="invalid('sucursal')">{{getError('sucursal')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- subCuenta -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<input matInput formControlName="subCuenta" [required]="true">
+							<mat-label>{{'subCuenta' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('subCuenta') )">
+								<span *ngIf="invalid('subCuenta')">{{getError('subCuenta')}}</span>
+							</mat-error>
+						</mat-form-field>
+						<!-- idItemByTipoDepositoCuenta -->
+						<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+							<mat-select formControlName="idItemByTipoDepositoCuenta" [required]="true">
+								<mat-option *ngFor="let it of listaTipoDepositoCuenta" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-label>{{'itemByTipoDepositoCuenta' | transloco }}</mat-label>
+							<mat-error *ngIf="(invalid('idItemByTipoDepositoCuenta') )">
+								<span
+									*ngIf="invalid('idItemByTipoDepositoCuenta')">{{getError('idItemByTipoDepositoCuenta')}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>
+					<!-- Actions -->
+					<div class="flex items-center justify-end">
+						<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+							(click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+							{{'guardar' | transloco}}
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,27 @@
+<mat-list dense *ngFor="let capacidad of listaCapacidad">
+	<!-- <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+	  <h3 mat-subheader>{{'capacidad.grilla.pnl.title' | transloco}} ({{listasize}})</h3> -->
+	<mat-list-item style="background: rgb(255, 255, 136);" dense>
+		<button style="margin-left: 20px;" matListIcon mat-icon-button color="accent" (click) = "openOpcion(capacidad)">
+			<mat-icon  *ngIf="!capacidad.checked"  class="mat-24" >arrow_drop_up</mat-icon>
+			<mat-icon  *ngIf="capacidad.checked" class="mat-24" >arrow_drop_down</mat-icon>
+		</button>
+	 	 <p mat-line >{{capacidad.abreviatura}} {{capacidad.descripcion}}</p>
+	
+	   <button matTooltip="{{'asociar' | transloco}}"  mat-icon-button (click)="abrirModalDesempenhoEdit(capacidad);"  color="accent">
+		   <mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+	   </button>			   
+	   <button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+					   (click)="abrirModalCapacidadEdit(capacidad)" mat-icon-button color="accent">
+		   <mat-icon class="mat-24">edit</mat-icon>
+	   </button>
+	   <button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+					   (click)="confirmarEliminar(capacidad)" mat-icon-button color="accent">
+		   <mat-icon class="mat-24">delete</mat-icon>
+	   </button>	   
+   </mat-list-item>
+   <mat-nav-list  dense>
+	<app-desempenho *ngIf="(capacidad.checked)" [id]="capacidad.idCapacidad"></app-desempenho>
+</mat-nav-list>
+<mat-divider></mat-divider>
+</mat-list>

@@ -1,0 +1,1064 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center">
+        <div class="flex flex-col w-full">
+            <!-- Form -->
+            <div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+                    {{alert.message}}
+                </ng-mf-bs-alert>
+                <form class="space-y-3" [formGroup]="frmGroup">
+                    <mat-tab-group class="sm:px-2" mat-stretch-tabs="true" [animationDuration]="'0'">
+                        <!-- Datos Personales -->
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                {{'personal.frm.tab.datos.personales.pnl.title' | transloco}}
+                            </ng-template>
+                            <ng-template matTabContent>
+                                <div class="grid sm:grid-cols-4 gap-6 mt-8">
+                                    <ng-mf-bs-avatar class="sm:col-span-2" [frmGroup]="frmGroup" [atribute]="'foto'"
+                                        [name]="selectedData?.nombres" [avatar]="selectedData?.foto"
+                                        [id]="'avatar-file-input-foto'">
+                                    </ng-mf-bs-avatar>
+
+                                    <ng-mf-bs-avatar class="sm:col-span-2" [frmGroup]="frmGroup" [atribute]="'firma'"
+                                        [name]="selectedData?.nombres" [avatar]="selectedData?.firma"
+                                        [id]="'avatar-file-input-firma'">
+                                    </ng-mf-bs-avatar>
+                                </div>
+                                <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                                    <!-- codigoUnico -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="codigoUnico" [required]="true">
+                                        <mat-label>{{'codigoUnico' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('codigoUnico') )">
+                                            <span *ngIf="invalid('codigoUnico')">{{getError('codigoUnico')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- estado -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="estado" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaEstado" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'estado' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('estado') )">
+                                            <span *ngIf="invalid('estado')">{{getError('estado')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByDocIdentidad -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByDocIdentidad" [required]="true">
+                                            <mat-option *ngFor="let it of listaTipoDoc " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'docIdentidad' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByDocIdentidad') )">
+                                            <span
+                                                *ngIf="invalid('idItemByDocIdentidad')">{{getError('idItemByDocIdentidad')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- nroDoc -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="nroDoc" [required]="true">
+                                        <mat-label>{{'nroDoc' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('nroDoc') )">
+                                            <span *ngIf="invalid('nroDoc')">{{getError('nroDoc')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- apellidoPaterno -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="apellidoPaterno" [required]="true">
+                                        <mat-label>{{'apellidoPaterno' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('apellidoPaterno') )">
+                                            <span
+                                                *ngIf="invalid('apellidoPaterno')">{{getError('apellidoPaterno')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- apellidoMaterno -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="apellidoMaterno" [required]="true">
+                                        <mat-label>{{'apellidoMaterno' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('apellidoMaterno') )">
+                                            <span
+                                                *ngIf="invalid('apellidoMaterno')">{{getError('apellidoMaterno')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- nombres -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="nombres" [required]="true">
+                                        <mat-label>{{'nombres' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('nombres') )">
+                                            <span *ngIf="invalid('nombres')">{{getError('nombres')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByEstadoCivil -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByEstadoCivil" [required]="true">
+                                            <mat-option *ngFor="let it of listaEstadoCivil " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'estadoCivil' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByEstadoCivil') )">
+                                            <span
+                                                *ngIf="invalid('idItemByEstadoCivil')">{{getError('idItemByEstadoCivil')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- fechaNacimiento -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput [matDatepicker]="ffechaNacimiento"
+                                            formControlName="fechaNacimiento">
+                                        <mat-datepicker-toggle matSuffix [for]="ffechaNacimiento">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ffechaNacimiento touchUi></mat-datepicker>
+                                        <mat-label>{{'fechaNacimiento' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('fechaNacimiento') )">
+                                            <span
+                                                *ngIf="invalid('fechaNacimiento')">{{getError('fechaNacimiento')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- telefono1 -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="telefono1" [required]="true">
+                                        <mat-label>{{'telefono1' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('telefono1') )">
+                                            <span *ngIf="invalid('telefono1')">{{getError('telefono1')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- telefono2 -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="telefono2" [required]="true">
+                                        <mat-label>{{'telefono2' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('telefono2') )">
+                                            <span *ngIf="invalid('telefono2')">{{getError('telefono2')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- celular -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="celular" [required]="true">
+                                        <mat-label>{{'celular' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('celular') )">
+                                            <span *ngIf="invalid('celular')">{{getError('celular')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- email -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="email" [required]="true">
+                                        <mat-label>{{'email' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('email') )">
+                                            <span *ngIf="invalid('email')">{{getError('email')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- codigoControl -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="codigoControl" [required]="true">
+                                        <mat-label>{{'codigoControl' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('codigoControl') )">
+                                            <span *ngIf="invalid('codigoControl')">{{getError('codigoControl')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- nroTarjeta -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="nroTarjeta" [required]="true">
+                                        <mat-label>{{'nroTarjeta' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('nroTarjeta') )">
+                                            <span *ngIf="invalid('nroTarjeta')">{{getError('nroTarjeta')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- sexo -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="sexo" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaGenero" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'sexo' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('sexo') )">
+                                            <span *ngIf="invalid('sexo')">{{getError('sexo')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByPaisEmisor -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByPaisEmisor" [required]="true">
+                                            <mat-option *ngFor="let it of listaPaisEmisor" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'paisEmisor' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByPaisEmisor') )">
+                                            <span
+                                                *ngIf="invalid('idItemByPaisEmisor')">{{getError('idItemByPaisEmisor')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <!-- departamento -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idDepartamento" [required]="true"
+                                            (selectionChange)="onDepartamentoChange($event)">
+                                            <mat-option *ngFor="let it of listaDepartamento " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'departamento' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idDepartamento') )">
+                                            <span
+                                                *ngIf="invalid('idDepartamento')">{{getError('idDepartamento')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- provincia -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idProvincia" [required]="true"
+                                            (selectionChange)="onProvinciaChange($event)">
+                                            <mat-option *ngFor="let it of listaProvincia " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'provincia' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idProvincia') )">
+                                            <span *ngIf="invalid('idProvincia')">{{getError('idProvincia')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idLugarNacimiento -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idLugarNacimiento" [required]="true">
+                                            <mat-option *ngFor="let it of listaDistrito " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'lugarNacimiento' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idLugarNacimiento') )">
+                                            <span
+                                                *ngIf="invalid('idLugarNacimiento')">{{getError('idLugarNacimiento')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByNacionalidad -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByNacionalidad" [required]="true">
+                                            <mat-option *ngFor="let it of listaNacionalidad " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'nacionalidad' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByNacionalidad') )">
+                                            <span
+                                                *ngIf="invalid('idItemByNacionalidad')">{{getError('idItemByNacionalidad')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <!-- Actions -->
+                                <div class="flex items-center justify-end">
+                                    <button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid"
+                                        [color]="'primary'" (click)="guardar()"
+                                        [ngClass]="{'pointer-events-none': isLoading}">
+                                        {{'guardar' | transloco}}
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </mat-tab>
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                {{'personal.frm.tab.datos.laborales.pnl.title' | transloco}}
+                            </ng-template>
+                            <ng-template matTabContent>
+                                <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+
+                                    <!-- idItemByCargo -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByCargo" [required]="true">
+                                            <mat-option *ngFor="let it of listaCargo" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByCargo' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByCargo') )">
+                                            <span *ngIf="invalid('idItemByCargo')">{{getError('idItemByCargo')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByArea -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByArea" [required]="true">
+                                            <mat-option *ngFor="let it of listaArea" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByArea' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByArea') )">
+                                            <span *ngIf="invalid('idItemByArea')">{{getError('idItemByArea')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- fechaIngresospp -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput [matDatepicker]="ffechaIngreso" formControlName="fechaIngreso">
+                                        <mat-datepicker-toggle matSuffix [for]="ffechaIngreso">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ffechaIngreso touchUi></mat-datepicker>
+                                        <mat-label>{{'fechaIngreso' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('fechaIngreso') )">
+                                            <span *ngIf="invalid('fechaIngreso')">{{getError('fechaIngreso')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- fechaCese -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput [matDatepicker]="ffechaCese" formControlName="fechaCese">
+                                        <mat-datepicker-toggle matSuffix [for]="ffechaCese">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ffechaCese touchUi></mat-datepicker>
+                                        <mat-label>{{'fechaCese' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('fechaCese') )">
+                                            <span *ngIf="invalid('fechaCese')">{{getError('fechaCese')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- remuneracion -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="remuneracion" [required]="true">
+                                        <mat-label>{{'remuneracion' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('remuneracion') )">
+                                            <span *ngIf="invalid('remuneracion')">{{getError('remuneracion')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByEps -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByEps" [required]="true">
+                                            <mat-option *ngFor="let it of listaEps " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByEps' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByEps') )">
+                                            <span *ngIf="invalid('idItemByEps')">{{getError('idItemByEps')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- cantAfiliados -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="cantAfiliados" [required]="true">
+                                        <mat-label>{{'cantAfiliados' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('cantAfiliados') )">
+                                            <span *ngIf="invalid('cantAfiliados')">{{getError('cantAfiliados')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByRegimenPensionario -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByRegimenPensionario" [required]="true">
+                                            <mat-option *ngFor="let it of listaRegimenPensionario" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByRegimenPensionario' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByRegimenPensionario') )">
+                                            <span
+                                                *ngIf="invalid('idItemByRegimenPensionario')">{{getError('idItemByRegimenPensionario')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemBySituacion -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemBySituacion" [required]="true">
+                                            <mat-option *ngFor="let it of listaSituacion" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemBySituacion' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemBySituacion') )">
+                                            <span
+                                                *ngIf="invalid('idItemBySituacion')">{{getError('idItemBySituacion')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByAfp -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByAfp" [required]="true">
+                                            <mat-option *ngFor="let it of listaAfp" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByAfp' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByAfp') )">
+                                            <span *ngIf="invalid('idItemByAfp')">{{getError('idItemByAfp')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- fechaIngresospp -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput [matDatepicker]="ffechaIngresospp"
+                                            formControlName="fechaIngresospp">
+                                        <mat-datepicker-toggle matSuffix [for]="ffechaIngresospp">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ffechaIngresospp touchUi></mat-datepicker>
+                                        <mat-label>{{'fechaIngresospp' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('fechaIngresospp') )">
+                                            <span
+                                                *ngIf="invalid('fechaIngresospp')">{{getError('fechaIngresospp')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- fechaIngresoonp -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput [matDatepicker]="ffechaIngresoonp"
+                                            formControlName="fechaIngresoonp">
+                                        <mat-datepicker-toggle matSuffix [for]="ffechaIngresoonp">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ffechaIngresoonp touchUi></mat-datepicker>
+                                        <mat-label>{{'fechaIngresoonp' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('fechaIngresoonp') )">
+                                            <span
+                                                *ngIf="invalid('fechaIngresoonp')">{{getError('fechaIngresoonp')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- cuspp -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="cuspp" [required]="true">
+                                        <mat-label>{{'cuspp' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('cuspp') )">
+                                            <span *ngIf="invalid('cuspp')">{{getError('cuspp')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- esComisionMixta -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="esComisionMixta" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'esComisionMixta' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('esComisionMixta') )">
+                                            <span
+                                                *ngIf="invalid('esComisionMixta')">{{getError('esComisionMixta')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- aportaSenati -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="aportaSenati" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'aportaSenati' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('aportaSenati') )">
+                                            <span *ngIf="invalid('aportaSenati')">{{getError('aportaSenati')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByRegimenLaboral -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByRegimenLaboral" [required]="true">
+                                            <mat-option *ngFor="let it of listaRegimenLaboral" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByRegimenLaboral' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByRegimenLaboral') )">
+                                            <span
+                                                *ngIf="invalid('idItemByRegimenLaboral')">{{getError('idItemByRegimenLaboral')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- esAfiliacionAseguraTuPension -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="esAfiliacionAseguraTuPension" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'esAfiliacionAseguraTuPension' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('esAfiliacionAseguraTuPension') )">
+                                            <span
+                                                *ngIf="invalid('esAfiliacionAseguraTuPension')">{{getError('esAfiliacionAseguraTuPension')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByConvenioEvitarDobleTributacion -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByConvenioEvitarDobleTributacion"
+                                            [required]="true">
+                                            <mat-option *ngFor="let it of listaConvenioEvitarDobleTributacion"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByConvenioEvitarDobleTributacion' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByConvenioEvitarDobleTributacion') )">
+                                            <span
+                                                *ngIf="invalid('idItemByConvenioEvitarDobleTributacion')">{{getError('idItemByConvenioEvitarDobleTributacion')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- rucCas -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="rucCas" [required]="true">
+                                        <mat-label>{{'rucCas' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('rucCas') )">
+                                            <span *ngIf="invalid('rucCas')">{{getError('rucCas')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- autoGeneradoEssalud -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="autoGeneradoEssalud" [required]="true">
+                                        <mat-label>{{'autoGeneradoEssalud' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('autoGeneradoEssalud') )">
+                                            <span
+                                                *ngIf="invalid('autoGeneradoEssalud')">{{getError('autoGeneradoEssalud')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByCategoriaTrabajador -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByCategoriaTrabajador" [required]="true">
+                                            <mat-option *ngFor="let it of listaCategoriaTrabajador " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'categoriaTrabajador' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByCategoriaTrabajador') )">
+                                            <span
+                                                *ngIf="invalid('idItemByCategoriaTrabajador')">{{getError('idItemByCategoriaTrabajador')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idEmpleadorDestacaPersonalTercero -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idEmpleadorDestacaPersonalTercero"
+                                            [required]="false">
+                                            <mat-option *ngFor="let it of listaEmpleadorDestacaPersonalTercero "
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'empleadorDestacaPersonalTercero' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idEmpleadorDestacaPersonalTercero') )">
+                                            <span
+                                                *ngIf="invalid('idEmpleadorDestacaPersonalTercero')">{{getError('idEmpleadorDestacaPersonalTercero')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- esSaludVida -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="esSaludVida" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'esSaludVida' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('esSaludVida') )">
+                                            <span *ngIf="invalid('esSaludVida')">{{getError('esSaludVida')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- esTrabajadorSindicalizado -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="esTrabajadorSindicalizado" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'esTrabajadorSindicalizado' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('esTrabajadorSindicalizado') )">
+                                            <span
+                                                *ngIf="invalid('esTrabajadorSindicalizado')">{{getError('esTrabajadorSindicalizado')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- sujetoControlnmediato -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="sujetoControlnmediato" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'sujetoControlnmediato' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('sujetoControlnmediato') )">
+                                            <span
+                                                *ngIf="invalid('sujetoControlnmediato')">{{getError('sujetoControlnmediato')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- regimenAlterAcumulaAtipico -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="regimenAlterAcumulaAtipico" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'regimenAlterAcumulaAtipico' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('regimenAlterAcumulaAtipico') )">
+                                            <span
+                                                *ngIf="invalid('regimenAlterAcumulaAtipico')">{{getError('regimenAlterAcumulaAtipico')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- conAsignacionFamiliar -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="conAsignacionFamiliar" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'conAsignacionFamiliar' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('conAsignacionFamiliar') )">
+                                            <span
+                                                *ngIf="invalid('conAsignacionFamiliar')">{{getError('conAsignacionFamiliar')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- asignacionFamiliar -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="asignacionFamiliar" [required]="true">
+                                        <mat-label>{{'asignacionFamiliar' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('asignacionFamiliar') )">
+                                            <span
+                                                *ngIf="invalid('asignacionFamiliar')">{{getError('asignacionFamiliar')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- sujetoHorarioNocturno -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="sujetoHorarioNocturno" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'sujetoHorarioNocturno' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('sujetoHorarioNocturno') )">
+                                            <span
+                                                *ngIf="invalid('sujetoHorarioNocturno')">{{getError('sujetoHorarioNocturno')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- jornadaTrabajoMaxima -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="jornadaTrabajoMaxima" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'jornadaTrabajoMaxima' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('jornadaTrabajoMaxima') )">
+                                            <span
+                                                *ngIf="invalid('jornadaTrabajoMaxima')">{{getError('jornadaTrabajoMaxima')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemBySctrSalud -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemBySctrSalud" [required]="false">
+                                            <mat-option *ngFor="let it of listaSctrSalud " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemBySctrSalud' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemBySctrSalud') )">
+                                            <span
+                                                *ngIf="invalid('idItemBySctrSalud')">{{getError('idItemBySctrSalud')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByRegimenAsegSalud -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByRegimenAsegSalud" [required]="false">
+                                            <mat-option *ngFor="let it of listaRegimenAsegSalud " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByRegimenAsegSalud' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByRegimenAsegSalud') )">
+                                            <span
+                                                *ngIf="invalid('idItemByRegimenAsegSalud')">{{getError('idItemByRegimenAsegSalud')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemBySctrPension -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemBySctrPension" [required]="false">
+                                            <mat-option *ngFor="let it of listaSctrPension " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemBySctrPension' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemBySctrPension') )">
+                                            <span
+                                                *ngIf="invalid('idItemBySctrPension')">{{getError('idItemBySctrPension')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByServicoMedico -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByServicoMedico" [required]="false">
+                                            <mat-option *ngFor="let it of listaServicoMedico " [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByServicoMedico' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByServicoMedico') )">
+                                            <span
+                                                *ngIf="invalid('idItemByServicoMedico')">{{getError('idItemByServicoMedico')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <!-- Actions -->
+                                <div class="flex items-center justify-end">
+                                    <button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid"
+                                        [color]="'primary'" (click)="guardar()"
+                                        [ngClass]="{'pointer-events-none': isLoading}">
+                                        {{'guardar' | transloco}}
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </mat-tab>
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                {{'personal.frm.tab.datos.complementarios.pnl.title' | transloco}}
+                            </ng-template>
+                            <ng-template matTabContent>
+                                <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                                    <!-- idItemByPeriocidadIngreso -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByPeriocidadIngreso" [required]="false">
+                                            <mat-option *ngFor="let it of listaPeriocidadIngreso" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByPeriocidadIngreso' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByPeriocidadIngreso') )">
+                                            <span
+                                                *ngIf="invalid('idItemByPeriocidadIngreso')">{{getError('idItemByPeriocidadIngreso')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByTipoPago -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByTipoPago" [required]="false">
+                                            <mat-option *ngFor="let it of listaTipoPago" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByTipoPago' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByTipoPago') )">
+                                            <span
+                                                *ngIf="invalid('idItemByTipoPago')">{{getError('idItemByTipoPago')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- renta5taExoneradaEInafecta -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="renta5taExoneradaEInafecta" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'renta5taExoneradaEInafecta' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('renta5taExoneradaEInafecta') )">
+                                            <span
+                                                *ngIf="invalid('renta5taExoneradaEInafecta')">{{getError('renta5taExoneradaEInafecta')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- rentaQuintaManual -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="rentaQuintaManual" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'rentaQuintaManual' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('rentaQuintaManual') )">
+                                            <span
+                                                *ngIf="invalid('rentaQuintaManual')">{{getError('rentaQuintaManual')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemBySituacionEspecial -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemBySituacionEspecial" [required]="false">
+                                            <mat-option *ngFor="let it of listaSituacionEspecial" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemBySituacionEspecial' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemBySituacionEspecial') )">
+                                            <span
+                                                *ngIf="invalid('idItemBySituacionEspecial')">{{getError('idItemBySituacionEspecial')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByCategoriaOcupacional -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByCategoriaOcupacional" [required]="false">
+                                            <mat-option *ngFor="let it of listaCategoriaOcupacional" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByCategoriaOcupacional' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByCategoriaOcupacional') )">
+                                            <span
+                                                *ngIf="invalid('idItemByCategoriaOcupacional')">{{getError('idItemByCategoriaOcupacional')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+
+                                    <!-- idItemByOcupacion -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="itemByOcupacionView" [required]="false"
+                                            [readonly]="true">
+                                        <mat-label>{{'itemByOcupacion' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('itemByOcupacionView') )">
+                                            <span
+                                                *ngIf="invalid('itemByOcupacionView')">{{getError('itemByOcupacionView')}}</span>
+                                        </mat-error>
+                                        <mat-icon matSuffix class="lupa-ico"
+                                            (click)="abrirModalSelectItemItemOcupacion()">
+                                            search</mat-icon>
+                                    </mat-form-field>
+
+                                    <!-- idItemByOcupacionRegimenPublico -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="itemByOcupacionRegimenPublicoView"
+                                            [required]="false" [readonly]="true">
+                                        <mat-label>{{'itemByOcupacionRegimenPublico' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('itemByOcupacionRegimenPublicoView') )">
+                                            <span
+                                                *ngIf="invalid('itemByOcupacionRegimenPublicoView')">{{getError('itemByOcupacionRegimenPublicoView')}}</span>
+                                        </mat-error>
+                                        <mat-icon matSuffix class="lupa-ico"
+                                            (click)="abrirModalSelectItemItemOcupacionRegimenPublico()">
+                                            search</mat-icon>
+                                    </mat-form-field>
+
+                                    <!-- discapacidad -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="discapacidad" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'discapacidad' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('discapacidad') )">
+                                            <span *ngIf="invalid('discapacidad')">{{getError('discapacidad')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- esPencionista -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="esPencionista" [required]="false">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'esPencionista' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('esPencionista') )">
+                                            <span *ngIf="invalid('esPencionista')">{{getError('esPencionista')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByTipoPension -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByTipoPension" [required]="false">
+                                            <mat-option *ngFor="let it of listaTipoPension" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByTipoPension' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByTipoPension') )">
+                                            <span
+                                                *ngIf="invalid('idItemByTipoPension')">{{getError('idItemByTipoPension')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByRegimenPensionarioPension -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByRegimenPensionarioPension"
+                                            [required]="true">
+                                            <mat-option *ngFor="let it of listaRegimenPensionarioPension"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByRegimenPensionarioPension' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByRegimenPensionarioPension') )">
+                                            <span
+                                                *ngIf="invalid('idItemByRegimenPensionarioPension')">{{getError('idItemByRegimenPensionarioPension')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- fechaInscripcionRegPensionario -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput [matDatepicker]="ffechaInscripcionRegPensionario"
+                                            formControlName="fechaInscripcionRegPensionario">
+                                        <mat-datepicker-toggle matSuffix [for]="ffechaInscripcionRegPensionario">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #ffechaInscripcionRegPensionario touchUi></mat-datepicker>
+                                        <mat-label>{{'fechaInscripcionRegPensionario' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('fechaInscripcionRegPensionario') )">
+                                            <span
+                                                *ngIf="invalid('fechaInscripcionRegPensionario')">{{getError('fechaInscripcionRegPensionario')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- cusppPension -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="cusppPension" [required]="true">
+                                        <mat-label>{{'cusppPension' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('cusppPension') )">
+                                            <span *ngIf="invalid('cusppPension')">{{getError('cusppPension')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByTipoPagoPension -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByTipoPagoPension" [required]="true">
+                                            <mat-option *ngFor="let it of listaTipoPagoPension" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByTipoPagoPension' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByTipoPagoPension') )">
+                                            <span
+                                                *ngIf="invalid('idItemByTipoPagoPension')">{{getError('idItemByTipoPagoPension')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- informaOtrosIngreso5taCategoria -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="informaOtrosIngreso5taCategoria" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'informaOtrosIngreso5taCategoria' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('informaOtrosIngreso5taCategoria') )">
+                                            <span
+                                                *ngIf="invalid('informaOtrosIngreso5taCategoria')">{{getError('informaOtrosIngreso5taCategoria')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- esPracticante -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="esPracticante" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'esPracticante' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('esPracticante') )">
+                                            <span *ngIf="invalid('esPracticante')">{{getError('esPracticante')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- madreResponsaFamliar -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="madreResponsaFamliar" [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'madreResponsaFamliar' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('madreResponsaFamliar') )">
+                                            <span
+                                                *ngIf="invalid('madreResponsaFamliar')">{{getError('madreResponsaFamliar')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByTipoCentroFormacionProfesional -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByTipoCentroFormacionProfesional"
+                                            [required]="true">
+                                            <mat-option *ngFor="let it of listaTipoCentroFormacionProfesional"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByTipoCentroFormacionProfesional' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByTipoCentroFormacionProfesional') )">
+                                            <span
+                                                *ngIf="invalid('idItemByTipoCentroFormacionProfesional')">{{getError('idItemByTipoCentroFormacionProfesional')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- idItemByTipoModalidadFormativa -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemByTipoModalidadFormativa" [required]="true">
+                                            <mat-option *ngFor="let it of listaTipoModalidadFormativa" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemByTipoModalidadFormativa' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemByTipoModalidadFormativa') )">
+                                            <span
+                                                *ngIf="invalid('idItemByTipoModalidadFormativa')">{{getError('idItemByTipoModalidadFormativa')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- vencimientoFotocheck -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput [matDatepicker]="fvencimientoFotocheck"
+                                            formControlName="vencimientoFotocheck">
+                                        <mat-datepicker-toggle matSuffix [for]="fvencimientoFotocheck">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #fvencimientoFotocheck touchUi></mat-datepicker>
+                                        <mat-label>{{'vencimientoFotocheck' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('vencimientoFotocheck') )">
+                                            <span
+                                                *ngIf="invalid('vencimientoFotocheck')">{{getError('vencimientoFotocheck')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <!-- Actions -->
+                                <div class="flex items-center justify-end">
+                                    <button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid"
+                                        [color]="'primary'" (click)="guardar()"
+                                        [ngClass]="{'pointer-events-none': isLoading}">
+                                        {{'guardar' | transloco}}
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </mat-tab>
+                        <mat-tab>
+                            <ng-template mat-tab-label>
+                                {{'personal.frm.tab.situacion.educativa.pnl.title' | transloco}}
+                            </ng-template>
+                            <ng-template matTabContent>
+                                <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                                    <!-- idItemBySituacionEducativa -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="idItemBySituacionEducativa" [required]="true">
+                                            <mat-option *ngFor="let it of listaSituacionEducativa" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'itemBySituacionEducativa' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('idItemBySituacionEducativa') )">
+                                            <span
+                                                *ngIf="invalid('idItemBySituacionEducativa')">{{getError('idItemBySituacionEducativa')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- esEducacionCompletaInsEducativaPeru -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="esEducacionCompletaInsEducativaPeru"
+                                            [required]="true">
+                                            <mat-option *ngFor="let it of typeService.listaRespuestaNatural"
+                                                [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'esEducacionCompletaInsEducativaPeru' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('esEducacionCompletaInsEducativaPeru') )">
+                                            <span
+                                                *ngIf="invalid('esEducacionCompletaInsEducativaPeru')">{{getError('esEducacionCompletaInsEducativaPeru')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- carrera -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <mat-select formControlName="carrera" [required]="true">
+                                            <mat-option *ngFor="let it of listaCarrera" [value]="it.id">
+                                                {{it.nombre}}
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-label>{{'carrera' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('carrera') )">
+                                            <span *ngIf="invalid('carrera')">{{getError('carrera')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!-- anhoEgreso -->
+                                    <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                                        <input matInput formControlName="anhoEgreso" [required]="true">
+                                        <mat-label>{{'anhoEgreso' | transloco }}</mat-label>
+                                        <mat-error *ngIf="(invalid('anhoEgreso') )">
+                                            <span *ngIf="invalid('anhoEgreso')">{{getError('anhoEgreso')}}</span>
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <!-- Actions -->
+                                <div class="flex items-center justify-end">
+                                    <button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid"
+                                        [color]="'primary'" (click)="guardar()"
+                                        [ngClass]="{'pointer-events-none': isLoading}">
+                                        {{'guardar' | transloco}}
+                                    </button>
+                                </div>
+                            </ng-template>
+                        </mat-tab>
+                    </mat-tab-group>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

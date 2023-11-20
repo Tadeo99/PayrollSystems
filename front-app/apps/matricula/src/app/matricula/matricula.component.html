@@ -1,0 +1,256 @@
+<form fxLayout="column" fxFlex name="frmMatricula" #frmMatricula="ngForm" novalidate>
+	<div name="pnlGridListMatricula" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<mat-form-field class="search-full-width" color="accent">
+				<mat-icon matPrefix>search</mat-icon>
+				<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+				<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+					<mat-icon class="mat-24">replay</mat-icon>
+				</button>
+				<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx" [disabled]="(frmMatricula.invalid)">
+					<mat-icon>add</mat-icon>
+				</button>
+			</mat-form-field>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+				<div fxFlex="50%" fxFlex.xs="50%">
+					<div class="div-input-text">
+						<mat-form-field class="input-full-width">
+							<mat-label>{{'anhio' | transloco}}</mat-label>
+							<input matInput  name="anhioT" #anhioT="ngModel"
+								[(ngModel)]="anhioActivo.descripcionView">
+							<mat-error *ngIf="(anhioT.errors ) && (anhioT.dirty || anhioT.touched)">
+								<span *ngIf="anhioT.errors?.required">{{'anhioT.requiered' | transloco}}</span>
+							</mat-error>
+							<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAnhioanhio()">search</mat-icon>
+						</mat-form-field>
+					</div>
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%">
+					<div class="div-input-text">
+						<mat-form-field class="input-full-width">
+							<mat-label>{{'itemByTurno' | transloco}}</mat-label>
+							<mat-select class="input-full-width" matInput 
+								name="turnoT" #turnoT="ngModel" [(ngModel)]="idTurno" (selectionChange)="evenTurno()">
+								<mat-option *ngFor="let it of listaTurno" [value]="it.id">
+									{{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-error *ngIf="(turnoT.errors ) && (turnoT.dirty || turnoT.touched)">
+								<span *ngIf="turnoT.errors?.required">{{'turnoT.requiered' | transloco}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>
+				</div>
+			</div>
+			<mat-card-content>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader>{{'matricula.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let matricula of listaMatricula; let i = index" class="noright">
+							<mat-icon color="warn" mat-list-icon>library_books</mat-icon>
+							<span mat-line><a class="label-data"> Alumno:
+								</a>{{matricula.alumno.descripcionView}}
+							</span>
+							<span mat-line><a class="label-data"> Grado:
+								</a>{{matricula.cargaAcademica.seccion.grado.descripcionView}}
+							</span>
+
+							<button matTooltip="Ficha Matricula" mat-stroked-button
+								(click)="generarReporteFichaMatricula(matricula)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+
+								Ficha Matricula
+							</button>
+
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+			</mat-card-content>
+		</mat-card>
+		<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+			(click)="dialogRef.close(listaMatriculaSelectMap)">
+			<mat-icon>check_circle</mat-icon>
+		</button>
+	</div>
+
+
+	<div name="pnlGridFrmMallaCurricular" *ngIf="mostrarPanelForm">
+		<mat-card>
+			<mat-card-header>
+				<div mat-card-avatar>
+					<mat-icon>folder</mat-icon>
+				</div>
+				<mat-card-title *ngIf="accionNuevo ">{{'title.crear' | transloco }}</mat-card-title>
+				<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</mat-card-title>
+				<div fxFlex></div>
+				<section>
+					<div class="example-button-row">
+						<button (click)="cancelar()" color="accent" mat-raised-button>{{'cancelar'
+							| transloco}}
+						</button>
+						<span></span>
+						<button (click)="guardar()" color="primary" [disabled]="(frmMatricula.invalid || isMatriculado)"
+							mat-raised-button>{{'guardar'
+							| transloco}}
+						</button>
+						<button *ngIf="isMatriculado" color="accent" mat-icon-button [matMenuTriggerFor]="posXMenu"
+							aria-label="Open x-positioned menu" matTooltip="Opciones" matTooltipPosition="left">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+					</div>
+				</section>
+			</mat-card-header>
+			<mat-divider></mat-divider>
+			<mat-card-content>
+				<div fxLayout="row wrap" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'anhio' | transloco}}</mat-label>
+								<input matInput  name="anhioT" #anhioT="ngModel"
+									[(ngModel)]="anhioActivo.descripcionView">
+								<mat-error *ngIf="(anhioT.errors ) && (anhioT.dirty || anhioT.touched)">
+									<span *ngIf="anhioT.errors?.required">{{'anhioT.requiered' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAnhioanhio()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'itemByTurno' | transloco}}</mat-label>
+								<mat-select class="input-full-width" matInput
+									 name="turnoT" #turnoT="ngModel"
+									[(ngModel)]="idTurno" (selectionChange)="evenTurno()" required>
+									<mat-option *ngFor="let it of listaTurno" [value]="it.id">
+										{{it.nombre}}
+									</mat-option>
+								</mat-select>
+								<mat-error *ngIf="(turnoT.errors ) && (turnoT.dirty || turnoT.touched)">
+									<span *ngIf="turnoT.errors?.required">{{'turnoT.requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row wrap" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'alumno' | transloco}}</mat-label>
+								<input matInput  name="alumnoT" #alumnoT="ngModel"
+									[(ngModel)]="alumno.descripcionView" required>
+								<mat-error *ngIf="(alumnoT.errors ) && (alumnoT.dirty || alumnoT.touched)">
+									<span *ngIf="alumnoT.errors?.required">{{'alumnoT.requiered' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAlumnoalumno()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'seccion' | transloco}}</mat-label>
+								<input matInput  [disabled]="!alumno.descripcionView"
+									 name="seccionT" #seccionT="ngModel"
+									[(ngModel)]="seccion.descripcionView" required>
+								<mat-error *ngIf="(seccionT.errors ) && (seccionT.dirty || seccionT.touched)">
+									<span *ngIf="seccionT.errors?.required">{{'seccionT.requiered' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" *ngIf="alumno.descripcionView" (click)="abrirModalSeccionseccion()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+					<div fxFlex="33%" fxFlex.xs="33%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'periodo' | transloco}}</mat-label>
+								<input matInput [disabled]="!seccion.descripcionView"
+								name="peridodoView" #peridodoView="ngModel" [(ngModel)]="periodo.descripcionView" required> 
+								<mat-icon matSuffix class="lupa-ico" *ngIf="seccion.descripcionView" (click)="abrirModalPeriodoperiodo()">search
+								</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+
+				<h3 mat-subheader>{{'matricula.grilla.pnl.title' | transloco}} ({{listasize2}})</h3>
+				<mat-nav-list dense>
+					<mat-list dense *ngFor="let detCargaLectiva of listaDetalleCargaAcademica; let i = index">
+						<mat-list-item class="noright" (click)="openOpcion(detCargaLectiva)">
+							<mat-icon color="warn" *ngIf="!detCargaLectiva.esPadre" mat-list-icon>library_books
+							</mat-icon>
+							<mat-icon color="warn" *ngIf="detCargaLectiva.esPadre"
+								[@indicatorRotate]="detCargaLectiva == detCargaAcademica ? 'expanded': 'collapsed'"
+								mat-list-icon>arrow_drop_down
+							</mat-icon>
+							<span mat-line><a class="label-data"> Curso:
+								</a>{{detCargaLectiva.detMallaCurricular.descripcionCurso}} <a class="label-data">
+									Código:
+								</a>{{detCargaLectiva.detMallaCurricular.codigoAsignatura}}</span>
+							<span mat-line class="app-secondary-textx"><a class="label-data"> Tipo asignatura: </a>
+								{{detCargaLectiva.detMallaCurricular.tipoAsignatura}} </span>
+							<span mat-line><a class="label-data"> Docente:
+								</a>{{detCargaLectiva.personalByDocentePrincipal.nombres}}
+								{{detCargaLectiva.personalByDocentePrincipal.apellidoPaterno}}
+								{{detCargaLectiva.personalByDocentePrincipal.apellidoMaterno}} </span>
+							<mat-chip-list *ngIf="detCargaLectiva.idDetalleCargaAcademica == '' ">
+								<mat-chip selected color="primary">
+									Matriculado
+									<span class="span"></span>
+									<mat-icon>thumb_up</mat-icon>
+								</mat-chip>
+							</mat-chip-list>
+						</mat-list-item>
+
+						<mat-nav-list *ngIf="detCargaLectiva.checked" dense>
+							<mat-list class="nav-per-list" dense
+								*ngFor="let detCargaLectivaT of detCargaLectiva.detalleCargaAcademicaDTOList">
+								<mat-list-item class="noright">
+									<mat-icon color="warn" mat-list-icon>library_books</mat-icon>
+									<span mat-line><a class="label-data"> Curso:
+										</a>{{detCargaLectivaT.detMallaCurricular.descripcionCurso}} <a
+											class="label-data">
+											Código:
+										</a>{{detCargaLectivaT.detMallaCurricular.codigoAsignatura}}</span>
+									<span mat-line class="app-secondary-textx"><a class="label-data"> Tipo asignatura:
+										</a>
+										{{detCargaLectivaT.detMallaCurricular.tipoAsignatura}} </span>
+									<span mat-line><a class="label-data"> Docente:
+										</a>{{detCargaLectivaT.personalByDocentePrincipal.nombres}}
+										{{detCargaLectivaT.personalByDocentePrincipal.apellidoPaterno}}
+										{{detCargaLectivaT.personalByDocentePrincipal.apellidoMaterno}} </span>
+									<mat-chip-list *ngIf="detCargaLectivaT.idDetalleCargaAcademica == '' ">
+										<mat-chip selected color="primary">
+											Matriculado
+											<span class="span"></span>
+											<mat-icon>thumb_up</mat-icon>
+										</mat-chip>
+									</mat-chip-list>
+									<mat-divider></mat-divider>
+								</mat-list-item>
+							</mat-list>
+						</mat-nav-list>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+			</mat-card-content>
+		</mat-card>
+		<mat-menu x-position="before" #posXMenu="matMenu" class="before">
+			<button mat-menu-item *ngFor="let item of iconAccionItems" (click)="accionMenu(item)"
+				[disabled]="item.disabled">
+				<mat-icon>{{ item.icon }}</mat-icon>
+				{{ item.text }}
+			</button>
+		</mat-menu>
+	</div>

@@ -1,0 +1,140 @@
+<form name="frmRegistroNota" #frmRegistroNota="ngForm" novalidate>
+	<div name="pnlGridListRegistroNota" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<span *ngIf="showModal">{{'registroNota.pnl.title' | transloco}}</span>
+			<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+				<mat-icon class="mat-24">reply</mat-icon>
+			</button>
+			<div fxLayout="row wrap" fxLayout.xs="column" fxLayout.sm="row">
+				<div fxFlex="25%" fxFlex.xs="25%">
+					<div class="div-input-text">
+						<mat-form-field class="input-full-width">
+							<mat-label>{{'anhio' | transloco}}</mat-label>
+							<input matInput  name="anhioView" #anhioView="ngModel"
+								[(ngModel)]="anhioActivo.descripcionView">
+							<mat-icon matSuffix class="lupa-ico" (click)="abrirModalAnhioanhio()">search</mat-icon>
+						</mat-form-field>
+					</div>
+				</div>
+				<div fxFlex="25%" fxFlex.xs="25%">
+					<div class="div-input-text">
+						<mat-form-field class="input-full-width">
+							<mat-label>{{'periodo' | transloco}}</mat-label>
+							<input matInput name="peridodoView"
+								#peridodoView="ngModel" [(ngModel)]="periodo.descripcionView" required>
+							<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPeriodoperiodo()">search
+							</mat-icon>
+						</mat-form-field>
+					</div>
+				</div>
+				<div fxFlex="25%" fxFlex.xs="25%">
+					<div class="div-input-text">
+						<mat-form-field class="input-full-width">
+							<mat-label>{{'unidad' | transloco}}</mat-label>
+							<input matInput  name="unidadView" [disabled]="!periodo.idPeriodo"
+								#unidadView="ngModel" [(ngModel)]="unidad.descripcionView" required>
+							<mat-icon matSuffix class="lupa-ico" (click)="abrirModalUnidadunidad()">search
+							</mat-icon>
+						</mat-form-field>
+					</div>
+				</div>
+				<div fxFlex="25%" fxFlex.xs="25%">
+					<div class="div-input-text">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'personalByDocente' | transloco}}</mat-label>
+								<input matInput  name="docenteView"
+									#docenteView="ngModel" [disabled]="!unidad.idUnidad"
+									[(ngModel)]="detCargaAcademica.personalByDocentePrincipal.nombres">
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalPersonal()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</div>
+			<mat-card-content *ngIf="!mostarListado">
+				<mat-form-field class="search-full-width" color="accent" *ngIf="detCargaAcademica.personalByDocentePrincipal.nombres">
+					<mat-icon matPrefix>search</mat-icon>
+					<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+						placeholder="{{'search' | transloco}}">
+					<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+						<mat-icon>close</mat-icon>
+					</button>
+					<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}"
+						(click)="listarDetalleCargaAcademicaByDocente()">
+						<mat-icon class="mat-24">replay</mat-icon>
+					</button>
+				</mat-form-field>
+				<mat-nav-list dense>
+					<mat-list dense *ngFor="let detCargaLectiva of listaDetalleCargaAcademica; let i = index">
+						<mat-list-item class="noright" (click)="openOpcion(detCargaLectiva)">
+							<mat-icon color="warn" *ngIf="!detCargaLectiva.esPadre" mat-list-icon>library_books
+							</mat-icon>
+							<mat-icon color="warn" *ngIf="detCargaLectiva.esPadre"
+								[@indicatorRotate]="detCargaLectiva == detCargaAcademica ? 'expanded': 'collapsed'"
+								mat-list-icon>arrow_drop_down
+							</mat-icon>
+							<span mat-line class="cursoCss"><a class="label-data"> Curso:
+								</a>{{detCargaLectiva.detMallaCurricular.descripcionCurso}} <a class="label-data">
+									Código:
+								</a>{{detCargaLectiva.detMallaCurricular.codigoAsignatura}}</span>
+							<span mat-line class="app-secondary-textx"><a class="label-data"> Tipo asignatura: </a>
+								{{detCargaLectiva.detMallaCurricular.tipoAsignatura}} </span>
+							<!-- <span mat-line *ngIf="!detCargaLectiva.esPadre"><a class="label-data"> Docente:
+								</a>{{detCargaLectiva.personalByDocentePrincipal.nombres}}
+								{{detCargaLectiva.personalByDocentePrincipal.apellidoPaterno}}
+								{{detCargaLectiva.personalByDocentePrincipal.apellidoMaterno}} </span> -->
+							<span mat-line class="app-secondary-textx"><a class="label-data"> Grado - Seccion: </a>
+								{{detCargaLectiva.cargaAcademica.seccion.grado.itemByNivel.nombre}}
+								{{detCargaLectiva.cargaAcademica.seccion.grado.nombre}} -
+								{{detCargaLectiva.cargaAcademica.seccion.nombre}}</span>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="!detCargaLectiva.esPadre"
+								(click)="registrarNota(detCargaLectiva)" mat-stroked-button color="accent">
+								<mat-icon class="mat-24">description</mat-icon>
+								Registrar Nota
+							</button>
+						</mat-list-item>
+						<mat-nav-list *ngIf="detCargaLectiva.checked" dense>
+							<mat-list class="nav-per-list" dense
+								*ngFor="let detCargaLectivaT of detCargaLectiva.detalleCargaAcademicaDTOList">
+								<mat-list-item class="noright">
+									<mat-icon color="warn" mat-list-icon>library_books</mat-icon>
+									<span mat-line><a class="label-data"> Curso:
+										</a>{{detCargaLectivaT.detMallaCurricular.descripcionCurso}} <a
+											class="label-data">
+											Código:
+										</a>{{detCargaLectivaT.detMallaCurricular.codigoAsignatura}}</span>
+									<span mat-line class="app-secondary-textx"><a class="label-data"> Tipo asignatura:
+										</a>
+										{{detCargaLectivaT.detMallaCurricular.tipoAsignatura}} </span>
+									<span mat-line><a class="label-data"> Docente:
+										</a>{{detCargaLectivaT.personalByDocentePrincipal.nombres}}
+										{{detCargaLectivaT.personalByDocentePrincipal.apellidoPaterno}}
+										{{detCargaLectivaT.personalByDocentePrincipal.apellidoMaterno}} </span>
+									<button matTooltip="{{'modificar' | transloco}}"
+										(click)="registrarNota(detCargaLectivaT)" mat-stroked-button color="accent">
+										<mat-icon class="mat-24">description</mat-icon>
+										Registrar Nota
+									</button>
+									<mat-divider></mat-divider>
+								</mat-list-item>
+							</mat-list>
+						</mat-nav-list>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+			</mat-card-content>
+			<div fxLayout="row wrap" fxLayout.xs="column" fxLayout.sm="row" *ngIf="mostarListado">
+				<div fxFlex="100%" fxFlex.xs="100%">
+					<app-detregistronota [isCrud]="true" [data]="data" [showModal]="false" [showComponentPage]="false"
+						[esIncludeComponent]="true" [detCargaAcademica]="detCargaAcademica"
+						[listaDetRegistroNota]="listaDetRegistroNota" [unidad]="unidad"
+						[listaCriterioEvaluacionDisponible]="listaCriterioEvaluacionDisponible"
+						[cursoNotaUnidadMap]="cursoNotaUnidadMap" [cursoNotaUnidadPromMap]="cursoNotaUnidadPromMap" (change)="actualizaFrm($event)">
+					</app-detregistronota>
+				</div>
+			</div>
+		</mat-card>
+	</div>
+</form>

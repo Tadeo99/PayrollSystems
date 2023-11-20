@@ -1,0 +1,117 @@
+{
+  "name": "nota",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/nota/src",
+  "prefix": "ng-mf",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/nota",
+        "index": "apps/nota/src/index.html",
+        "main": "apps/nota/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/nota/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/nota/src/favicon.ico", "apps/nota/src/assets"],
+        "styles": ["apps/nota/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/nota/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/nota/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nrwl/angular:webpack-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "nota:build:production"
+        },
+        "development": {
+          "browserTarget": "nota:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4208,
+		"host": "0.0.0.0",
+        "publicHost": "http://localhost:4208"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "nota:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/nota/**/*.ts", "apps/nota/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/nota/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/angular:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "nota:build",
+		"host": "0.0.0.0",
+        "port": 4208
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "nota:build:development"
+        },
+        "production": {
+          "buildTarget": "nota:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

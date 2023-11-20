@@ -1,0 +1,20 @@
+/* language=SCSS */
+.centroCosto-grid {
+    grid-template-columns: auto 80px;
+
+    @screen sm {
+        grid-template-columns: auto 80px 0px;
+    }
+
+    @screen md {
+        grid-template-columns: 112px auto 80px 0px;
+    }
+
+    @screen lg {
+        grid-template-columns: 112px auto 80px 80px;
+    }
+}
+
+[hidden] {
+    display: none !important;
+}

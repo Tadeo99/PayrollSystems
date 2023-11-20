@@ -1,0 +1,194 @@
+/* Variables */
+:root {
+    --bs-vertical-navigation-width: 280px;
+    --bs-vertical-navigation-dense-width: 80px;
+}
+
+ng-mf-bs-vertical-navigation {
+
+    /* Dense appearance overrides */
+    &.bs-vertical-navigation-appearance-dense {
+
+        &:not(.bs-vertical-navigation-mode-over) {
+            width: var(--bs-vertical-navigation-dense-width);
+            min-width: var(--bs-vertical-navigation-dense-width);
+            max-width: var(--bs-vertical-navigation-dense-width);
+
+            /* Left positioned */
+            &.bs-vertical-navigation-position-left {
+
+                /* Side mode */
+                &.bs-vertical-navigation-mode-side {
+                    margin-left: calc(var(--bs-vertical-navigation-dense-width) * -1);
+                }
+
+                /* Opened */
+                &.bs-vertical-navigation-opened {
+                    margin-left: 0;
+                }
+            }
+
+            /* Right positioned */
+            &.bs-vertical-navigation-position-right {
+
+                /* Side mode */
+                &.bs-vertical-navigation-mode-side {
+                    margin-right: calc(var(--bs-vertical-navigation-dense-width) * -1);
+                }
+
+                /* Opened */
+                &.bs-vertical-navigation-opened {
+                    margin-right: 0;
+                }
+
+                /* Aside wrapper */
+                .bs-vertical-navigation-aside-wrapper {
+                    left: auto;
+                    right: var(--bs-vertical-navigation-dense-width);
+                }
+
+                &.bs-vertical-navigation-hover {
+
+                    .bs-vertical-navigation-aside-wrapper {
+                        left: auto;
+                        right: var(--bs-vertical-navigation-width);
+                    }
+                }
+            }
+        }
+
+        /* Wrapper */
+        .bs-vertical-navigation-wrapper {
+
+            /* Content */
+            .bs-vertical-navigation-content {
+
+                ng-mf-bs-vertical-navigation-aside-item,
+                ng-mf-bs-vertical-navigation-basic-item,
+                ng-mf-bs-vertical-navigation-collapsable-item,
+                ng-mf-bs-vertical-navigation-group-item {
+
+                    .bs-vertical-navigation-item-wrapper {
+
+                        .bs-vertical-navigation-item {
+                            width: calc(var(--bs-vertical-navigation-dense-width) - 24px);
+                            min-width: calc(var(--bs-vertical-navigation-dense-width) - 24px);
+                            max-width: calc(var(--bs-vertical-navigation-dense-width) - 24px);
+
+                            .bs-vertical-navigation-item-arrow,
+                            .bs-vertical-navigation-item-badge,
+                            .bs-vertical-navigation-item-title-wrapper {
+                                transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+                            }
+                        }
+                    }
+                }
+
+                ng-mf-bs-vertical-navigation-group-item {
+
+                    &:first-of-type {
+                        margin-top: 0;
+                    }
+                }
+            }
+        }
+
+        &:not(.bs-vertical-navigation-hover):not(.bs-vertical-navigation-mode-over) {
+
+            /* Wrapper */
+            .bs-vertical-navigation-wrapper {
+
+                /* Content */
+                .bs-vertical-navigation-content {
+
+                    .bs-vertical-navigation-item-wrapper {
+
+                        .bs-vertical-navigation-item {
+                            padding: 10px 16px;
+
+                            .bs-vertical-navigation-item-arrow,
+                            .bs-vertical-navigation-item-badge,
+                            .bs-vertical-navigation-item-title-wrapper {
+                                white-space: nowrap;
+                                opacity: 0;
+                            }
+                        }
+                    }
+
+                    ng-mf-bs-vertical-navigation-collapsable-item {
+
+                        .bs-vertical-navigation-item-children {
+                            display: none;
+                        }
+                    }
+
+                    ng-mf-bs-vertical-navigation-group-item {
+
+                        > .bs-vertical-navigation-item-wrapper {
+
+                            .bs-vertical-navigation-item {
+
+                                &:before {
+                                    content: '';
+                                    position: absolute;
+                                    top: 20px;
+                                    width: 23px;
+                                    border-top-width: 2px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Aside wrapper */
+        .bs-vertical-navigation-aside-wrapper {
+            left: var(--bs-vertical-navigation-dense-width);
+        }
+
+        /* Hover */
+        &.bs-vertical-navigation-hover {
+
+            .bs-vertical-navigation-wrapper {
+                width: var(--bs-vertical-navigation-width);
+
+                .bs-vertical-navigation-content {
+
+                    .bs-vertical-navigation-item-wrapper {
+
+                        .bs-vertical-navigation-item {
+                            width: calc(var(--bs-vertical-navigation-width) - 24px);
+                            min-width: calc(var(--bs-vertical-navigation-width) - 24px);
+                            max-width: calc(var(--bs-vertical-navigation-width) - 24px);
+
+                            .bs-vertical-navigation-item-arrow,
+                            .bs-vertical-navigation-item-badge,
+                            .bs-vertical-navigation-item-title-wrapper {
+                                white-space: nowrap;
+                                animation: removeWhiteSpaceNoWrap 1ms linear 350ms;
+                                animation-fill-mode: forwards;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .bs-vertical-navigation-aside-wrapper {
+                left: var(--bs-vertical-navigation-width);
+            }
+        }
+    }
+}
+
+@keyframes removeWhiteSpaceNoWrap {
+    0% {
+        white-space: nowrap
+    }
+    99% {
+        white-space: nowrap
+    }
+    100% {
+        white-space: normal;
+    }
+}

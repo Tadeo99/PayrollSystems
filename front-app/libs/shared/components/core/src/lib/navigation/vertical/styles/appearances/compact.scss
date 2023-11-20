@@ -1,0 +1,112 @@
+/* Variables */
+:root {
+    --bs-vertical-navigation-compact-width: 112px;
+}
+
+ng-mf-bs-vertical-navigation {
+
+    /* Compact appearance overrides */
+    &.bs-vertical-navigation-appearance-compact {
+        width: var(--bs-vertical-navigation-compact-width);
+        min-width: var(--bs-vertical-navigation-compact-width);
+        max-width: var(--bs-vertical-navigation-compact-width);
+
+        /* Left positioned */
+        &.bs-vertical-navigation-position-left {
+
+            /* Side mode */
+            &.bs-vertical-navigation-mode-side {
+                margin-left: calc(var(--bs-vertical-navigation-compact-width) * -1);
+            }
+
+            /* Opened */
+            &.bs-vertical-navigation-opened {
+                margin-left: 0;
+            }
+        }
+
+        /* Right positioned */
+        &.bs-vertical-navigation-position-right {
+
+            /* Side mode */
+            &.bs-vertical-navigation-mode-side {
+                margin-right: calc(var(--bs-vertical-navigation-compact-width) * -1);
+            }
+
+            /* Opened */
+            &.bs-vertical-navigation-opened {
+                margin-right: 0;
+            }
+
+            /* Aside wrapper */
+            .bs-vertical-navigation-aside-wrapper {
+                left: auto;
+                right: var(--bs-vertical-navigation-compact-width);
+            }
+        }
+
+        /* Wrapper */
+        .bs-vertical-navigation-wrapper {
+
+            /* Content */
+            .bs-vertical-navigation-content {
+
+                > ng-mf-bs-vertical-navigation-aside-item,
+                > ng-mf-bs-vertical-navigation-basic-item {
+
+                    .bs-vertical-navigation-item-wrapper {
+                        margin: 4px 8px 0 8px;
+
+                        .bs-vertical-navigation-item {
+                            flex-direction: column;
+                            justify-content: center;
+                            padding: 12px;
+                            border-radius: 6px;
+
+                            .bs-vertical-navigation-item-icon {
+                                margin-right: 0;
+                            }
+
+                            .bs-vertical-navigation-item-title-wrapper {
+                                margin-top: 8px;
+
+                                .bs-vertical-navigation-item-title {
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                    text-align: center;
+                                    line-height: 16px;
+                                }
+
+                                .bs-vertical-navigation-item-subtitle {
+                                    display: none !important;
+                                }
+                            }
+
+                            .bs-vertical-navigation-item-badge {
+                                position: absolute;
+                                top: 12px;
+                                left: 64px;
+                            }
+                        }
+                    }
+
+                    > ng-mf-bs-vertical-navigation-collapsable-item {
+                        display: none
+                    }
+
+                    > ng-mf-bs-vertical-navigation-group-item {
+
+                        > .bs-vertical-navigation-item-wrapper {
+                            display: none
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Aside wrapper */
+        .bs-vertical-navigation-aside-wrapper {
+            left: var(--bs-vertical-navigation-compact-width);
+        }
+    }
+}

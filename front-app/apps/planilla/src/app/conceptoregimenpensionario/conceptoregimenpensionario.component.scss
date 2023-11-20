@@ -1,0 +1,20 @@
+/* language=SCSS */
+.conceptoregimenpensionario-grid {
+    grid-template-columns: auto 80px 80px 80px 80px 80px 0px;
+
+    @screen sm {
+        grid-template-columns: auto 80px 80px 80px 80px 80px 0px;
+    }
+
+    @screen md {
+        grid-template-columns: auto 80px 80px 80px 80px 80px 0px;
+    }
+
+    @screen lg {
+        grid-template-columns: auto 100px 100px 100px 100px 100px 80px;
+    }
+}
+
+[hidden] {
+    display: none !important;
+}

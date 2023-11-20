@@ -1,0 +1,49 @@
+<form [formGroup]="frmGroup" novalidate>
+    <div name="pnlGridListAlumno" *ngIf="!mostrarPanelForm">
+        <mat-card>
+            <span *ngIf="showModal">{{'alumno.pnl.title' | transloco}}</span>
+            <button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+			<mat-icon class="mat-24">reply</mat-icon>
+		</button>
+            <mat-form-field class="search-full-width" color="accent">
+                <mat-icon matPrefix>search</mat-icon>
+                <input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text" placeholder="{{'search' | transloco}}">
+                <button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+                <button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+				<mat-icon class="mat-24">replay</mat-icon>
+			</button>
+            </mat-form-field>
+            <mat-card-content>
+                <mat-nav-list>
+                    <mat-list dense>
+                        <h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+                        <h3 mat-subheader>{{'alumno.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+                        <mat-list-item *ngFor="let alumno of listaAlumno" class="noright">
+                            <mat-icon mat-list-icon (click)="buscarID(alumno)">person</mat-icon>
+                            <p mat-line (click)="buscarID(alumno)"> {{alumno.apellidoPaterno}} {{alumno.apellidoMaterno}} {{alumno.nombres}}</p>
+                            <p mat-line (click)="buscarID(alumno)"> {{alumno.grado.itemByNivel.nombre}} {{alumno.grado.nombre}}</p>
+                            <mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(alumno)" name="checkedView" #checkedView="ngModel" [(ngModel)]="alumno.checked">
+                            </mat-checkbox>
+                            <button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck" mat-icon-button (click)="asociar(alumno)" color="accent">
+								<mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+							</button>
+                            <button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar" (click)="buscarID(alumno)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">edit</mat-icon>
+							</button>
+                            <button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar" (click)="confirmarEliminar(alumno)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">delete</mat-icon>
+							</button>
+                            <mat-divider></mat-divider>
+                        </mat-list-item>
+                    </mat-list>
+                </mat-nav-list>
+                <app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+            </mat-card-content>
+        </mat-card>
+        <button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab (click)="dialogRef.close(listaAlumnoSelectMap)">
+		<mat-icon>check_circle</mat-icon>
+	</button>
+    </div>
+</form>

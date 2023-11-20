@@ -1,0 +1,55 @@
+<form name="frmUsuario" #frmUsuario="ngForm" novalidate>
+	<div name="pnlGridListUsuario">
+		<mat-card>
+			<span *ngIf="showModal">{{'usuario.pnl.title' | transloco}}</span>
+			<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+				<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+				<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+					<mat-icon>close</mat-icon>
+				</button>
+				<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+					<mat-icon class="mat-24">search</mat-icon>
+				</button>
+			</mat-form-field>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'usuario.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let usuario of listaUsuario" class="noright">
+							<mat-icon mat-list-icon (click)="buscarID(usuario)">perm_identity</mat-icon>
+							<p mat-line (click)="buscarID(usuario)"> {{usuario.nombre}}</p>
+							<p mat-line (click)="buscarID(usuario)"> {{usuario.apellidoPaterno}}</p>
+							<p mat-line (click)="buscarID(usuario)"> {{usuario.apellidoMaterno}}</p>
+							<p mat-line (click)="buscarID(usuario)"> {{usuario.userName}}</p>
+							<p> ({{usuario.varCantidad}})</p>
+							<mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(usuario)"
+								name="checkedView" #checkedView="ngModel" [(ngModel)]="usuario.checked">
+							</mat-checkbox>
+							<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck"
+								mat-icon-button (click)="asociar(usuario)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+							</button>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(usuario)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">chevron_right</mat-icon>
+							</button>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+		<button matTooltip="{{'usuario.grilla.accion.asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+			(click)="dialogRef.close(listaUsuarioSelectMap)">
+			<mat-icon>check_circle</mat-icon>
+		</button>
+	</div>
+</form>

@@ -1,0 +1,32 @@
+<form [formGroup]="frmGroup"  novalidate> 
+    <div name="pnlGridFrmJustificarAsistencia">
+        <mat-card>
+            <mat-card-header >	
+                <mat-card-title>Registrar Justificación</mat-card-title>	              
+                <div fxFlex></div>
+                <button matTooltip="{{'guardar' | transloco}}" matTooltipPosition="left" mat-mini-fab (click)="listo()" [disabled]="frmGroup.invalid" color="accent"><mat-icon class="mat-24">check</mat-icon></button>
+            </mat-card-header>                
+            <mat-divider></mat-divider>
+            <p></p>
+            <mat-card-content>
+                <mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+                <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+                    <div fxFlex="100%" fxFlex.xs="100%"> 
+                      <div class="div-input-text"  >
+                        <mat-form-field class="input-full-width">
+                            <mat-label>{{'justificacion' | transloco}}</mat-label>
+                            <input [maxlength]="200" matInput formControlName="justificacion" >
+                            <mat-error *ngIf="(invalid('justificacion') )" > 
+                                <span *ngIf="invalid('justificacion')">{{getError('justificacion')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                       </div>					
+                    </div>
+                </div>
+            </mat-card-content>
+            <mat-card-footer>
+                <mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+</form>

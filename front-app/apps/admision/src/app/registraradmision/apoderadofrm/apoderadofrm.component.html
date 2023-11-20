@@ -1,0 +1,238 @@
+<div *ngIf="isFrmLogin" class="flex flex-col flex-auto items-center sm:justify-center min-w-0">
+    <div class="w-full sm:w-auto py-8 px-4 sm:p-12 sm:rounded-2xl sm:shadow sm:bg-card">
+        <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+            <!-- Logo -->
+            <div class="w-12">
+                <img src="assets/images/logo/logo.svg">
+            </div>
+
+            <!-- Title -->
+            <div class="mt-8 text-4xl font-extrabold tracking-tight leading-tight">Sign in</div>
+            <div class="flex items-baseline mt-0.5 font-medium">
+                <div>Don't have an account?</div>
+                <a class="ml-1 text-primary-500 hover:underline" (click)="onClickRegistrar()">Registrar
+                </a>
+            </div>
+
+            <!-- Alert -->
+            <ng-mf-bs-alert class="mt-8" *ngIf="showAlert" [appearance]="'outline'" [showIcon]="false"
+                [type]="alert.type" [@shake]="alert.type === 'error'">
+                {{alert.message}}
+            </ng-mf-bs-alert>
+
+            <!-- Sign in form -->
+            <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
+
+                <!-- Email field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Email address</mat-label>
+                    <input id="email" matInput [formControlName]="'email'">
+                    <mat-error *ngIf="signInForm.get('email')?.hasError('required')">
+                        Email address is required
+                    </mat-error>
+                    <mat-error *ngIf="signInForm.get('email')?.hasError('email')">
+                        Please enter a valid email address
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Password field -->
+                <mat-form-field class="w-full">
+                    <mat-label>Password</mat-label>
+                    <input id="password" matInput type="password" [formControlName]="'password'" #passwordField>
+                    <button mat-icon-button type="button"
+                        (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                        matSuffix>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'password'"
+                            [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                        <mat-icon class="icon-size-5" *ngIf="passwordField.type === 'text'"
+                            [svgIcon]="'heroicons_solid:eye-off'"></mat-icon>
+                    </button>
+                    <mat-error>
+                        Password is required
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- Actions -->
+                <div class="inline-flex items-center justify-between w-full mt-1.5">
+                    <mat-checkbox class="-ml-2" [color]="'primary'" [formControlName]="'rememberMe'">
+                        Remember me
+                    </mat-checkbox>
+                    <a class="text-md font-medium text-primary-500 hover:underline"
+                        [routerLink]="['/forgot-password']">Forgot password?
+                    </a>
+                </div>
+
+                <!-- Submit button -->
+                <button class="bs-mat-button-large w-full mt-6" mat-flat-button [color]="'primary'"
+                    [disabled]="signInForm.disabled" (click)="signIn()">
+                    <span *ngIf="!signInForm.disabled">
+                        Sign in
+                    </span>
+                    <mat-progress-spinner *ngIf="signInForm.disabled" [diameter]="24" [mode]="'indeterminate'">
+                    </mat-progress-spinner>
+                </button>
+
+                <!-- Separator -->
+                <div class="flex items-center mt-8">
+                    <div class="flex-auto mt-px border-t"></div>
+                    <div class="mx-2 text-secondary">Or continue with</div>
+                    <div class="flex-auto mt-px border-t"></div>
+                </div>
+
+                <!-- Single sign-on buttons -->
+                <div class="flex items-center mt-8 space-x-4">
+                    <button class="flex-auto" type="button" mat-stroked-button>
+                        <mat-icon class="icon-size-5" [svgIcon]="'feather:facebook'"></mat-icon>
+                    </button>
+                    <button class="flex-auto" type="button" mat-stroked-button>
+                        <mat-icon class="icon-size-5" [svgIcon]="'feather:twitter'"></mat-icon>
+                    </button>
+                    <button class="flex-auto" type="button" mat-stroked-button>
+                        <mat-icon class="icon-size-5" [svgIcon]="'feather:github'"></mat-icon>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isFrmRegistrar" class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center">
+        <div class="flex flex-col w-full">
+            <ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+            <!-- Form -->
+            <div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+                    {{alert.message}}
+                </ng-mf-bs-alert>
+                <form class="space-y-3" [formGroup]="frmGroup">
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <!-- idItemByDocIdentidad -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <mat-select formControlName="idItemByDocIdentidad" [required]="true">
+                                <mat-option *ngFor="let it of listaTipoDoc " [value]="it.id">
+                                    {{it.nombre}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-label>{{'docIdentidad' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('idItemByDocIdentidad') )">
+                                <span
+                                    *ngIf="invalid('idItemByDocIdentidad')">{{getError('idItemByDocIdentidad')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- nroDoc -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="nroDoc" [required]="true">
+                            <mat-label>{{'nroDoc' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('nroDoc') )">
+                                <span *ngIf="invalid('nroDoc')">{{getError('nroDoc')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- apellidoPaterno -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="apellidoPaterno" [required]="true">
+                            <mat-label>{{'apellidoPaterno' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('apellidoPaterno') )">
+                                <span *ngIf="invalid('apellidoPaterno')">{{getError('apellidoPaterno')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- apellidoMaterno -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="apellidoMaterno" [required]="true">
+                            <mat-label>{{'apellidoMaterno' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('apellidoMaterno') )">
+                                <span *ngIf="invalid('apellidoMaterno')">{{getError('apellidoMaterno')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- nombres -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="nombres" [required]="true">
+                            <mat-label>{{'nombres' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('nombres') )">
+                                <span *ngIf="invalid('nombres')">{{getError('nombres')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- fechaNacimiento -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput [matDatepicker]="ffechaNacimiento" formControlName="fechaNacimiento">
+                            <mat-datepicker-toggle matSuffix [for]="ffechaNacimiento">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #ffechaNacimiento touchUi></mat-datepicker>
+                            <mat-label>{{'fechaNacimiento' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('fechaNacimiento') )">
+                                <span *ngIf="invalid('fechaNacimiento')">{{getError('fechaNacimiento')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- telefono1 -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="telefono1" [required]="true">
+                            <mat-label>{{'telefono1' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('telefono1') )">
+                                <span *ngIf="invalid('telefono1')">{{getError('telefono1')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- telefono2 -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="telefono2" [required]="true">
+                            <mat-label>{{'telefono2' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('telefono2') )">
+                                <span *ngIf="invalid('telefono2')">{{getError('telefono2')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- celular -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="celular" [required]="true">
+                            <mat-label>{{'celular' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('celular') )">
+                                <span *ngIf="invalid('celular')">{{getError('celular')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- email -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="email" [required]="true">
+                            <mat-label>{{'email' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('email') )">
+                                <span *ngIf="invalid('email')">{{getError('email')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- sexo -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="sexo" [required]="true">
+                            <mat-label>{{'sexo' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('sexo') )">
+                                <span *ngIf="invalid('sexo')">{{getError('sexo')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- clave -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="clave" [required]="true">
+                            <mat-label>{{'clave' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('clave') )">
+                                <span *ngIf="invalid('clave')">{{getError('clave')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button mat-stroked-button (click)="cancelar()" [ngClass]="{'pointer-events-none': isLoading}"
+                        *ngIf="!authService.authenticated">
+                        {{'Sign in' | transloco}}
+                    </button>
+
+                        <button mat-stroked-button (click)="cancelar()" [ngClass]="{'pointer-events-none': isLoading}"
+                            *ngIf="!authService.authenticated">
+                            {{'cancelar' | transloco}}
+                        </button>
+                        <button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid || !isRegistrar"
+                            [color]="'primary'" (click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+                            {{'guardar' | transloco}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

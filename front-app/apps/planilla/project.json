@@ -1,0 +1,117 @@
+{
+  "name": "planilla",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/planilla/src",
+  "prefix": "ng-mf",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/planilla",
+        "index": "apps/planilla/src/index.html",
+        "main": "apps/planilla/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/planilla/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/planilla/src/favicon.ico", "apps/planilla/src/assets"],
+        "styles": ["apps/planilla/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/planilla/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/planilla/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nrwl/angular:webpack-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "planilla:build:production"
+        },
+        "development": {
+          "browserTarget": "planilla:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4210,
+		"host": "0.0.0.0",
+        "publicHost": "http://localhost:4210"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "planilla:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/planilla/**/*.ts", "apps/planilla/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/planilla/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/angular:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "planilla:build",
+		"host": "0.0.0.0",
+        "port": 4210
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "planilla:build:development"
+        },
+        "production": {
+          "buildTarget": "planilla:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

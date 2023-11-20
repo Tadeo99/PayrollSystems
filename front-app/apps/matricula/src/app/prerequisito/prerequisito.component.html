@@ -1,0 +1,108 @@
+ <form [formGroup]="frmGroup"  novalidate>
+ 	<div name="pnlGridListPreRequisito" *ngIf="!mostrarPanelForm"  >
+	<mat-card>
+	    <span *ngIf="showModal" >{{'preRequisito.pnl.title' | transloco}}</span>
+		<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+			<mat-icon class="mat-24">reply</mat-icon>
+		</button>
+		<mat-form-field class="search-full-width" color="accent">
+			<mat-icon matPrefix>search</mat-icon>
+			<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+			<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+				<mat-icon class="mat-24">replay</mat-icon>
+			</button>
+			<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx">
+				<mat-icon>add</mat-icon>
+			</button>
+		</mat-form-field>	  
+	    <mat-card-content>
+		 <mat-nav-list>
+      	  <mat-list dense>
+			 <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+      	     <h3 mat-subheader>{{'preRequisito.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+			 <mat-list-item *ngFor="let preRequisito of listaPreRequisito" class="noright">
+			   <mat-icon mat-list-icon (click)="buscarID(preRequisito)" >folder</mat-icon>
+				 <mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(preRequisito)"  
+				 name="checkedView" #checkedView="ngModel" [(ngModel)]="preRequisito.checked">
+				 </mat-checkbox>
+				<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck" mat-icon-button (click)="asociar(preRequisito)" color="accent">
+					<mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+				</button>			   
+				<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(preRequisito)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">edit</mat-icon>
+				</button>
+				<button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+								(click)="confirmarEliminar(preRequisito)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">delete</mat-icon>
+				</button>
+				<mat-divider></mat-divider>
+			</mat-list-item>
+       	  </mat-list>
+		</mat-nav-list>
+		<app-paginacion [dataProvider]="dataProvider" [cantidadPage] = "cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+	  </mat-card-content>			
+	</mat-card >	
+	<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab (click)="dialogRef.close(listaPreRequisitoSelectMap)"  >
+		<mat-icon>check_circle</mat-icon>
+	</button>	
+   </div>	
+	
+   <div name="pnlGridFrmPreRequisito" *ngIf="mostrarPanelForm"  >  
+    <mat-card >
+		<mat-card-header>
+			<div mat-card-avatar>
+				<mat-icon>folder</mat-icon>
+			</div>
+			<mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }}</mat-card-title>
+			<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</mat-card-title>
+		</mat-card-header>
+		<mat-divider></mat-divider>
+		<p></p>
+		<mat-card-content>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  formGroupName="detMallaCurricular" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'detMallaCurricular' | transloco}}</mat-label>
+						<input  matInput   formControlName="descripcionView" 
+					      >
+						<mat-error *ngIf="(invalid('detMallaCurricular.descripcionView')  )" > 
+							<span *ngIf="invalid('detMallaCurricular.descripcionView')">{{getError('detMallaCurricular.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalDetMallaCurriculardetMallaCurricular()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  formGroupName="detMallaCurricularRequisito" >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'detMallaCurricularRequisito' | transloco}}</mat-label>
+						<input  matInput  formControlName="descripcionView" 
+					      >
+						<mat-error *ngIf="(invalid('detMallaCurricularRequisito.descripcionView')  )" > 
+							<span *ngIf="invalid('detMallaCurricularRequisito.descripcionView')">{{getError('detMallaCurricularRequisito.descripcionView')}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalDetMallaCurriculardetMallaCurricularRequisito()" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+		 </mat-card-content>
+		 <mat-card-actions>
+			<button  (click)="guardar()" color="primary"
+					[disabled]="frmGroup.invalid" mat-raised-button>{{'guardar' | transloco}}</button>
+
+			<button  (click)="cancelar()" color="accent"
+					mat-raised-button>{{'cancelar' | transloco}}</button>
+		 </mat-card-actions>		 
+	   </mat-card>
+	</div>
+</form>

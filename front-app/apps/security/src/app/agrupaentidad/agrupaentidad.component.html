@@ -1,0 +1,148 @@
+<form name="frmAgrupaEntidad" #frmAgrupaEntidad="ngForm" novalidate>
+	<div name="pnlGridListAgrupaEntidad" *ngIf="!mostrarPanelForm">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span>{{'agrupaEntidad.pnl.title' | transloco}}</span>
+				<span class="app-fill-remaining">
+					<mat-form-field [floatLabel]="'never'" class="search-full-width" [color]="'accent'">
+						<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+							placeholder="{{'search' | transloco}}">
+					</mat-form-field>
+				</span>
+				<mat-icon matTooltip="{{'buscar' | transloco}}" (click)="buscar()" class="app-toolbar-icon">search
+				</mat-icon>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<mat-nav-list>
+					<mat-list dense>
+						<h3 mat-subheader *ngIf="titlePage != ''">{{titlePage}}</h3>
+						<h3 mat-subheader>{{'agrupaEntidad.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+						<mat-list-item *ngFor="let agrupaEntidad of listaAgrupaEntidad" class="noright">
+							<mat-icon mat-list-icon (click)="buscarID(agrupaEntidad)">folder</mat-icon>
+							<p mat-line (click)="buscarID(agrupaEntidad)"> {{agrupaEntidad.estado}}</p>
+							<mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(agrupaEntidad)"
+								name="checkedView" #checkedView="ngModel" [(ngModel)]="agrupaEntidad.checked">
+							</mat-checkbox>
+							<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck"
+								mat-icon-button (click)="asociar(agrupaEntidad)" color="accent">
+								<mat-icon class="mat-24">add_circle_outline</mat-icon>
+							</button>
+							<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(agrupaEntidad)" mat-icon-button color="accent">
+								<mat-icon class="mat-24">chevron_right</mat-icon>
+							</button>
+							<mat-divider></mat-divider>
+						</mat-list-item>
+					</mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage]="cantidadPage"
+					(change)="getBufferedData($event)"></app-paginacion>
+				<mat-card-footer>
+					<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				</mat-card-footer>
+			</mat-card-content>
+		</mat-card>
+		<button matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo" mat-fab (click)="nuevo()" class="app-fab">
+			<mat-icon>add</mat-icon>
+		</button>
+		<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab
+			(click)="dialogRef.close(listaAgrupaEntidadSelectMap)">
+			<mat-icon>check_circle</mat-icon>
+		</button>
+	</div>
+
+	<div name="pnlGridFrmAgrupaEntidad" *ngIf="mostrarPanelForm">
+		<input type="hidden" name="entidadID" #entidadID="ngModel" [(ngModel)]="agrupaEntidad.entidad.idEntidad"
+			[required]="true">
+		<input type="hidden" name="entidadAgrupaID" #entidadAgrupaID="ngModel"
+			[(ngModel)]="agrupaEntidad.entidadAgrupa.idEntidad" [required]="true">
+		<mat-card>
+			<mat-toolbar color="primary">
+				<button matTooltip="{{'cancelar' | transloco}}" mat-icon-button (click)="cancelar()" color="accent">
+					<mat-icon class="mat-24">reply</mat-icon>
+				</button>
+				<span *ngIf="accionNuevo">{{'title.crear' | transloco }}</span>
+				<span *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</span>
+				<span class="app-fill-remaining"></span>
+				<button matTooltip="{{'guardar' | transloco}}" mat-icon-button (click)="listo()"
+					[disabled]="frmAgrupaEntidad.invalid" color="accent">
+					<mat-icon class="mat-24">check</mat-icon>
+				</button>
+				<button *ngIf="!accionNuevo" mat-icon-button [matMenuTriggerFor]="posXMenu"
+					aria-label="Open x-positioned menu">
+					<mat-icon>more_vert</mat-icon>
+				</button>
+			</mat-toolbar>
+			<mat-card-content>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'entidad' | transloco}}</mat-label>
+								<input matInput name="entidad" #entidad="ngModel"
+									[(ngModel)]="agrupaEntidad.entidad.descripcionView" [required]="true"
+									(change)="abrirModalEntidadInput($event.target.value)">
+								<mat-error
+									*ngIf="(entidad.errors  || entidadID.errors ) && (entidad.dirty || entidad.touched)">
+									<span *ngIf="entidad.errors?.required">{{'entidad.requiered' | transloco}}</span>
+									<span *ngIf="entidadID.errors?.required">{{'entidad.no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalEntidad()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'entidadAgrupa' | transloco}}</mat-label>
+								<input matInput name="entidadAgrupa" #entidadAgrupa="ngModel"
+									[(ngModel)]="agrupaEntidad.entidadAgrupa.descripcionView" [required]="true"
+									(change)="abrirModalEntidadInput($event.target.value)">
+								<mat-error
+									*ngIf="(entidadAgrupa.errors  || entidadAgrupaID.errors ) && (entidadAgrupa.dirty || entidadAgrupa.touched)">
+									<span *ngIf="entidadAgrupa.errors?.required">{{'entidadAgrupa.requiered' |
+										translate}}</span>
+									<span *ngIf="entidadAgrupaID.errors?.required">{{'entidadAgrupa.no.existe.bd' |
+										translate}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalEntidad()">search</mat-icon>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+				<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row">
+					<div fxFlex="50%" fxFlex.xs="50%">
+						<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'estado' | transloco}}</mat-label>
+								<input [maxlength]="1" matInput name="estado" #estado="ngModel"
+									[(ngModel)]="agrupaEntidad.estado">
+								<mat-error *ngIf="(estado.errors ) && (estado.dirty || estado.touched)">
+									<span *ngIf="estado.errors?.required">{{'estado.requiered' | transloco}}</span>
+								</mat-error>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</mat-card-content>
+			<mat-card-footer>
+				<mat-progress-bar *ngIf="isProgrress" mode="indeterminate" color="accent"></mat-progress-bar>
+			</mat-card-footer>
+		</mat-card>
+		<mat-menu x-position="before" #posXMenu="matMenu" class="before">
+			<button mat-menu-item *ngFor="let item of iconAccionItems" (click)="accionMenu(item)"
+				[disabled]="item.disabled">
+				<mat-icon>{{ item.icon }}</mat-icon>
+				{{ item.text }}
+			</button>
+		</mat-menu>
+	</div>
+</form>

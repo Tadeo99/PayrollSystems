@@ -1,0 +1,26 @@
+/* language=SCSS */
+.personalConcepto-grid {
+  grid-template-columns: auto 80px;
+
+  @screen sm {
+      grid-template-columns: auto 80px 0px;
+  }
+
+  @screen md {
+      grid-template-columns: 112px auto 80px 0px;
+  }
+
+  @screen lg {
+      grid-template-columns: 112px auto 80px 80px;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+ng-mf-bs-personalconcepto {
+  .mat-mdc-tab-group .mat-mdc-tab-body-content {
+    padding: 0px !important;
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "name": "pago",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    }
+  },
+  "sourceRoot": "apps/pago/src",
+  "prefix": "ng-mf",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:webpack-browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/pago",
+        "index": "apps/pago/src/index.html",
+        "main": "apps/pago/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/pago/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/pago/src/favicon.ico", "apps/pago/src/assets"],
+        "styles": ["apps/pago/src/styles.scss"],
+        "scripts": [],
+        "customWebpackConfig": {
+          "path": "apps/pago/webpack.config.js"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all",
+          "customWebpackConfig": {
+            "path": "apps/pago/webpack.prod.config.js"
+          }
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nrwl/angular:webpack-dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "pago:build:production"
+        },
+        "development": {
+          "browserTarget": "pago:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4209,
+		"host": "0.0.0.0",
+        "publicHost": "http://localhost:4209"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "pago:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/pago/**/*.ts", "apps/pago/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/pago/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "serve-static": {
+      "executor": "@nrwl/angular:file-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "pago:build",
+		"host": "0.0.0.0",
+        "port": 4209
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "pago:build:development"
+        },
+        "production": {
+          "buildTarget": "pago:build:production"
+        }
+      }
+    }
+  },
+  "tags": []
+}

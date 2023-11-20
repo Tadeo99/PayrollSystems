@@ -1,0 +1,196 @@
+<div [hidden]="mostrarPanelForm"
+	class="sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+	<ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+		(changeEmitter)="changeEmitterEvent($event)" [showBotonNuevo]="false">
+		<div class="grid sm:grid-cols-6 gap-6 w-full px-6">
+			<!-- listaAnhio -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idAnhio" [required]="true" (selectionChange)="onAnhioChange($event)">
+					<mat-option *ngFor="let it of listaAnhio" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'anhio' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idAnhio') )">
+					<span *ngIf="invalid('idAnhio')">{{getError('idAnhio')}}</span>
+				</mat-error>
+			</mat-form-field>
+			<!-- listaMes -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idItemByMes" [required]="true" (selectionChange)="onMesChange($event)">
+					<mat-option *ngFor="let it of typeService.listaMes" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'itemByMes' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idItemByMes') )">
+					<span *ngIf="invalid('idItemByMes')">{{getError('idItemByMes')}}</span>
+				</mat-error>
+			</mat-form-field>
+			<!-- listaEPS -->
+			<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+				<mat-select [formControl]="idEPS" [required]="true" (selectionChange)="onEPSChange($event)">
+					<mat-option *ngFor="let it of listaEPS" [value]="it.id">
+						{{it.nombre}}
+					</mat-option>
+				</mat-select>
+				<mat-label>{{'EPS' | transloco }}</mat-label>
+				<mat-error *ngIf="(invalid('idEPS') )">
+					<span *ngIf="invalid('idEPS')">{{getError('idEPS')}}</span>
+				</mat-error>
+			</mat-form-field>
+		</div>
+
+	</ng-mf-bs-cabeceragrilla>
+
+	<!-- Main -->
+	<div class="flex flex-auto overflow-hidden">
+
+		<!-- ListaData list -->
+		<div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+			<ng-container>
+				<div class="grid">
+					<!-- Header -->
+					<div class="epspersonal-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+						matSort matSortDisableClear>
+						<div class="hidden md:block" [mat-sort-header]="'idTareoPersonal'">
+							{{ 'id' | transloco }}
+						</div>
+						<div [mat-sort-header]="'nombres'">{{ 'nombres' | transloco }}</div>
+						<div class="hidden lg:block" [mat-sort-header]="'planMonto'">{{ 'planMonto' | transloco }}</div>
+						<div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+					</div>
+					<!-- Rows -->
+					<ng-container *ngIf="(listaData$ | async) as listaData">
+						<ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+							<div class="epspersonal-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+								<!-- SKU -->
+								<div class="hidden md:block truncate">
+									{{objData.personal?.nroDoc}}
+								</div>
+
+								<!-- Name -->
+								<div class="truncate">
+									{{objData.personal?.nombres??''}}
+								</div>
+
+								<!-- diasLab -->
+								<div class="hidden lg:block">
+									{{objData.planMonto}}
+								</div>
+
+								<!-- accion -->
+								<div>
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button
+										matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5"
+											[svgIcon]="selectedData?.idPersonal === objData.idPersonal ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'">
+										</mat-icon>
+									</button>
+								</div>
+							</div>
+							<div class="grid">
+								<ng-container *ngIf="selectedData?.idPersonal === objData.idPersonal">
+									<ng-container
+										*ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: objData}"></ng-container>
+								</ng-container>
+							</div>
+						</ng-container>
+						<ng-template #rowDetailsTemplate let-personal>
+							<div class="shadow-lg overflow-hidden">
+								<div class="flex border-b">
+									<!-- Selected personal form -->
+									<form class="flex flex-col w-full" [formGroup]="frmGroup">
+										<div class="w-full flex flex-col sm:flex-row p-8">
+											<div class="grid sm:grid-cols-6 gap-6 w-full mt-4">
+												<!-- planMonto -->
+												<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+													<input matInput formControlName="planMonto" [required]="true">
+													<mat-label>{{'planMonto' | transloco }}</mat-label>
+													<mat-error *ngIf="(invalid('planMonto') )">
+														<span
+															*ngIf="invalid('planMonto')">{{getError('planMonto')}}</span>
+													</mat-error>
+												</mat-form-field>
+												<!-- creditoPct -->
+												<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+													<input matInput formControlName="creditoPct" [required]="true">
+													<mat-label>{{'creditoPct' | transloco }}</mat-label>
+													<mat-error *ngIf="(invalid('creditoPct') )">
+														<span
+															*ngIf="invalid('creditoPct')">{{getError('creditoPct')}}</span>
+													</mat-error>
+												</mat-form-field>
+												<!-- sueldoPct -->
+												<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+													<input matInput formControlName="sueldoPct" [required]="false">
+													<mat-label>{{'sueldoPct' | transloco }}</mat-label>
+													<mat-error *ngIf="(invalid('sueldoPct') )">
+														<span
+															*ngIf="invalid('sueldoPct')">{{getError('sueldoPct')}}</span>
+													</mat-error>
+												</mat-form-field>
+												<!-- essaludPct -->
+												<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+													<input matInput formControlName="essaludPct" [required]="false">
+													<mat-label>{{'essaludPct' | transloco }}</mat-label>
+													<mat-error *ngIf="(invalid('essaludPct') )">
+														<span
+															*ngIf="invalid('essaludPct')">{{getError('essaludPct')}}</span>
+													</mat-error>
+												</mat-form-field>
+												<!-- afiliados -->
+												<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+													<input matInput formControlName="afiliados" [required]="true">
+													<mat-label>{{'afiliados' | transloco }}</mat-label>
+													<mat-error *ngIf="(invalid('afiliados') )">
+														<span
+															*ngIf="invalid('afiliados')">{{getError('afiliados')}}</span>
+													</mat-error>
+												</mat-form-field>
+												<!-- descontar -->
+												<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+													<input matInput formControlName="descontar" [required]="true">
+													<mat-label>{{'descontar' | transloco }}</mat-label>
+													<mat-error *ngIf="(invalid('descontar') )">
+														<span
+															*ngIf="invalid('descontar')">{{getError('descontar')}}</span>
+													</mat-error>
+												</mat-form-field>
+												<!-- descontarTrabajador -->
+												<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+													<input matInput formControlName="descontarTrabajador"
+														[required]="true">
+													<mat-label>{{'descontarTrabajador' | transloco }}</mat-label>
+													<mat-error *ngIf="(invalid('descontarTrabajador') )">
+														<span
+															*ngIf="invalid('descontarTrabajador')">{{getError('descontarTrabajador')}}</span>
+													</mat-error>
+												</mat-form-field>
+											</div>
+										</div>
+										<!-- Actions -->
+										<div class="flex items-center justify-end p-8">
+											<button mat-stroked-button (click)="cancelar()"
+												[ngClass]="{'pointer-events-none': isLoading}">
+												{{'cancelar' | transloco}}
+											</button>
+											<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid"
+												[color]="'primary'" (click)="guardar()"
+												[ngClass]="{'pointer-events-none': isLoading}">
+												{{'guardar' | transloco}}
+											</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</ng-template>
+					</ng-container>
+					<ng-mf-bs-noresultados [length]="(listaData$ | async)?.length??0"></ng-mf-bs-noresultados>
+				</div>
+			</ng-container>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,223 @@
+ <form name="frmConfiguracionAtributo"  #frmConfiguracionAtributo="ngForm" novalidate>
+ 	<div name="pnlGridListConfiguracionAtributo" *ngIf="!mostrarPanelForm"  >
+	<mat-card>
+		<span *ngIf="showModal" >{{'configuracionAtributo.pnl.title' | transloco}}</span>
+		<mat-form-field class="search-full-width" color="accent">
+			<mat-icon matPrefix>search</mat-icon>
+			<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+			<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+				<mat-icon class="mat-24">replay</mat-icon>
+			</button>
+			<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx">
+				<mat-icon>add</mat-icon>
+			</button>
+		</mat-form-field>
+	    <mat-card-content>
+		 <mat-nav-list>
+      	  <mat-list dense>
+			 <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+      	     <h3 mat-subheader>{{'configuracionAtributo.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+			 <mat-list-item *ngFor="let configuracionAtributo of listaConfiguracionAtributo" class="noright">
+				 <mat-icon mat-list-icon (click)="buscarID(configuracionAtributo)" >folder</mat-icon>
+				 <p mat-line (click)="buscarID(configuracionAtributo)" > {{configuracionAtributo.itemByIdNombreEntidad?.nombre}}</p>
+				 <p mat-line (click)="buscarID(configuracionAtributo)" > {{configuracionAtributo.itemByIdComponte?.nombre}}==>{{configuracionAtributo.nombreAtributo}}</p>
+				 <mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(configuracionAtributo)"  
+				 name="checkedView" #checkedView="ngModel" [(ngModel)]="configuracionAtributo.checked">
+				 </mat-checkbox>
+				<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck" mat-icon-button (click)="asociar(configuracionAtributo)" color="accent">
+					<mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+				</button>
+			    <button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar" (click)="buscarID(configuracionAtributo)" mat-icon-button color="accent">
+					<mat-icon  class="mat-24" >edit</mat-icon>
+				</button>
+				<button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+								(click)="confirmarEliminar(configuracionAtributo)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">delete</mat-icon>
+				</button>
+				<mat-divider></mat-divider>
+			</mat-list-item>
+       	  </mat-list>
+		</mat-nav-list>
+		<app-paginacion [dataProvider]="dataProvider" [cantidadPage] = "cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+	  </mat-card-content>			
+	</mat-card >	
+	
+	<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab (click)="dialogRef.close(listaConfiguracionAtributoSelectMap)"  >
+		<mat-icon>check_circle</mat-icon>
+	</button>	
+   </div>	
+	
+   <div name="pnlGridFrmConfiguracionAtributo" *ngIf="mostrarPanelForm"  >
+	     <input type="hidden" name="itemByIdNombreEntidadID" #itemByIdNombreEntidadID = "ngModel"  [(ngModel)]="configuracionAtributo.itemByIdNombreEntidad.idItem"  [required] = "true" >
+	     <input type="hidden" name="itemByIdComponteID" #itemByIdComponteID = "ngModel"  [(ngModel)]="configuracionAtributo.itemByIdComponte.idItem"  [required] = "true" >
+	     <input type="hidden" name="listaItemID" #listaItemID = "ngModel"  [(ngModel)]="configuracionAtributo.listaItem.idListaItems"  [required] = "false" >
+    <mat-card >
+		<mat-card-header>
+			<div mat-card-avatar>
+				<mat-icon>event_note</mat-icon>
+			</div>
+			<mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }}</mat-card-title>
+			<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }}</mat-card-title>
+		</mat-card-header>
+		<mat-divider></mat-divider>
+		<p></p>
+		<mat-card-content>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text">
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'itemByIdNombreEntidad' | transloco}}</mat-label>
+						<input  matInput   name="itemByIdNombreEntidad" #itemByIdNombreEntidad = "ngModel"  [(ngModel)]="configuracionAtributo.itemByIdNombreEntidad.descripcionView"  [required] = "true" 
+					     (change)="abrirModalItemInput(ITEM_ENTIDAD_CONFIGURAR,$event.target.value)" >
+						<mat-error *ngIf="(itemByIdNombreEntidad.errors  || itemByIdNombreEntidadID.errors ) && (itemByIdNombreEntidad.dirty || itemByIdNombreEntidad.touched)" > 
+							<span *ngIf="itemByIdNombreEntidad.errors?.required">{{'requiered' | transloco}}</span>
+							<span *ngIf="itemByIdNombreEntidadID.errors?.required">{{'no.existe.bd' | transloco}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItem(ITEM_ENTIDAD_CONFIGURAR)" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text">
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'itemByIdComponte' | transloco}}</mat-label>
+						<input  matInput   name="itemByIdComponte" #itemByIdComponte = "ngModel"  [(ngModel)]="configuracionAtributo.itemByIdComponte.descripcionView"  [required] = "true" 
+					     (change)="abrirModalItemInput(ITEM_TIPO_COMPONENTE_CONFIGURAR,$event.target.value)" >
+						<mat-error *ngIf="(itemByIdComponte.errors  || itemByIdComponteID.errors ) && (itemByIdComponte.dirty || itemByIdComponte.touched)" > 
+							<span *ngIf="itemByIdComponte.errors?.required">{{'requiered' | transloco}}</span>
+							<span *ngIf="itemByIdComponteID.errors?.required">{{'no.existe.bd' | transloco}}</span>
+						</mat-error>
+						<mat-icon matSuffix class="lupa-ico" (click)="abrirModalItem(ITEM_TIPO_COMPONENTE_CONFIGURAR)" >search</mat-icon>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text">
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'nombreAtributo' | transloco}}</mat-label>
+						<input [maxlength]="20" matInput   name="nombreAtributo" #nombreAtributo = "ngModel"  [(ngModel)]="configuracionAtributo.nombreAtributo"  [required] = "true" >
+						<mat-error *ngIf="(nombreAtributo.errors ) && (nombreAtributo.dirty || nombreAtributo.touched)" > 
+							<span *ngIf="nombreAtributo.errors?.required">{{'requiered' | transloco}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text">
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'keyLabel' | transloco}}</mat-label>
+						<input [maxlength]="150" matInput  name="keyLabel" #keyLabel = "ngModel"  [(ngModel)]="configuracionAtributo.keyLabel"  [required] = "true"
+					  >
+						<mat-error *ngIf="(keyLabel.errors ) && (keyLabel.dirty || keyLabel.touched)" > 
+							<span *ngIf="keyLabel.errors?.required">{{'requiered' | transloco}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>				
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 				  
+							<div class="div-input-select">
+							 <mat-form-field class="input-full-width" >
+								 <mat-label>{{'tipoDato' | transloco}}</mat-label>
+								 <mat-select class="input-full-width"   name="tipoDato" [(ngModel)]="configuracionAtributo.tipoDato" 
+								 [required] = "true"
+									 #tipoDato = "ngModel" #drinkControl="ngModel">					
+									 <mat-option *ngFor="let it of typeSelectItemService.listaTipoDato" [value]="it.id" >
+									 {{it.nombre}}
+									 </mat-option>
+									 </mat-select>
+								 <mat-error *ngIf="tipoDato.errors && (tipoDato.dirty || tipoDato.touched)" > 
+									 <span *ngIf="tipoDato.errors?.required">{{'requiered' | transloco}}</span>
+								 </mat-error>
+							 </mat-form-field>
+						 </div>							
+					 </div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text">
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'formato' | transloco}}</mat-label>
+						<input [maxlength]="20" matInput  name="formato" #formato = "ngModel"  [(ngModel)]="configuracionAtributo.formato" 
+						[required] = "false" >
+						<mat-error *ngIf="(formato.errors ) && (formato.dirty || formato.touched)" > 
+							<span *ngIf="formato.errors?.required">{{'requiered' | transloco}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>				
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+					<div fxFlex="50%" fxFlex.xs="50%"> 
+							<div class="div-input-text">
+							<mat-form-field class="input-full-width">
+								<mat-label>{{'listaItem' | transloco}}</mat-label>
+								<input  matInput   name="listaItem" #listaItem = "ngModel"  [(ngModel)]="configuracionAtributo.listaItem.descripcionView"  [required] = "false" 
+									 (change)="abrirModalListaItemsInput($event.target.value)" >
+								<mat-error *ngIf="(listaItem.errors  || listaItemID.errors ) && (listaItem.dirty || listaItem.touched)" > 
+									<span *ngIf="listaItem.errors?.required">{{'requiered' | transloco}}</span>
+									<span *ngIf="listaItemID.errors?.required">{{'no.existe.bd' | transloco}}</span>
+								</mat-error>
+								<mat-icon matSuffix class="lupa-ico" (click)="abrirModalListaItems()" >search</mat-icon>
+							</mat-form-field>
+							 </div>					
+						</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-check">
+						<mat-checkbox
+						name="esPersistente"  #esPersistente="ngModel"	[(ngModel)]="configuracionAtributo.esPersistente"  [labelPosition]="'before'" 
+						[required] = "false" >
+						{{'esPersistente' | transloco}}
+						</mat-checkbox>
+						<mat-error *ngIf="(esPersistente.errors ) && (esPersistente.dirty || esPersistente.touched)" > 
+							<span *ngIf="esPersistente.errors?.required">{{'requiered' | transloco}}</span>
+						</mat-error>
+				   </div>					
+				</div>
+			</div>		
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text">
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'orden' | transloco}}</mat-label>
+						<input [maxlength]="18" matInput   name="orden" #orden = "ngModel"  [(ngModel)]="configuracionAtributo.orden"  [required] = "true" >
+						<mat-error *ngIf="(orden.errors ) && (orden.dirty || orden.touched)" > 
+							<span *ngIf="orden.errors?.required">{{'requiered' | transloco}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-select">
+					<mat-form-field class="input-full-width" >
+						<mat-label>{{'estado' | transloco}}</mat-label>
+						<mat-select class="input-full-width"    name="estado" [(ngModel)]="configuracionAtributo.estado" 
+							#estado = "ngModel" #drinkControl="ngModel" [required] = "true" in>					
+							<mat-option *ngFor="let it of typeSelectItemService.listaEstado" [value]="it.id" >
+							 {{it.nombre}}
+							</mat-option>
+					    </mat-select>
+						<mat-error *ngIf="estado.errors && (estado.dirty || estado.touched)" > 
+							<span *ngIf="estado.errors?.required">{{'requiered' | transloco}}</span>
+						</mat-error>
+					</mat-form-field>
+				</div>				     
+			   </div>
+			</div>
+		 </mat-card-content>
+		 <mat-card-actions>
+			<button  (click)="guardar()" color="primary"
+				[disabled]="frmConfiguracionAtributo.invalid" mat-raised-button>{{'guardar' | transloco}}</button>
+
+			<button  (click)="cancelar()" color="accent"
+				mat-raised-button>{{'cancelar' | transloco}}</button>
+		</mat-card-actions>
+	   </mat-card>
+	</div>
+</form>

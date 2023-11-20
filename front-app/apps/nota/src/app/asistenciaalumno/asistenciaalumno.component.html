@@ -1,0 +1,133 @@
+ <form [formGroup]="frmGroup"  novalidate> 
+	<div name="pnlGridListAsistenciaAlumno" *ngIf="!mostrarPanelForm"  >
+		<mat-card>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-text"  formGroupName="anhio" >
+					  <mat-form-field class="input-full-width">
+						  <mat-label>{{'anhio' | transloco}}</mat-label>
+						  <input  matInput formControlName="descripcionView"  required >
+						  <mat-error *ngIf="(invalid('anhio.descripcionView')  )" > 
+							  <span *ngIf="invalid('anhio.descripcionView')">{{getError('anhio.descripcionView')}}</span>
+						  </mat-error>
+						  <mat-icon matSuffix class="lupa-ico" (click)="abrirModalAnhioanhio()" >search</mat-icon>
+					  </mat-form-field>
+					 </div>					
+				  </div>
+				  <div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-text"  formGroupName="personalByDocente" >
+					  <mat-form-field class="input-full-width">
+						  <mat-label>{{'personalByDocente' | transloco}}</mat-label>
+						  <input  matInput  formControlName="descripcionView" >
+						  <mat-error *ngIf="(invalid('personalByDocente.descripcionView')  )" > 
+							  <span *ngIf="invalid('personalByDocente.descripcionView')">{{getError('personalByDocente.descripcionView')}}</span>
+						  </mat-error>
+						  <mat-icon matSuffix class="lupa-ico" (click)="abrirModalPersonal()" >search</mat-icon>
+					  </mat-form-field>
+					 </div>					
+				  </div>
+			</div>
+			<mat-card-content>
+				<mat-nav-list>
+					<mat-list dense>
+					 <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+					   <h3 mat-subheader>{{'asistenciaAlumno.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+					 <mat-list-item *ngFor="let detalleCargaAcademica of listaDetalleCargaAcademica" class="noright">
+					   <mat-icon mat-list-icon >folder</mat-icon>						
+						<p mat-line > {{detalleCargaAcademica.detMallaCurricular.descripcionCurso}}</p>
+						<p mat-line> {{detalleCargaAcademica.cargaAcademica.seccion.grado.itemByNivel.nombre}} {{detalleCargaAcademica.cargaAcademica.seccion.grado.nombre}} {{detalleCargaAcademica.cargaAcademica.seccion.nombre}}</p>
+						<p mat-line> {{detalleCargaAcademica.cargaAcademica.itemByTurno.nombre}}</p>
+						<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+									(click)="buscarID(detalleCargaAcademica)"	 mat-icon-button color="accent">
+							<mat-icon class="mat-24">assistant</mat-icon>
+						</button>					
+						<mat-divider></mat-divider>
+					</mat-list-item>
+					 </mat-list>
+				</mat-nav-list>
+				<app-paginacion [dataProvider]="dataProvider" [cantidadPage] = "cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+			</mat-card-content>
+		</mat-card>
+	</div>
+
+   <div name="pnlGridFrmAsistenciaAlumno" *ngIf="mostrarPanelForm"  >
+    <mat-card >
+		<mat-card-header>	
+			<div mat-card-avatar>
+				<mat-icon>folder</mat-icon>
+			</div>
+			<mat-card-title>{{asistenciaAlumno.detalleCargaAcademica.detMallaCurricular.descripcionCurso}}</mat-card-title>		
+			<div fxFlex></div>
+			<button style="margin-right: 10px;" (click)="guardar()" color="primary"
+					[disabled]="frmGroup.invalid" mat-raised-button>{{'guardar' | transloco}}</button>
+			<button  (click)="cancelar()" color="accent"
+					mat-raised-button>{{'cancelar' | transloco}}</button>
+		</mat-card-header>
+		<mat-divider></mat-divider>
+		<p></p>
+		<mat-card-content>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				 <div class="div-input-text">
+					   <mat-form-field  class="input-full-width">
+						<mat-label>{{'fechaHorario' | transloco}}</mat-label>
+						 <input matInput [required]="true" [matDatepicker]="ffechaHorario"  formControlName="fechaHorario" (dateChange)="obtenerAsistencia()">
+						 <mat-datepicker-toggle matSuffix [for]="ffechaHorario"></mat-datepicker-toggle>
+						 <mat-error *ngIf="invalid('fechaHorario')" > 
+							 <span *ngIf="invalid('fechaHorario')">{{getError('fechaHorario')}}</span>
+						 </mat-error>
+						 <mat-datepicker #ffechaHorario [touchUi]="touch" ></mat-datepicker>
+					   </mat-form-field>					  
+				 </div>
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-text"  formGroupName="alumno" >
+					  <mat-form-field class="input-full-width">
+						  <mat-label>{{'alumno' | transloco}}</mat-label>
+						  <input  matInput    formControlName="descripcionView" 
+							>
+						  <mat-error *ngIf="(invalid('alumno.descripcionView')  )" > 
+							  <span *ngIf="invalid('alumno.descripcionView')">{{getError('alumno.descripcionView')}}</span>
+						  </mat-error>
+						  <mat-icon matSuffix class="lupa-ico" (click)="abrirModalAlumnoalumno()" >search</mat-icon>
+					  </mat-form-field>
+					 </div>					
+				  </div>
+			 </div>
+	
+
+			<mat-nav-list>
+				<mat-list dense>
+				 <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+				   <h3 mat-subheader>{{'asistenciaAlumno.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+				 <mat-list-item *ngFor="let asistenciaAlumno of listaAsistenciaAlumno" class="noright">
+				   <mat-icon mat-list-icon >person</mat-icon>						
+				   <p mat-line>{{asistenciaAlumno.alumno.apellidoPaterno}} {{asistenciaAlumno.alumno.apellidoMaterno}}, {{asistenciaAlumno.alumno.nombres}}</p>
+				   <p mat-line>{{asistenciaAlumno.alumno.codigo}}</p>
+				   <button *ngIf="(asistenciaAlumno.estado == '?')" matTooltip="{{'seleccionarAsistencia' | transloco}}" matTooltipPosition="left" (click)="selecionarAsistencia(asistenciaAlumno)" mat-icon-button color="accent">
+					<mat-icon  class="mat-24" >help</mat-icon>
+				</button>
+														   <button *ngIf="(asistenciaAlumno.estado == 'T')" matTooltip="Justificar" matTooltipPosition="above" (click)="justificarAsistencia(asistenciaAlumno)" mat-icon-button color="primary">
+					<mat-icon  class="mat-24" >assignment_turned_in</mat-icon>
+				</button>
+														   <button *ngIf="(asistenciaAlumno.estado == 'F')" matTooltip="Justificar" matTooltipPosition="above" (click)="justificarAsistencia(asistenciaAlumno)" mat-icon-button color="primary">
+					<mat-icon  class="mat-24" >assignment_turned_in</mat-icon>
+				</button>
+	   
+														   <button *ngIf="(asistenciaAlumno.estado == 'A')" matTooltip="{{'asistio' | transloco}}" matTooltipPosition="above" (click)="selecionarAsistencia(asistenciaAlumno)" mat-icon-button color="primary">
+					<mat-icon  class="mat-24" >sentiment_very_satisfied</mat-icon>
+				</button>
+														   <button *ngIf="(asistenciaAlumno.estado == 'F')" matTooltip="{{'falto' | transloco}}" matTooltipPosition="above" (click)="selecionarAsistencia(asistenciaAlumno)" mat-icon-button color="warn">
+					<mat-icon  class="mat-24" >sentiment_very_dissatisfied</mat-icon>
+				</button>
+														   <button *ngIf="(asistenciaAlumno.estado == 'T')" matTooltip="{{'tardanza' | transloco}}" matTooltipPosition="above" (click)="selecionarAsistencia(asistenciaAlumno)" mat-icon-button color="accent">
+					<mat-icon  class="mat-24" >sentiment_neutral</mat-icon>
+				</button>					
+					<mat-divider></mat-divider>
+				</mat-list-item>
+				 </mat-list>
+			</mat-nav-list>
+		 </mat-card-content>		 
+	   </mat-card>
+	</div>
+</form>

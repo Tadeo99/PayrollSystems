@@ -1,0 +1,62 @@
+ <form [formGroup]="frmGroup"  novalidate>
+ 	<div name="pnlGridListAsignaPostulante" *ngIf="!mostrarPanelForm"  >
+	<mat-card>
+	    <span *ngIf="showModal" >{{'asignaPostulante.pnl.title' | transloco}}</span>
+		<button mat-icon-button *ngIf="showComponentPage" (click)="regresarPage()" color="accent">
+			<mat-icon class="mat-24">reply</mat-icon>
+		</button>
+		<mat-form-field class="search-full-width" color="accent">
+			<mat-icon matPrefix>search</mat-icon>
+			<input [maxlength]="20" matInput name="searchname" autocompleteOff  #searchname [formControl]="term" type="text"
+					placeholder="{{'search' | transloco}}">
+			<button matSuffix mat-icon-button *ngIf="term.value" aria-label="Clear" (click)="term.setValue('')">
+				<mat-icon>close</mat-icon>
+			</button>
+			<button matSuffix mat-icon-button matTooltip="{{'buscar' | transloco}}" (click)="buscar()">
+				<mat-icon class="mat-24">replay</mat-icon>
+			</button>
+			<button matSuffix mat-mini-fab matTooltip="{{'nuevo' | transloco}}" *ngIf="showAccionNuevo"
+					(click)="nuevo()" color="accent" class="app-fabx">
+				<mat-icon>add</mat-icon>
+			</button>
+		</mat-form-field>	  
+	    <mat-card-content>
+		 <mat-nav-list>
+      	  <mat-list dense>
+			 <h3 mat-subheader *ngIf="titlePage != ''" >{{titlePage}}</h3> 
+      	     <h3 mat-subheader>{{'asignaPostulante.grilla.pnl.title' | transloco}} ({{listasize}})</h3>
+			 <mat-list-item *ngFor="let asignaPostulante of listaAsignaPostulante" class="noright">
+			   <mat-icon mat-list-icon (click)="buscarID(asignaPostulante)" >folder</mat-icon>
+				 <mat-checkbox *ngIf="showAccionCheck" color="accent" (change)="agregarCheck(asignaPostulante)"  
+				 name="checkedView" #checkedView="ngModel" [(ngModel)]="asignaPostulante.checked">
+				 </mat-checkbox>
+				<button matTooltip="{{'asociar' | transloco}}" *ngIf="showModal && !showAccionCheck" mat-icon-button (click)="asociar(asignaPostulante)" color="accent">
+					<mat-icon  class="mat-24" >add_circle_outline</mat-icon>
+				</button>			   
+				<button matTooltip="{{'modificar' | transloco}}" *ngIf="showAccionModificar"
+								(click)="buscarID(asignaPostulante)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">edit</mat-icon>
+				</button>
+				<button matTooltip="{{'eliminar' | transloco}}" *ngIf="showAccionEliminar"
+								(click)="confirmarEliminar(asignaPostulante)" mat-icon-button color="accent">
+					<mat-icon class="mat-24">delete</mat-icon>
+				</button>
+				<mat-divider></mat-divider>
+			</mat-list-item>
+       	  </mat-list>
+		</mat-nav-list>
+		<app-paginacion [dataProvider]="dataProvider" [cantidadPage] = "cantidadPage" (change)="getBufferedData($event)"></app-paginacion>
+	  </mat-card-content>			
+	</mat-card >	
+	<button matTooltip="{{'asociar' | transloco}}" *ngIf="showAccionAsociar" mat-fab (click)="dialogRef.close(listaAsignaPostulanteSelectMap)"  >
+		<mat-icon>check_circle</mat-icon>
+	</button>	
+   </div>	
+	
+   <div name="pnlGridFrmAsignaPostulante" *ngIf="mostrarPanelForm"  >  
+    <mat-card >
+		
+			 
+	   </mat-card>
+	</div>
+</form>

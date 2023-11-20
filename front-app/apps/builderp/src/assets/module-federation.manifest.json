@@ -1,0 +1,13 @@
+{
+  "aas": "http://localhost:4201",
+  "comun": "http://localhost:4202",
+  "security": "http://localhost:4203",
+  "admision": "http://localhost:4204",
+  "escalafon": "http://localhost:4205",
+  "hora": "http://localhost:4206",
+  "matricula": "http://localhost:4207",
+  "nota": "http://localhost:4208",
+  "pago": "http://localhost:4209",
+  "planilla": "http://localhost:4210",
+  "generador": "http://localhost:4211"
+}

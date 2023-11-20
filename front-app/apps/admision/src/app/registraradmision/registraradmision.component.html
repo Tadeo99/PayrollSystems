@@ -1,0 +1,287 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="max-w-3xl">
+            <!-- Vertical stepper -->
+            <form class="p-4 bg-card shadow rounded overflow-hidden" [formGroup]="verticalStepperForm">
+                <mat-vertical-stepper [linear]="false" #verticalStepper [selectedIndex]="stepIndex"
+                    (selectionChange)="onStepChange($event)">
+                    <mat-step [formGroupName]="'stepValidarVacante'"
+                        [stepControl]="verticalStepperForm.get('stepValidarVacante')" #verticalStepperStep1>
+                        <ng-template matStepLabel>{{'registrar.admision.step.validar.vacante.pnl.title' | transloco}}
+                        </ng-template>
+                        <mat-accordion class="example-headers-align">
+                            <mat-expansion-panel class="acordionPer" [expanded]="stepAcordion === 0"
+                                (opened)="setStepAcordion(0)" hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{'vacantes.title' | transloco}}
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        <span></span>
+                                        <mat-icon>school</mat-icon>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+
+                                <div class="sm:col-span-4">
+                                    <div class="col-span-4 sm:col-span-2">
+                                        <mat-label>{{'nroVacante' | transloco}}({{nroVacante}})</mat-label>
+                                        <mat-slider class="w-full" [max]="max" [min]="min" [step]="step"
+                                            [discrete]="thumbLabel">
+                                            <input matSliderThumb [formControlName]="'nroVacante'"
+                                                (valueChange)="onInputChange($event)">
+                                        </mat-slider>
+                                    </div>
+                                </div>
+                                <div class="grid sm:grid-cols-6 gap-6 w-full mt-8">
+                                    <div class="sm:col-span-2">
+                                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                            <mat-label>{{'departamento' | transloco}}</mat-label>
+                                            <mat-select [formControlName]="'departamento'" [required]="true">
+                                                <mat-option>--</mat-option>
+                                                <mat-option *ngFor="let obj of departamentos" [value]="obj.id">
+                                                    {{obj.nombre}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="(invalid('stepValidarVacante.departamento') )">
+                                                <span
+                                                    *ngIf="invalid('stepValidarVacante.departamento')">{{getError('stepValidarVacante.departamento')}}</span>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                            <mat-label>{{'provincia' | transloco}}</mat-label>
+                                            <mat-select [formControlName]="'provincia'" [required]="true">
+                                                <mat-option>--</mat-option>
+                                                <mat-option *ngFor="let obj of provincias" [value]="obj.id">
+                                                    {{obj.nombre}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="(invalid('stepValidarVacante.provincia') )">
+                                                <span
+                                                    *ngIf="invalid('stepValidarVacante.provincia')">{{getError('stepValidarVacante.provincia')}}</span>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="sm:col-span-2">
+                                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                            <mat-label>{{'distrito' | transloco}}</mat-label>
+                                            <mat-select [formControlName]="'distrito'" [required]="true">
+                                                <mat-option>--</mat-option>
+                                                <mat-option *ngFor="let obj of distritos" [value]="obj.id">
+                                                    {{obj.nombre}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="(invalid('stepValidarVacante.distrito') )">
+                                                <span
+                                                    *ngIf="invalid('stepValidarVacante.distrito')">{{getError('stepValidarVacante.distrito')}}</span>
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <mat-action-row>
+                                    <button mat-button color="primary" (click)="nextStepAcordion()">Next</button>
+                                </mat-action-row>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel class="acordionPer" [expanded]="stepAcordion === 1"
+                                (opened)="setStepAcordion(1)" hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        {{'postulante.title' | transloco}} ({{nroVacante}})
+                                    </mat-panel-title>
+                                    <mat-panel-description>
+                                        <span></span>
+                                        <mat-icon>person_add</mat-icon>
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <div class="grid grid-cols-1 w-full" *ngFor="let postulante of listaPostulante">
+                                    <div class="col-span-1">
+                                        {{postulante.postulante.nombres}}
+                                        <div class="flex flex-wrap items-center py-5 px-6">
+                                            <mat-button-toggle-group class="flex flex-wrap -m-2" name="nivel"
+                                                aria-label="nivel" #groupNivel="matButtonToggleGroup"
+                                                (change)="onChangeNivel($event,postulante)">
+                                                <mat-button-toggle mat-stroked-button class="m-2"
+                                                    *ngFor="let objNivel of listaNivel" value="{{objNivel.id}}"
+                                                    [checked]="postulante.grado.idItemByNivel===objNivel.id">
+                                                    <span class="text-secondary">{{objNivel.nombre}}</span>
+                                                </mat-button-toggle>
+                                            </mat-button-toggle-group>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-1">
+                                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                            <mat-label>{{'gradoanhio' | transloco}} </mat-label>
+                                            <mat-select (selectionChange)="onChangeGrado($event,postulante)" required
+                                                [value]="postulante.grado.idGrado">
+                                                <mat-option>--</mat-option>
+                                                <mat-option
+                                                    *ngFor="let grado of listaGradoSelectItemMap.get(postulante.grado.idItemByNivel)"
+                                                    [value]="grado.id">
+                                                    {{grado.nombre}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <!-- Divider -->
+                                    <div class="my-10 border-t"></div>
+                                </div>
+                                <div class="flex justify-end">
+                                    <button mat-button color="primary" (click)="prevStepAcordion()">{{'atras' |
+                                        transloco}}</button>
+                                </div>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                        <div class="flex justify-end mt-4">
+                            <button class="px-8" mat-flat-button [color]="'primary'"
+                                (click)="obtenerVacantesDisponibles()"
+                                [disabled]="verticalStepperStep1.stepControl.invalid" type="button" matStepperNext>
+                                {{'siguiente' | transloco}}
+                            </button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step [formGroupName]="'stepReultadoVacante'"
+                        [stepControl]="verticalStepperForm.get('stepReultadoVacante')" #verticalStepperStep2>
+                        <ng-template matStepLabel>{{'registrar.admision.step.vacante.resultados.pnl.title' |
+                            transloco}}</ng-template>
+
+                        <mat-card class="{{sede.checked === true ? 'card-seleccionado' : 'card-per'}}"
+                            (click)="selectSede(sede)" *ngFor="let sede of listaSede">
+                            <mat-card-header>
+                                <div mat-card-avatar class="example-header-image"></div>
+                                <mat-card-title>{{sede.codigo}} - {{sede.nombre}}</mat-card-title>
+                                <mat-card-subtitle>{{sede.direccion}} </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="flex flex-col divide-y border-t border-b">
+                                    <div class="grid grid-cols-4 flex flex-col sm:flex-row sm:items-center py-6">
+                                        <div class="col-span-2 flex items-center">
+                                            <div
+                                                class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                                                <ng-container>
+                                                    <div
+                                                        class="flex items-center justify-center w-full h-full rounded-full text-lg ">
+
+                                                    </div>
+                                                </ng-container>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="font-medium"> {{'grado' | transloco}}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-span-2 flex items-center mt-4 sm:mt-0 sm:ml-auto">
+                                            <div class="order-2 sm:order-1 ml-4 sm:ml-0">
+                                                <div class="font-medium"> {{'vacante' | transloco}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ng-container
+                                        *ngFor="let objData of sede.sedeAsignaPostulanteList; trackBy: trackByFn;">
+                                        <div class="grid grid-cols-4 flex flex-col sm:flex-row sm:items-center py-6">
+                                            <div class="col-span-2 flex items-center">
+                                                <div
+                                                    class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
+                                                    <ng-container>
+                                                        <div
+                                                            class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                            {{objData.grado.nombre.charAt(0)}}
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                                <div class="ml-4">
+                                                    <div class="font-medium">{{objData.grado.nombre}}</div>
+                                                    <div class="text-secondary">{{objData.grado.itemByNivel.nombre}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-span-2 flex items-center mt-4 sm:mt-0 sm:ml-auto">
+                                                <div class="order-2 sm:order-1 ml-4 sm:ml-0">
+
+                                                    <p mat-icon-button class="estado-disponible"
+                                                        *ngIf="objData.checked">
+                                                        Disponible
+                                                        <mat-icon class="estado-disponible">
+                                                            done_outline</mat-icon>
+                                                    </p>
+                                                    <p mat-icon-button class="estado-no-disponible"
+                                                        *ngIf="!objData.checked">
+                                                        No Disponible
+                                                        <mat-icon class="estado-no-disponible">
+                                                            clear
+                                                        </mat-icon>
+                                                    </p>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <button mat-stroked-button color="primary">{{'selecciona' | transloco}}</button>
+                            </mat-card-actions>
+                        </mat-card>
+                        <div class="flex justify-end mt-4">
+                            <button class="px-8 mr-2" mat-stroked-button color="primary" type="button"
+                                matStepperPrevious>
+                                {{'atras' | transloco}}
+                            </button>
+                            <button class="px-8" mat-flat-button [color]="'primary'"
+                                [disabled]="verticalStepperStep2.stepControl.invalid" type="button" matStepperNext>
+                                {{'siguiente' | transloco}}
+                            </button>
+                        </div>
+                    </mat-step>
+                    <mat-step [formGroupName]="'step3'" [stepControl]="verticalStepperForm.get('step3')">
+                        <ng-template matStepLabel>{{'registrar.admision.step.registrar.apoderado.pnl.title' |
+                            transloco}}</ng-template>
+                        <ng-mf-bs-apoderadofrm></ng-mf-bs-apoderadofrm>
+                        <div class="flex justify-end mt-8">
+                            <button class="px-8 mr-2" mat-stroked-button color="primary" type="button"
+                                matStepperPrevious>
+                                {{'atras' | transloco}}
+                            </button>
+                            <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext>
+                                {{'siguiente' | transloco}}
+                            </button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step>
+                        <ng-template matStepLabel>{{'registrar.admision.step.registrar.postulante.pnl.title' |
+                            transloco}}</ng-template>
+                        <mat-tab-group mat-stretch-tabs>
+                            <mat-tab *ngFor="let postulante of listaPostulante" [disabled]="(user?.id??'') === ''">
+                                <ng-template mat-tab-label>
+                                    <mat-icon>person</mat-icon>
+                                    {{postulante.postulante.nombres}} / {{postulante.grado.nombre}}
+                                </ng-template>
+
+                                <ng-mf-bs-postulantefrm *ngIf="(user?.id??'') !== ''" [asignaPostulante]="postulante">
+                                </ng-mf-bs-postulantefrm>
+
+                            </mat-tab>
+                        </mat-tab-group>
+
+                        <div class="flex justify-end mt-4">
+                            <button class="px-8 mr-2" mat-stroked-button color="primary" type="button"
+                                matStepperPrevious>
+                                {{'atras' | transloco}}
+                            </button>
+                            <button class="px-8" mat-flat-button [color]="'primary'" type="button"
+                                (click)="verticalStepper.reset()">
+                                {{'inicio' | transloco}}
+                            </button>
+                        </div>
+                    </mat-step>
+                </mat-vertical-stepper>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

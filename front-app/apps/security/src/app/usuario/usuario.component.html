@@ -1,0 +1,322 @@
+<div [hidden]="mostrarPanelForm"
+	class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+
+	<ng-mf-bs-cabeceragrilla [isLoading]="isLoading" [titlePage]="titlePage" [searchInputControl]="searchInputControl"
+		(changeEmitter)="changeEmitterEvent($event)"></ng-mf-bs-cabeceragrilla>
+
+	<!-- Main -->
+	<div class="flex flex-auto overflow-hidden">
+
+		<!-- ListaData list -->
+		<div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+			<ng-container>
+				<div class="grid">
+					<!-- Header -->
+					<div class="usuario-grid z-10 sticky top-0 grid gap-4 py-3 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+						matSort matSortDisableClear>
+						<div class="hidden md:block" [mat-sort-header]="'idUsuario'">
+							{{ 'id' | transloco }}
+						</div>
+						<div [mat-sort-header]="'nombre'">{{ 'nombre' | transloco }}</div>
+						<div class="hidden lg:block" [mat-sort-header]="'estado'">{{ 'activo' | transloco }}</div>
+						<div class="hidden sm:block">{{ 'accion' | transloco }}</div>
+					</div>
+					<!-- Rows -->
+					<ng-container *ngIf="(listaData$ | async) as listaData">
+						<ng-container *ngFor="let objData of listaData; trackBy: trackByFn">
+							<div class="usuario-grid grid items-center gap-4 py-2 px-6 md:px-8 border-b">
+								<!-- SKU -->
+								<div class="hidden md:block truncate">
+									{{objData.idUsuario}}
+								</div>
+
+								<!-- nombre -->
+								<div class="truncate">
+									{{objData.nombre}}
+								</div>
+
+								<!-- Active -->
+								<div class="hidden lg:block">
+									<ng-container *ngIf="objData.estado">
+										<mat-icon class="text-green-400 icon-size-5"
+											[svgIcon]="'heroicons_solid:check'"></mat-icon>
+									</ng-container>
+									<ng-container *ngIf="!objData.estado">
+										<mat-icon class="text-gray-400 icon-size-5" [svgIcon]="'heroicons_solid:x'">
+										</mat-icon>
+									</ng-container>
+								</div>
+
+								<!-- accion -->
+								<div>
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'modificar' | transloco }}" (click)="find(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil-alt'">
+										</mat-icon>
+									</button>
+
+									<button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-icon-button
+										matTooltip="{{'eliminar' | transloco }}" (click)="confirmarEliminar(objData)"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										<mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:trash'">
+										</mat-icon>
+									</button>
+
+								</div>
+							</div>
+						</ng-container>
+					</ng-container>
+					<ng-mf-bs-noresultados [length]="pagination?.length??0"></ng-mf-bs-noresultados>
+				</div>
+
+				<mat-paginator
+					class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+					[ngClass]="{'pointer-events-none': isLoading}" [length]="pagination?.length??0"
+					[pageIndex]="pagination?.page" [pageSize]="pagination?.size" [pageSizeOptions]="[5, 10, 25, 100]"
+					[showFirstLastButtons]="true"></mat-paginator>
+
+			</ng-container>
+		</div>
+
+	</div>
+
+</div>
+
+<div *ngIf="mostrarPanelForm" class="flex flex-col flex-auto min-w-0">
+	<!-- Main -->
+	<div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+		<div class="flex flex-col w-full">
+			<ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+			<!-- Form -->
+			<div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+				<!-- Alert -->
+				<ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+					{{alert.message}}
+				</ng-mf-bs-alert>
+				<form class="space-y-3" [formGroup]="frmGroup">
+					<mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
+						<!-- Datos Personales -->
+						<mat-tab label="Informacion Basica">
+							<ng-template matTabContent>
+								<div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+									<!-- nombre -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="nombre" [required]="true">
+										<mat-label>{{'nombre' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('nombre') )">
+											<span *ngIf="invalid('nombre')">{{getError('nombre')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- apellidoPaterno -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="apellidoPaterno" [required]="true">
+										<mat-label>{{'apellidoPaterno' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('apellidoPaterno') )">
+											<span
+												*ngIf="invalid('apellidoPaterno')">{{getError('apellidoPaterno')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- apellidoMaterno -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="apellidoMaterno" [required]="true">
+										<mat-label>{{'apellidoMaterno' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('apellidoMaterno') )">
+											<span
+												*ngIf="invalid('apellidoMaterno')">{{getError('apellidoMaterno')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- email -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="email" [required]="true">
+										<mat-label>{{'email' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('email') )">
+											<span *ngIf="invalid('email')">{{getError('email')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- telefono -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="telefono" [required]="true">
+										<mat-label>{{'telefono' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('telefono') )">
+											<span *ngIf="invalid('telefono')">{{getError('telefono')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- celular -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="celular" [required]="true">
+										<mat-label>{{'celular' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('celular') )">
+											<span *ngIf="invalid('celular')">{{getError('celular')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- userName -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="userName" [required]="true">
+										<mat-label>{{'userName' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('userName') )">
+											<span *ngIf="invalid('userName')">{{getError('userName')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- userPassword -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="userPassword" [required]="true">
+										<mat-label>{{'userPassword' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('userPassword') )">
+											<span *ngIf="invalid('userPassword')">{{getError('userPassword')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- tipoUsuario -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'"
+										formGroupName="tipoUsuario">
+										<mat-select formControlName="idTipoUsuario" [required]="true">
+											<mat-option *ngFor="let it of listaTipoUsuario " [value]="it.id">
+												{{it.nombre}}
+											</mat-option>
+										</mat-select>
+										<mat-label>{{'tipoUsuario' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('idTipoUsuario') )">
+											<span *ngIf="invalid('idTipoUsuario')">{{getError('idTipoUsuario')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- codigoExterno -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<input matInput formControlName="codigoExterno" [required]="true">
+										<mat-label>{{'codigoExterno' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('codigoExterno') )">
+											<span *ngIf="invalid('codigoExterno')">{{getError('codigoExterno')}}</span>
+										</mat-error>
+									</mat-form-field>
+									<!-- estado -->
+									<mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+										<mat-select formControlName="estado" [required]="true">
+											<mat-option *ngFor="let it of typeService.listaEstado" [value]="it.id">
+												{{it.nombre}}
+											</mat-option>
+										</mat-select>
+										<mat-label>{{'estado' | transloco }}</mat-label>
+										<mat-error *ngIf="(invalid('estado') )">
+											<span *ngIf="invalid('estado')">{{getError('estado')}}</span>
+										</mat-error>
+									</mat-form-field>
+								</div>
+								<!-- Actions -->
+								<div class="flex items-center justify-end">
+									<button mat-stroked-button (click)="cancelar()"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										{{'cancelar' | transloco}}
+									</button>
+									<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid"
+										[color]="'primary'" (click)="guardar()"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										{{'guardar' | transloco}}
+									</button>
+								</div>
+							</ng-template>
+						</mat-tab>
+						<!-- Permisos -->
+						<mat-tab label="Permisos">
+							<ng-template matTabContent>
+
+								<!-- Section -->
+								<div class="w-full">
+									<div class="text-xl">Grupos de Usuario
+
+										<!-- Toggle labels button & menu -->
+										<button class="ml-auto" mat-icon-button [matMenuTriggerFor]="toggleLabelMenu">
+											<mat-icon [svgIcon]="'heroicons_outline:tag'"></mat-icon>
+										</button>
+										<mat-menu #toggleLabelMenu="matMenu">
+											<ng-container *ngFor="let label of listaGrupoUsuario; trackBy: trackByFn">
+												<div mat-menu-item (click)="togglegGrupoUsuarioLabel(label)" matRipple>
+													<mat-checkbox class="pointer-events-none" [color]="'primary'"
+														[checked]="grupoUsuarios?.includes(label.id)"
+														[disableRipple]="true">
+														{{label.nombre}}
+													</mat-checkbox>
+												</div>
+											</ng-container>
+										</mat-menu>
+
+									</div>
+									<div class="text-secondary">Seleccciona grupos de usuario</div>
+								</div>
+
+								<!-- Subject and Labels -->
+								<div class="flex flex-wrap items-center py-5 px-6">
+									<!-- Labels -->
+									<ng-container>
+										<div class="flex flex-wrap items-center justify-start -mx-1">
+											<ng-container
+												*ngFor="let label of (grupoUsuarios | bsFindByKey:'id':listaGrupoUsuario)">
+												<div class="m-1 py-0.5 px-2.5 rounded-full text-sm font-medium whitespace-nowrap"
+													[ngClass]="labelColors['green'].combined">
+													{{label.nombre}}
+												</div>
+											</ng-container>
+										</div>
+									</ng-container>
+								</div>
+
+								<!-- Divider -->
+								<div class="my-10 border-t"></div>
+
+								<!-- Section -->
+								<div class="w-full">
+									<div class="text-xl">Entidad
+
+										<!-- Toggle labels button & menu -->
+										<button class="ml-auto" mat-icon-button
+											[matMenuTriggerFor]="toggleEntidadLabelMenu">
+											<mat-icon [svgIcon]="'heroicons_outline:tag'"></mat-icon>
+										</button>
+										<mat-menu #toggleEntidadLabelMenu="matMenu">
+											<ng-container *ngFor="let label of listaEntidad; trackBy: trackByFn">
+												<div mat-menu-item (click)="togglegEntidadLabel(label)" matRipple>
+													<mat-checkbox class="pointer-events-none" [color]="'primary'"
+														[checked]="entidades?.includes(label.id)"
+														[disableRipple]="true">
+														{{label.nombre}}
+													</mat-checkbox>
+												</div>
+											</ng-container>
+										</mat-menu>
+									</div>
+									<div class="text-secondary">Selecciona la entidad</div>
+								</div>
+								<!-- Subject and Labels -->
+								<div class="flex flex-wrap items-center py-5 px-6">
+									<!-- Labels -->
+									<ng-container>
+										<div class="flex flex-wrap items-center justify-start -mx-1">
+											<ng-container
+												*ngFor="let label of (entidades | bsFindByKey:'id':listaEntidad)">
+												<div class="m-1 py-0.5 px-2.5 rounded-full text-sm font-medium whitespace-nowrap"
+													[ngClass]="labelColors['indigo'].combined">
+													{{label.nombre}}
+												</div>
+											</ng-container>
+										</div>
+									</ng-container>
+								</div>
+								<!-- Actions -->
+								<div class="grid sm:grid-cols-4 gap-6 w-full mt-8"></div>
+								<div class="flex items-center justify-end">
+									<button mat-stroked-button (click)="cancelar()"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										{{'cancelar' | transloco}}
+									</button>
+									<button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid"
+										[color]="'primary'" (click)="guardar()"
+										[ngClass]="{'pointer-events-none': isLoading}">
+										{{'guardar' | transloco}}
+									</button>
+								</div>
+							</ng-template>
+						</mat-tab>
+					</mat-tab-group>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

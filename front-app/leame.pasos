@@ -1,0 +1,291 @@
+Trabajar con Angular 2:
+help : npm rebuild node-sass
+Herramientas:
+1.-Descargar e Instalar NodeJS Versin estable (v6.10)
+ 1.2-Actualizar el NPM de NODEJS:
+ Actualizar NPM Ejecutar cmd Como ADMINISTRADOR
+npm i -g npm  
+Ver la Version : npm -v
+ 1.3 Instalar el Angular CLI (https://cli.angular.io/)
+     1.3.1 npm install -g @angular/cli
+
+     npm install @angular/cli --save-dev 
+
+ESTO ES CUANDO QUISIERAMOS MIGRAR A OTRA VERSION 
+crear proyecto
+-npm install npm@latest -g
+-1.-Instalar angular cli
+https://material.angular.io/guide/getting-started
+servidor estatico pase a  prod: https://www.npmjs.com/package/http-server
+
+https://www.cygwin.com/install.html
+
+https://github.com/mschwarzmueller/reactjs-basics/issues/2
+
+npm install http-server -g
+
+https://www.codeproject.com/Articles/1175045/Angular-SwipeClouds-Mobile-App-Framework-with-JQue
+npm uninstall -g @angular/cli
+npm clean cache
+npm install Last-g @angular/cli
+then remove the local node_modules folder and run:
+install npm–Save-dev @angular/cli @Last
+npm install
+ uninstall (primero)
+--https://stormpath.com/blog/progressive-web-applications-angular-spring-boot-stormpath
+npm install @angular/app-shell --save
+
+npm install -g @angular/cli
+2.-Crear proyecto
+ng new appContable
+
+Instalar demas dependencias:
+npm install --save ngx-perfect-scrollbar
+
+https://github.com/nrwl/nx/issues/11259 incidencia de incluir componentes
+
+https://material.angular.io/guide/getting-started
+npm install --save @angular/material @angular/cdk
+--npm install --save @angular/material
+npm install --save @angular/animations
+npm install --save hammerjs
+npm install --save @angular/google-maps
+
+https://www.npmjs.com/package/@angular/flex-layout
+npm install --save @angular/flex-layout
+--npm install --save angular/flex-layout-builds
+
+para angular 6 npm i --save @angular/flex-layout@6.0.0-beta.15
+
+https://www.npmjs.com/package/ng2-dragula
+--npm install ng2-dragula dragula --save
+npm install ng2-dragula --save
+
+https://www.npmjs.com/package/@ngx-translate/core
+npm install @ngx-translate/core --save
+npm install @ngx-translate/http-loader --save
+
+npm uninstall @ngx-translate/core --save
+npm uninstall @ngx-translate/http-loader --save
+
+https://github.com/marella/material-icons ultimo
+npm install material-icons@latest
+
+
+https://github.com/hellsan631/material-avatar (todavia validar)
+npm install --save material-avatar
+
+https://github.com/yuyang041060120/ng2-validation
+npm install ng2-validation --save (creo que esta en desuso 27/02/2010)
+
+https://www.npmjs.com/package/ngx-custom-validators
+npm install ngx-custom-validators --save
+
+underscore
+
+https://www.npmjs.com/package/ng2-ace-editor
+npm install  ng2-ace-editor --save
+
+
+https://swimlane.github.io/ngx-charts/#/ngx-charts/bar-horizontal-normalized
+https://github.com/swimlane/ngx-charts
+
+npm install @swimlane/ngx-charts --save
+
+
+https://github.com/thelgevold/rxjs-socket.io
+http://www.discoversdk.com/blog/socket-programming-in-angularjs-2-building-a-simple-chat-application-with-socket.io-and-rxjs
+npm install socket.io-client --save
+
+https://medium.com/@ryanchenkie_40935/angular-authentication-using-route-guards-bf7a4ca13ae3
+   npm install --save jwt-decode
+
+https://github.com/auth0/angular2-jwt
+npm install --save angular2-jwt (creo que no va)
+
+--Añadir graaficoshttps://www.angularjs4u.com/angularjs2/top-20-angular-2-charts-graphs/
+
+http://valor-software.com/ng2-charts/#lineChart
+https://github.com/krispo/ng2-nvd3
+
+https://medium.com/@webmaxru/a-new-angular-service-worker-creating-automatic-progressive-web-apps-part-2-practice-3221471269a1
+
+npm install @angular/service-worker --save
+
+--revisar si usamos comando de voz
+https://sdkcarlos.github.io/sitios/artyom.html
+http://abarcarodriguez.com/blog/input-con-comandos-de-voz-en-html5
+http://www.phonegapspain.com/topic/como-utilizar-speech-recognition-html5-para-que-funcione-con-phonegap/
+
+--inicio  voz ver
+http://www.desarrollolibre.net/blog/javascript/la-api-de-reconocimiento-de-voz-en-javascript-speechrecognition#.W2B6tNVKjZ4
+https://sintaxispragmatica.wordpress.com/2013/07/21/usando-la-libreria-texttospeech-texto-a-voz/
+
+https://javalangnullpointer.wordpress.com/2007/08/21/freetts-convertir-textos-a-voz/
+
+https://docs.kde.org/trunk5/es/kdeaccessibility/kmouth/tts.html
+http://www.jc-mouse.net/android/texttospeech-convierte-texto-a-voz
+http://www.cristalab.com/tutoriales/input-con-comandos-de-voz-en-html5-c103177l/
+--Fin  voz ver
+
+--usando voz
+npm install artyom.js
+
+https://github.com/angular/angular-cli/issues/4352
+npm uninstall -g angular-cli
+npm clear cache
+npm install -g @angular/cli
+npm install -g @angular/cli@next
+
+--Actualizando npm 5 trae archivo de bloque para su correcto funcionamineto usar esto:
+npm i webpack --save-dev
+npm uninstall webpack --save-dev
+npm install webpack@3.7.1 --save-dev
+npm uninstall webpack@3.7.1
+
+npm install webpack --save-dev
+npm install webpack-dev-middleware --save-dev
+npm install webpack-dev-server --save-dev
+npm install webpack-md5-hash --save-dev
+npm install webpack-merge --save-dev
+
+npm cache clean
+
+npm i -g webpack aspnet-webpack
+
+--proxy:
+
+
+
+
+
+--Usar Compilacion Anticipada AOT:
+--https://angular.io/guide/aot-compiler
+
+npm install @angular/compiler-cli @angular/platform-server --save
+
+npm install source-map-explorer --save-dev
+
+--esto : https://github.com/stokingerl/Angular2-Electron-Boilerplate
+--https://github.com/maximegris/angular-electron
+
+https://angularfirebase.com/lessons/desktop-apps-with-electron-and-angular/
+
+npm install electron --save-dev
+
+npm install electron-packager -g
+npm install electron-packager --save-dev
+
+
+https://www.christianengvall.se/electron-windows-installer/
+npm install --save-dev electron-winstaller
+
+
+https://www.npmjs.com/package/angular2-rollup
+
+
+https://medium.com/@trekhleb/how-to-create-aot-jit-compatible-angular-4-library-with-external-scss-html-templates-9da6e68dac6e
+
+
+https://github.com/trekhleb/angular-library-seed/blob/master/package.json
+
+https://legacy.docs.feathersjs.com/databases/nedb.html
+http://stackabuse.com/nedb-a-lightweight-javascript-database/
+
+npm config set proxy http://access605.cws.sco.cisco.com:8080
+npm config set https-proxy http://access605.cws.sco.cisco.com:8080
+
+npm config delete proxy
+npm config delete https-proxy
+
+---modo escritorio
+
+npm install --save-dev html-loader
+npm install --save-dev  file-loader
+npm install --save-dev exports-loader
+
+npm install --save-dev url-loader
+npm install --save-dev webdriver-manager
+
+
+npm install --save enhanced-resolve
+
+https://www.sevenforums.com/tutorials/55721-folder-delete-command-prompt.html
+RD /S /Q "C:\Users\UserName\Desktop\Folder"
+
+npm run build-prod-memory
+
+
+--actualozar angular cli
+npm uninstall -g @angular/cli
+npm cache clean --force
+npm install -g @angular/cli
+npm cache verify
+
+npm uninstall @angular/cli --save --dev --force
+npm uninstall @angular/material --save --force
+
+
+
+
+https://nx.dev/recipes/module-federation/faster-builds
+
+# Replace acme with desired scope
+npx create-nx-workspace acme --preset=empty
+cd acme
+
+
+To run one or more remotes in development mode, use the --devRemotes option.
+
+npx create-nx-workspace ng-mf
+npx nx g @nrwl/angular:host builderp --remotes=aas,comun,security,admision,escalafon,hora,matricula,nota,pago,planilla,generador --dynamic
+
+nx g @nrwl/angular:host employee --remotes=login --dynamic
+User Library
+nx g @nrwl/angular:lib shared/data-access-user
+nx g @nrwl/angular:service user --project=shared-data-access-user
+
+
+--nx serve builderp --devRemotes=aas,comun,admision,escalafon,pago,hora,planilla,security,generador,nota,matricula
+nx serve builderp
+
+nx run aas:serve
+
+
+----
+Now, we can add a simple deploy command to simulate deploying this folder to production.
+(https://nx.dev/recipes/module-federation/faster-builds)
+
+Creating a Cypress E2E project for an existing project
+nx e2e frontend-e2e --configuration=production
+
+https://blog.briebug.com/blog/micro-frontends-angular
+
+nx g @nrwl/angular:lib shared/service/aas
+nx g @nrwl/angular:service login --project=shared-service-aas
+
+nx g @nrwl/angular:lib shared/service/core
+nx g @nrwl/angular:service base --project=shared-service-core
+
+nx g @nrwl/angular:lib shared/service/comun
+
+--creando components
+nx g @nrwl/anguclslar:component menu --project=aas
+nx g @nrwl/angular:component login --project=aas
+
+
+nx g @nrwl/angular:lib shared/bs
+
+
+nx g @nrwl/angular:lib shared/components/core
+nx g @nrwl/angular:component base --project=shared-components-core
+
+ng add @angular/material
+
+
+nx serve builderp --devRemotes=aas,comun,security,admision,escalafon,hora,matricula,nota,pago,planilla,generador
+
+
+npx nx generate @nrwl/angular:setup-tailwind builderp
+
+https://blog.logrocket.com/how-to-use-custom-fonts-tailwind-css/

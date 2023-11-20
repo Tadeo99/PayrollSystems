@@ -1,0 +1,26 @@
+/* language=SCSS */
+.conceptoPdt-grid {
+  grid-template-columns: auto 120px;
+
+  @screen sm {
+    grid-template-columns: auto 120px 0px;
+  }
+
+  @screen md {
+    grid-template-columns: 112px auto 120px 0px;
+  }
+
+  @screen lg {
+    grid-template-columns: 112px auto 80px 120px;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+ng-mf-bs-conceptopdt {
+  .mat-mdc-tab-group .mat-mdc-tab-body-content {
+    padding: 0px !important;
+  }
+}

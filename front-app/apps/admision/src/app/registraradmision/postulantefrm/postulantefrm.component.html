@@ -1,0 +1,124 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full">
+            <ng-mf-bs-titlefrm [accionNuevo]="accionNuevo"></ng-mf-bs-titlefrm>
+            <!-- Form -->
+            <div class="mt-2 sm:mt-4 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <ng-mf-bs-alert class="mb-8" *ngIf="false" [type]="alert.type" [showIcon]="false">
+                    {{alert.message}}
+                </ng-mf-bs-alert>
+                <form class="space-y-3" [formGroup]="frmGroup">
+
+
+                    <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
+                        <!-- idItemByDocIdentidad -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <mat-select formControlName="idItemByDocIdentidad" [required]="true">
+                                <mat-option *ngFor="let it of listaTipoDoc " [value]="it.id">
+                                    {{it.nombre}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-label>{{'docIdentidad' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('idItemByDocIdentidad') )">
+                                <span
+                                    *ngIf="invalid('idItemByDocIdentidad')">{{getError('idItemByDocIdentidad')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- nroDoc -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="nroDoc" [required]="true">
+                            <mat-label>{{'nroDoc' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('nroDoc') )">
+                                <span *ngIf="invalid('nroDoc')">{{getError('nroDoc')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- apellidoPaterno -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="apellidoPaterno" [required]="true">
+                            <mat-label>{{'apellidoPaterno' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('apellidoPaterno') )">
+                                <span *ngIf="invalid('apellidoPaterno')">{{getError('apellidoPaterno')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- apellidoMaterno -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="apellidoMaterno" [required]="true">
+                            <mat-label>{{'apellidoMaterno' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('apellidoMaterno') )">
+                                <span *ngIf="invalid('apellidoMaterno')">{{getError('apellidoMaterno')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- nombres -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="nombres" [required]="true">
+                            <mat-label>{{'nombres' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('nombres') )">
+                                <span *ngIf="invalid('nombres')">{{getError('nombres')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- fechaNacimiento -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput [matDatepicker]="ffechaNacimiento" formControlName="fechaNacimiento">
+                            <mat-datepicker-toggle matSuffix [for]="ffechaNacimiento">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #ffechaNacimiento touchUi></mat-datepicker>
+                            <mat-label>{{'fechaNacimiento' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('fechaNacimiento') )">
+                                <span *ngIf="invalid('fechaNacimiento')">{{getError('fechaNacimiento')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- telefono1 -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="telefono1" [required]="true">
+                            <mat-label>{{'telefono1' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('telefono1') )">
+                                <span *ngIf="invalid('telefono1')">{{getError('telefono1')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- telefono2 -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="telefono2" [required]="true">
+                            <mat-label>{{'telefono2' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('telefono2') )">
+                                <span *ngIf="invalid('telefono2')">{{getError('telefono2')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- celular -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="celular" [required]="true">
+                            <mat-label>{{'celular' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('celular') )">
+                                <span *ngIf="invalid('celular')">{{getError('celular')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- email -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="email" [required]="true">
+                            <mat-label>{{'email' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('email') )">
+                                <span *ngIf="invalid('email')">{{getError('email')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- sexo -->
+                        <mat-form-field class="sm:col-span-2 w-full" [ngClass]="'bs-mat-dense'">
+                            <input matInput formControlName="sexo" [required]="true">
+                            <mat-label>{{'sexo' | transloco }}</mat-label>
+                            <mat-error *ngIf="(invalid('sexo') )">
+                                <span *ngIf="invalid('sexo')">{{getError('sexo')}}</span>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button class="ml-2" mat-flat-button [disabled]="frmGroup.invalid" [color]="'primary'"
+                            (click)="guardar()" [ngClass]="{'pointer-events-none': isLoading}">
+                            {{'guardar' | transloco}}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,104 @@
+ <form [formGroup]="frmGroup"  novalidate>	
+   <div name="pnlGridFrmDesempenho" *ngIf="mostrarPanelForm"  >  
+    <mat-card >
+		<mat-card-header>
+			<div mat-card-avatar>
+				<mat-icon>folder</mat-icon>
+			</div>
+			<mat-card-title *ngIf="accionNuevo">{{'title.crear' | transloco }} Desempeño</mat-card-title>
+			<mat-card-title *ngIf="!accionNuevo">{{'title.modificar' | transloco }} Desempeño</mat-card-title>
+		</mat-card-header>
+		<mat-divider></mat-divider>
+		<p></p>
+		<mat-card-content>		
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'codigo' | transloco}}</mat-label>
+						<input [maxlength]="20" matInput    formControlName="codigo" >
+						<mat-error *ngIf="(invalid('codigo') )" > 
+							<span *ngIf="invalid('codigo')">{{getError('codigo')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-text"  >
+					  <mat-form-field class="input-full-width">
+						  <mat-label>{{'peso' | transloco}}</mat-label>
+						  <input [maxlength]="18" matInput    formControlName="peso" >
+						  <mat-error *ngIf="(invalid('peso') )" > 
+							  <span *ngIf="invalid('peso')">{{getError('peso')}}</span>
+						  </mat-error>
+					  </mat-form-field>
+					 </div>					
+				  </div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="100%" fxFlex.xs="100%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'descripcion' | transloco}}</mat-label>
+						<input [maxlength]="500" matInput  formControlName="descripcion" >
+						<mat-error *ngIf="(invalid('descripcion') )" > 
+							<span *ngIf="invalid('descripcion')">{{getError('descripcion')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="100%" fxFlex.xs="100%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'abreviatura' | transloco}}</mat-label>
+						<input [maxlength]="100" matInput formControlName="abreviatura" >
+						<mat-error *ngIf="(invalid('abreviatura') )" > 
+							<span *ngIf="invalid('abreviatura')">{{getError('abreviatura')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+			</div>		
+			<div fxLayout="row" fxLayout.xs="column" fxLayout.sm="row" >
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+				  <div class="div-input-text"  >
+					<mat-form-field class="input-full-width">
+						<mat-label>{{'nroOrden' | transloco}}</mat-label>
+						<input [maxlength]="18" matInput    formControlName="nroOrden" >
+						<mat-error *ngIf="(invalid('nroOrden') )" > 
+							<span *ngIf="invalid('nroOrden')">{{getError('nroOrden')}}</span>
+						</mat-error>
+					</mat-form-field>
+				   </div>					
+				</div>
+				<div fxFlex="50%" fxFlex.xs="50%"> 
+					<div class="div-input-select">
+						<mat-form-field class="input-full-width" >
+							<mat-label>{{'estado' | transloco}}</mat-label>
+							<mat-select class="input-full-width" 
+								formControlName="estado"
+								[required] = "true">					
+								<mat-option *ngFor="let it of typeSelectItemService.listaEstado" [value]="it.id" >
+								 {{it.nombre}}
+								</mat-option>
+							</mat-select>
+							<mat-error *ngIf="(invalid('estado') )">
+								<span *ngIf="invalid('estado')">{{getError('estado')}}</span>
+							</mat-error>
+						</mat-form-field>
+					</div>					
+				</div>
+			</div>	
+		 </mat-card-content>
+		 <mat-card-actions>
+			<button  (click)="guardar()" color="primary"
+					[disabled]="frmGroup.invalid" mat-raised-button>{{'guardar' | transloco}}</button>
+
+			<button  (click)="cancelar()" color="accent"
+					mat-raised-button>{{'cancelar' | transloco}}</button>
+		 </mat-card-actions>		 
+	   </mat-card>
+	</div>
+</form>
